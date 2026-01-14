@@ -35,7 +35,7 @@ Init.lua
 Utils.lua
 
 Localization\enUS.lua
-Localization\[TextLocale].lua [AllowLoadTextLocale deDE, frFR]
+Localization\[TextLocale].lua [AllowLoadTextLocale deDE, frFR, zhCN]
 
 Settings.lua
 TargetedSpellsMixin.lua

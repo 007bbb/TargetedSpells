@@ -24,7 +24,6 @@
 ---@class CustomSound
 ---@field soundKitID number|string
 ---@field text string
----@field isFile boolean?
 
 ---@class SliderSettings
 ---@field min number

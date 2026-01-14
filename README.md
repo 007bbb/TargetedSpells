@@ -3,6 +3,13 @@
 - [Curseforge](https://www.curseforge.com/wow/addons/targetedspells)
 - [Wago](https://addons.wago.io/addons/targeted-spells)
 
+## Why?
+
+- the default UI continues to be not-so-good at communicating this info
+  - overlapping nameplates, important spell highlight being faint, targeting obscured, pick your poison
+- Spell Reflection timing gets improved significantly
+- healers have to split their attention less between nameplates and party frames
+
 ## Features
 
 - compatible with both The War Within and Midnight

@@ -68,9 +68,9 @@ L.Functionality.CAASayIfTargetedDisabledWarning = Private.IsMidnight
 		)
 	or nil
 
-L.Settings.EnabledLabel = "Actif/Activé"
+L.Settings.EnabledLabel = "Activé"
 L.Settings.EnabledTooltip = nil
-L.Settings.DisabledLabel = "Disabled"
+L.Settings.DisabledLabel = "Désactivé"
 
 L.Settings.AddonCompartmentTooltipLine1 =
 	string.format("%s is %s", WrapTextInColorCode(L.EditMode.TargetedSpellsSelfLabel, "ffeda55f"), "%s")
@@ -83,12 +83,12 @@ L.Settings.LoadConditionContentTypeTooltip = not Private.IsMidnight
 		and "This setting is only configurable via Edit Mode until the Midnight Pre-Patch due to lacking the settings primitives until then."
 	or nil
 L.Settings.LoadConditionContentTypeLabels = {
-	[Private.Enum.ContentType.OpenWorld] = "Open World",
-	[Private.Enum.ContentType.Delve] = "Delves",
-	[Private.Enum.ContentType.Dungeon] = "Dungeon",
+	[Private.Enum.ContentType.OpenWorld] = "Monde ouvert",
+	[Private.Enum.ContentType.Delve] = "Gouffre",
+	[Private.Enum.ContentType.Dungeon] = "Donjon",
 	[Private.Enum.ContentType.Raid] = "Raid",
-	[Private.Enum.ContentType.Arena] = "Arena",
-	[Private.Enum.ContentType.Battleground] = "Battleground",
+	[Private.Enum.ContentType.Arena] = "Arène",
+	[Private.Enum.ContentType.Battleground] = "Champ de bataille",
 }
 
 L.Settings.LoadConditionRoleLabel = "Condition de chargement: Rôle"
@@ -146,18 +146,18 @@ L.Settings.GlowTypeLabels = {
 }
 
 L.Settings.PlaySoundLabel = "Jouer le son"
-L.Settings.PlaySoundTooltip = "Play a sound when a spell targeting you is started. DISABLES TTS!"
-
-L.Settings.PlayTTSLabel = "Play TTS"
+L.Settings.PlaySoundTooltip = "Joue un son quand un sort vous ciblant commence. DESACTIVER TTS!"
+L.Settings.PlayTTSLabel = "Jouer TTS"
 L.Settings.PlayTTSTooltip =
-	"Plays the spell name using Text-To-Speech when a spell targeting you is started. DISABLES SOUND!"
+	"Joue le nom du sort en utilisant Text-To-Speech quand un sort vous cilblant commence. DESCATIVER SON!"
 
-L.Settings.TTSVoiceLabel = "TTS Voice"
-L.Settings.TTSVoiceTooltip = "Select the voice used for Text-To-Speech."
+L.Settings.TTSVoiceLabel = "Voix TTS"
+L.Settings.TTSVoiceTooltip = "Selectionner la voix utilisée pour Text-To-Speech."
 
 L.Settings.SoundLabel = "Son"
 L.Settings.SoundCategoryCustom = "Personnalisé"
-L.Settings.SoundTooltip = "Click to change, but also click to preview sound. Warning: Master channel volume!"
+L.Settings.SoundTooltip =
+	"Cliquer pour changer, mais cliquer aussi pour prévision du son. Attention: Master channel volume!"
 
 L.Settings.SoundChannelLabel = "Sound Channel"
 L.Settings.SoundChannelTooltip = nil
@@ -169,8 +169,8 @@ L.Settings.SoundChannelLabels = {
 	[Private.Enum.SoundChannel.Dialog] = DIALOG_VOLUME,
 }
 
-L.Settings.LoadConditionSoundContentTypeLabel = "Load Condition: Sound"
-L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "Play Sound in Content"
+L.Settings.LoadConditionSoundContentTypeLabel = "Load Condition: Son"
+L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "Jouer son dans le contenue"
 L.Settings.LoadConditionSoundContentTypeTooltip = not Private.IsMidnight
 		and "This setting is only configurable via Edit Mode until the Midnight Pre-Patch due to lacking the settings primitives until then."
 	or "Under which circumstances the above sound settings (both custom sound and TTS) should apply."
@@ -211,7 +211,7 @@ L.Settings.ClickToOpenSettingsLabel = "Cliquer pour ouvrir les paramètres"
 
 L.Settings.TargetingFilterApiLabel = "Targeting API"
 L.Settings.TargetingFilterApiTooltip =
-	"Subtle differences between the APIs.\n\nSpell Target: shows the unit that'll get hit by the spell regardless of the target. Does not work for abilities using arrow targeting indication o multiple players.\n\nUnit Target: shows the unit currently targeted by the cast source. Can also show spells that don't exclusively hit the target, such as party-wide AoE."
+	"Subtle differences between the APIs.\n\nSpell Target: shows the unit that'll get hit by the spell regardless of the target. Does not work for abilities using arrow targeting indication on multiple players.\n\nUnit Target: shows the unit currently targeted by the cast source. Can also show spells that don't exclusively hit the target, such as party-wide AoE."
 L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsSpellTarget] = "Spell Target",
 	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Unit Target",
