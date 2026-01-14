@@ -1,3 +1,9 @@
+## Version 1.0.6
+
+- add CN locale, thanks to nanjuekaien1
+- extend French locale
+- update README
+
 ## Version 1.0.5
 
 - fixed a bug incorrectly leading to event registration when both Self and Party modules were disabled
