@@ -2,21 +2,6 @@
 local addonName, Private = ...
 local LibSharedMedia = LibStub("LibSharedMedia-3.0")
 
-table.insert(Private.LoginFnQueue, function()
-	local customSounds = {
-		{ name = "TargetedSpells Water Drop", path = "WaterDrop.ogg" },
-		{ name = "TargetedSpells Banana Peel Slip", path = "BananaPeelSlip.ogg" },
-	}
-
-	for i, sound in pairs(customSounds) do
-		LibSharedMedia:Register(
-			"sound",
-			sound.name,
-			string.format("Interface\\AddOns\\TargetedSpells\\Media\\Sounds\\%s", sound.path)
-		)
-	end
-end)
-
 ---@class TargetedSpellsSettings
 Private.Settings = {}
 
@@ -94,11 +79,15 @@ function Private.Settings.GetSettingsDisplayOrder(kind)
 		table.insert(settings, Private.Settings.Keys.Self.Grow)
 		table.insert(settings, Private.Settings.Keys.Self.GlowImportant)
 		table.insert(settings, Private.Settings.Keys.Self.GlowType)
-		table.insert(settings, Private.Settings.Keys.Self.PlaySound)
-		table.insert(settings, Private.Settings.Keys.Self.Sound)
-		table.insert(settings, Private.Settings.Keys.Self.SoundChannel)
-		table.insert(settings, Private.Settings.Keys.Self.PlayTTS)
-		table.insert(settings, Private.Settings.Keys.Self.TTSVoice)
+
+		if not Private.IsMidnight then
+			table.insert(settings, Private.Settings.Keys.Self.PlaySound)
+			table.insert(settings, Private.Settings.Keys.Self.Sound)
+			table.insert(settings, Private.Settings.Keys.Self.SoundChannel)
+			table.insert(settings, Private.Settings.Keys.Self.PlayTTS)
+			table.insert(settings, Private.Settings.Keys.Self.TTSVoice)
+		end
+
 		table.insert(settings, Private.Settings.Keys.Self.LoadConditionSoundContentType)
 		table.insert(settings, Private.Settings.Keys.Self.ShowDuration)
 		table.insert(settings, Private.Settings.Keys.Self.ShowDurationFractions)
@@ -301,23 +290,7 @@ function Private.Settings.GetPartyDefaultSettings()
 	}
 end
 
-function Private.Settings.GetCooldownViewerSounds()
-	local soundCategoryKeyToLabel = {
-		Animals = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_ANIMALS,
-		Devices = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_DEVICES,
-		Impacts = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_IMPACTS,
-		Instruments = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_INSTRUMENTS,
-		War2 = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR2,
-		War3 = COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR3,
-	}
-
-	return {
-		soundCategoryKeyToLabel = soundCategoryKeyToLabel,
-		data = CooldownViewerSoundData,
-	}
-end
-
-do
+if not Private.IsMidnight then
 	---@type table<string|number, true>
 	local soundIsFileCache = {}
 
@@ -325,7 +298,20 @@ do
 		return soundIsFileCache[sound] or false
 	end
 
-	local function CacheCustomSoundsByPath()
+	table.insert(Private.LoginFnQueue, function()
+		local customSounds = {
+			{ name = "TargetedSpells Water Drop", path = "WaterDrop.ogg" },
+			{ name = "TargetedSpells Banana Peel Slip", path = "BananaPeelSlip.ogg" },
+		}
+
+		for i, sound in pairs(customSounds) do
+			LibSharedMedia:Register(
+				"sound",
+				sound.name,
+				string.format("Interface\\AddOns\\TargetedSpells\\Media\\Sounds\\%s", sound.path)
+			)
+		end
+
 		local soundInfo = Private.Settings.GetCustomSoundGroups()
 
 		for group, sounds in pairs(soundInfo.data) do
@@ -333,9 +319,7 @@ do
 				soundIsFileCache[sound.soundKitID] = true
 			end
 		end
-	end
-
-	table.insert(Private.LoginFnQueue, CacheCustomSoundsByPath)
+	end)
 
 	LibSharedMedia.RegisterCallback(Private, "LibSharedMedia_Registered", function(_, mediaType, key)
 		if mediaType ~= "sound" then
@@ -1252,23 +1236,11 @@ table.insert(Private.LoginFnQueue, function()
 				end
 			end
 
-			local function AddCooldownViewerSounds(container)
-				local soundInfo = Private.Settings.GetCooldownViewerSounds()
-
-				RecursiveAddSounds(container, soundInfo.soundCategoryKeyToLabel, soundInfo.data)
-			end
-
-			local function AddCustomSounds(container)
-				local soundInfo = Private.Settings.GetCustomSoundGroups()
-
-				RecursiveAddSounds(container, soundInfo.soundCategoryKeyToLabel, soundInfo.data)
-			end
-
 			local function GetOptions(owner, rootDescription)
 				local container = Settings.CreateControlTextContainer()
 
-				pcall(AddCooldownViewerSounds, container)
-				AddCustomSounds(container)
+				local soundInfo = Private.Settings.GetCustomSoundGroups()
+				RecursiveAddSounds(container, soundInfo.soundCategoryKeyToLabel, soundInfo.data)
 
 				return container:GetData()
 			end
@@ -2050,7 +2022,7 @@ table.insert(Private.LoginFnQueue, function()
 	Settings.RegisterAddOnCategory(category)
 
 	local function OpenSettings()
-		Settings.OpenToCategory(category.ID)
+		Settings.OpenToCategory(category:GetID())
 	end
 
 	AddonCompartmentFrame:RegisterAddon({

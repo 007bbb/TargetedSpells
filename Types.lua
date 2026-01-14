@@ -46,7 +46,6 @@
 ---@field GetSliderSettingsForOption fun(key: string): SliderSettings
 ---@field GetSelfDefaultSettings fun(): SavedVariablesSettingsSelf
 ---@field GetPartyDefaultSettings fun(): SavedVariablesSettingsParty
----@field GetCooldownViewerSounds fun(): SoundInfo
 ---@field GetCustomSoundGroups fun(groupSizeThreshold: number?):  SoundInfo
 ---@field SampleTTSVoice fun(voiceId: number)
 ---@field IsContentTypeAvailableForKind fun(kind: FrameKind, contentTypeId: ContentType): boolean
@@ -377,10 +376,7 @@ COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_INSTRUMENTS = ""
 COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR2 = ""
 COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR3 = ""
 
-CAA_COMBAT_AUDIO_ALERTS_LABEL = ""
-ACCESSIBILITY_AUDIO_LABEL = ""
 UNIT_NAMEPLATES_SHOW_OFFSCREEN = ""
-CAA_SAY_IF_TARGETED_LABEL = ""
 
 ---@class Plater
 ---@field db { profile: { script_data: PlaterScriptData[] } }?
@@ -391,12 +387,6 @@ CAA_SAY_IF_TARGETED_LABEL = ""
 
 ---@type Plater
 Plater = {}
-
-C_CombatAudioAlert = {
-	GetSpecSetting = function(id)
-		return 0
-	end,
-}
 
 ---@type string|nil
 GAME_LOCALE = ""
@@ -457,15 +447,6 @@ end
 ---@class Nameplate
 ---@field UnitFrame UnitFrameButton
 
----@class CombatAudioAlertManager : Frame
----@field GetUnitFormattedTargetingString fun(self: CombatAudioAlertManager, unit: string): string
-
-CombatAudioAlertManager = {
-	GetUnitFormattedTargetingString = function(unit)
-		return ""
-	end,
-}
-
 -- third party unit frame addons
 ---@class DandersFrames
 ---@field Api { GetFrameForUnit: fun(unit: string, kind: FrameKind): Frame? }
@@ -475,6 +456,3 @@ DandersFrames = nil
 
 ---@type Frame?
 DandersPartyGroupContainer = nil
-
----@type table<string, CustomSound[]>
-CooldownViewerSoundData = {}

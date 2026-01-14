@@ -30,44 +30,6 @@ L.Functionality.CVarWarning = Private.IsMidnight
 		)
 	or nil
 
-L.Functionality.CAAEnabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\n本插件已自动启用 '%s' 并根据你启用的声音/语音播报配置了它。\n\n你可以在 %s -> %s -> 左侧 %s > %s 下找到相关设置。\n\n或者输入：/run Settings.OpenToCategory(18)",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			KEY_ESCAPE,
-			OPTIONS_MENU,
-			ACCESSIBILITY_LABEL,
-			ACCESSIBILITY_AUDIO_LABEL
-		)
-	or nil
-
--- L.Functionality.CAADisabledWarning = Private.IsMidnight
--- 		and string.format(
--- 			"%s 本插件已自动禁用 '%s'，因为你不再使用声音或语音播报。",
--- 			addonNameWithIcon,
--- 			CAA_COMBAT_AUDIO_ALERTS_LABEL
--- 		)
--- 	or nil
-L.Functionality.CAAManuallyDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\n你禁用了 '%s'，但本插件依赖它来实现声音相关功能。\n\n请点击 %s 重新启用，或调整你的 %s 声音设置。",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-L.Functionality.CAASayIfTargetedDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\n你禁用了 '%s'，但本插件依赖它来实现声音相关功能。\n\n请点击 %s 重新启用，或调整你的 %s 声音设置。",
-			addonNameWithIcon,
-			CAA_SAY_IF_TARGETED_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-
 L.Settings.EnabledLabel = "启用"
 L.Settings.EnabledTooltip = nil
 L.Settings.DisabledLabel = "禁用"

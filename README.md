@@ -38,12 +38,12 @@
     - width, height, gap, direction, sort order, grow
   - glow important spells
     - 5 kinds of glows
-  - play sound
+  - play sound - (War Within only)
     - consumes all cooldown manager sounds (12.0+ only)
     - `LibSharedMedia` integration
     - ships two sounds
     - sound channel selection
-  - play tts
+  - play tts - (War Within only)
     - voice selection, automatically picking the most likely based on your game locale
   - option to selectively play sound/tts based on content type you're in
   - show duration
@@ -84,9 +84,11 @@
 
 ### Sound / TTS
 
-Built on top of Blizzards recently added Combat Audio Alerts (and thus requiring that to be enabled), it's unfortunately unreliable. You can test this with `TargetedSpells` disabled relatively easily in Follower Dungeons.
+No longer possible in Midnight after the Beta Build 65337 as expected.
 
-There's also a non-zero chance that Blizzard will simply **prevent** overriding this functionality, I was honestly surprised that it's currently possible which may or may not be intentional.
+~~Built on top of Blizzards recently added Combat Audio Alerts (and thus requiring that to be enabled), it's unfortunately unreliable. You can test this with `TargetedSpells` disabled relatively easily in Follower Dungeons.
+
+There's also a non-zero chance that Blizzard will simply **prevent** overriding this functionality, I was honestly surprised that it's currently possible which may or may not be intentional.~~
 
 #### Sound / TTS Sometimes Not Playing
 

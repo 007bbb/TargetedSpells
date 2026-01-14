@@ -62,7 +62,6 @@ function TargetedSpellsDriver:SetupFrame(isBoot)
 
 		if Private.IsMidnight then
 			self.frame:RegisterEvent("CVAR_UPDATE")
-			self.frame:RegisterEvent("PLAYER_LOGIN")
 		end
 
 		self.frame:SetScript("OnEvent", GenerateClosure(self.OnFrameEvent, self))
@@ -299,59 +298,6 @@ function TargetedSpellsDriver:LoadConditionsProhibitExecution(kind)
 	return false
 end
 
----@enum StaticPopupKind
-local StaticPopupKind = {
-	NamePlateShowOffScreen = 1,
-	CAAEnabled = 2,
-	CAASayIfTargeted = 3,
-}
-
----@param kind StaticPopupKind
-local function SetupStaticPopup(kind)
-	local text, OnAccept = nil, nil
-
-	if kind == StaticPopupKind.NamePlateShowOffScreen then
-		text = Private.L.Functionality.CVarWarning
-		OnAccept = function(dialog, data)
-			C_CVar.SetCVar("nameplateShowOffscreen", 1)
-			-- Settings.OpenToCategory(Settings.NAMEPLATE_OPTIONS_CATEGORY_ID, UNIT_NAMEPLATES_SHOW_OFFSCREEN)
-		end
-	elseif kind == StaticPopupKind.CAAEnabled then
-		text = Private.L.Functionality.CAAManuallyDisabledWarning
-		OnAccept = function(dialog, data)
-			C_CVar.SetCVar("CAAEnabled", 1)
-		end
-	elseif kind == StaticPopupKind.CAASayIfTargeted then
-		text = Private.L.Functionality.CAASayIfTargetedDisabledWarning
-		OnAccept = function(dialog, data)
-			C_CombatAudioAlert.SetSpecSetting(Enum.CombatAudioAlertSpecSetting.SayIfTargeted, 1)
-		end
-	end
-
-	if StaticPopupDialogs[addonName] == nil then
-		StaticPopupDialogs[addonName] = {
-			id = addonName,
-			button1 = ENABLE,
-			button2 = CLOSE,
-			whileDead = true,
-		}
-	end
-
-	StaticPopupDialogs[addonName].text = text
-	StaticPopupDialogs[addonName].OnAccept = OnAccept
-
-	local function Show()
-		StaticPopup_Hide(addonName)
-		StaticPopup_Show(addonName)
-	end
-
-	local function Hide()
-		StaticPopup_Hide(addonName)
-	end
-
-	return Show, Hide
-end
-
 function TargetedSpellsDriver:UnitIsIrrelevant(unit, skipTargetCheck)
 	if string.find(unit, "nameplate") == nil then
 		return true
@@ -391,7 +337,7 @@ function TargetedSpellsDriver:UnitIsIrrelevant(unit, skipTargetCheck)
 end
 
 ---@param _ Frame -- identical to self.frame
----@param event "DELAYED_FRAME_CLEANUP" | "PLAYER_LOGIN" | "UNIT_SPELLCAST_INTERRUPTED" | "UNIT_SPELLCAST_FAILED_QUIET" | "ZONE_CHANGED_NEW_AREA" | "LOADING_SCREEN_DISABLED" | "PLAYER_SPECIALIZATION_CHANGED" | "UNIT_SPELLCAST_EMPOWER_STOP" | "UNIT_SPELLCAST_EMPOWER_START" | "UNIT_SPELLCAST_SUCCEEDED" |"EDIT_MODE_POSITION_CHANGED" | "DELAYED_UNIT_SPELLCAST_START" | "DELAYED_UNIT_SPELLCAST_CHANNEL_START" | "UNIT_SPELLCAST_START" | "UNIT_SPELLCAST_STOP" | "UNIT_SPELLCAST_CHANNEL_START" | "UNIT_SPELLCAST_CHANNEL_STOP" | "NAME_PLATE_UNIT_REMOVED" | "NAME_PLATE_UNIT_ADDED"
+---@param event "DELAYED_FRAME_CLEANUP" | "UNIT_SPELLCAST_INTERRUPTED" | "UNIT_SPELLCAST_FAILED_QUIET" | "ZONE_CHANGED_NEW_AREA" | "LOADING_SCREEN_DISABLED" | "PLAYER_SPECIALIZATION_CHANGED" | "UNIT_SPELLCAST_EMPOWER_STOP" | "UNIT_SPELLCAST_EMPOWER_START" | "UNIT_SPELLCAST_SUCCEEDED" |"EDIT_MODE_POSITION_CHANGED" | "DELAYED_UNIT_SPELLCAST_START" | "DELAYED_UNIT_SPELLCAST_CHANNEL_START" | "UNIT_SPELLCAST_START" | "UNIT_SPELLCAST_STOP" | "UNIT_SPELLCAST_CHANNEL_START" | "UNIT_SPELLCAST_CHANNEL_STOP" | "NAME_PLATE_UNIT_REMOVED" | "NAME_PLATE_UNIT_ADDED"
 function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 	if
 		event == "UNIT_SPELLCAST_START"
@@ -592,41 +538,26 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 				self:RepositionFrames()
 			end
 		elseif name == "nameplateShowOffscreen" then
-			local Show, Hide = SetupStaticPopup(StaticPopupKind.NamePlateShowOffScreen)
+			if StaticPopupDialogs[addonName] == nil then
+				StaticPopupDialogs[addonName] = {
+					id = addonName,
+					button1 = ENABLE,
+					button2 = CLOSE,
+					whileDead = true,
+					text = Private.L.Functionality.CVarWarning,
+					OnAccept = function(dialog, data)
+						C_CVar.SetCVar("nameplateShowOffscreen", 1)
+						-- Settings.OpenToCategory(Settings.NAMEPLATE_OPTIONS_CATEGORY_ID, UNIT_NAMEPLATES_SHOW_OFFSCREEN)
+					end,
+				}
+			end
+
+			StaticPopup_Hide(addonName)
 
 			if value == "1" or value == 1 then
-				Hide()
 			else
-				Show()
-			end
-		elseif name == "CAAEnabled" then
-			if not TargetedSpellsSaved.Settings.Self.PlayTTS and not TargetedSpellsSaved.Settings.Self.PlaySound then
-				return
-			end
-
-			local Show, Hide = SetupStaticPopup(StaticPopupKind.CAAEnabled)
-
-			if value == "1" or value == 1 then
-				Hide()
-			else
-				Show()
-			end
-		elseif name == "CAASayIfTargeted" then
-			-- before PLAYER_LOGIN, the API below will return 0
-			if
-				not self.sawPlayerLogin
-				or (not TargetedSpellsSaved.Settings.Self.PlayTTS and not TargetedSpellsSaved.Settings.Self.PlaySound)
-			then
-				return
-			end
-
-			local Show, Hide = SetupStaticPopup(StaticPopupKind.CAASayIfTargeted)
-			local state = C_CombatAudioAlert.GetSpecSetting(Enum.CombatAudioAlertSpecSetting.SayIfTargeted)
-
-			if state == 0 then
-				Show()
-			else
-				Hide()
+				StaticPopup_Hide(addonName)
+				StaticPopup_Show(addonName)
 			end
 		end
 	elseif
@@ -801,8 +732,6 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 
 		if nextContentType ~= self.contentType then
 			self.contentType = nextContentType
-
-			self:MaybeApplyCombatAudioAlertOverride()
 		end
 
 		local specId = PlayerUtil.GetCurrentSpecID()
@@ -835,18 +764,6 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		self.frame:ClearAllPoints()
 		self.frame:SetPoint(point, x, y)
 		self.frame:Show()
-	elseif event == "PLAYER_LOGIN" then
-		self.sawPlayerLogin = true
-
-		if not TargetedSpellsSaved.Settings.Self.PlayTTS and not TargetedSpellsSaved.Settings.Self.PlaySound then
-			return
-		end
-
-		local state = C_CombatAudioAlert.GetSpecSetting(Enum.CombatAudioAlertSpecSetting.SayIfTargeted)
-
-		if state == 0 then
-			print(Private.L.Functionality.CAASayIfTargetedDisabledWarning)
-		end
 	end
 end
 
@@ -861,74 +778,6 @@ function TargetedSpellsDriver:OnSettingsChanged(key, value)
 		else
 			self:SetupFrame(false)
 		end
-	elseif key == Private.Settings.Keys.Self.PlayTTS or key == Private.Settings.Keys.Self.PlaySound then
-		if not Private.IsMidnight then
-			return
-		end
-
-		if value then
-			local state = C_CombatAudioAlert.GetSpecSetting(Enum.CombatAudioAlertSpecSetting.SayIfTargeted)
-
-			if state == 0 then
-				C_CVar.SetCVar("CAAEnabled", 1)
-				C_CVar.SetCVar("CAASayCombatStart", 0)
-				C_CVar.SetCVar("CAASayCombatEnd", 0)
-				C_CVar.SetCVar("CAAVoice", Private.Utils.FindAppropriateTTSVoiceId())
-				C_CVar.SetCVar("CAASayTargetName", 0)
-				C_CVar.SetCVar("CAATargetHealthPercent", 0)
-
-				C_CombatAudioAlert.SetSpecSetting(Enum.CombatAudioAlertSpecSetting.SayIfTargeted, 1)
-
-				print(Private.L.Functionality.CAAEnabledWarning)
-			end
-		else
-			-- C_CVar.SetCVar("CAAEnabled", 0)
-			-- print(Private.L.Functionality.CAADisabledWarning)
-		end
-	end
-end
-
-function TargetedSpellsDriver:MaybeApplyCombatAudioAlertOverride()
-	if not Private.IsMidnight then
-		return
-	end
-
-	---@param spellId number
-	local function MaybePlaySoundOrTTS(spellId)
-		if TargetedSpellsSaved.Settings.Self.PlaySound then
-			if TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[self.contentType] then
-				Private.Utils.AttemptToPlaySound(
-					TargetedSpellsSaved.Settings.Self.Sound,
-					TargetedSpellsSaved.Settings.Self.SoundChannel
-				)
-			end
-		elseif TargetedSpellsSaved.Settings.Self.PlayTTS then
-			local spellName = C_Spell.GetSpellName(spellId)
-
-			if spellName ~= nil then
-				Private.Utils.PlayTTS(spellName)
-			end
-		end
-	end
-
-	function CombatAudioAlertManager:GetUnitFormattedTargetingString(unit)
-		if not TargetedSpellsSaved.Settings.Self.Enabled then
-			return ""
-		end
-
-		if not TargetedSpellsSaved.Settings.Self.PlaySound and not TargetedSpellsSaved.Settings.Self.PlayTTS then
-			return ""
-		end
-
-		local spellId = select(9, UnitCastingInfo(unit)) or select(8, UnitChannelInfo(unit))
-
-		if spellId == nil then
-			return "" -- this is good old aggro
-		end
-
-		MaybePlaySoundOrTTS(spellId)
-
-		return ""
 	end
 end
 

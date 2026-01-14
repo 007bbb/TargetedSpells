@@ -30,44 +30,6 @@ L.Functionality.CVarWarning = Private.IsMidnight
 		)
 	or nil
 
-L.Functionality.CAAEnabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nThis addon automatically enabled '%s' and configured it as you've enabled Sound/TTS.\n\nYou can find the settings under %s -> %s -> left side %s > %s.\n\nAlternatively, type: /run Settings.OpenToCategory(18)",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			KEY_ESCAPE,
-			OPTIONS_MENU,
-			ACCESSIBILITY_LABEL,
-			ACCESSIBILITY_AUDIO_LABEL
-		)
-	or nil
-
--- L.Functionality.CAADisabledWarning = Private.IsMidnight
--- 		and string.format(
--- 			"%s This addon automatically disabled '%s' as you're no longer using neither Sound nor TTS.",
--- 			addonNameWithIcon,
--- 			CAA_COMBAT_AUDIO_ALERTS_LABEL
--- 		)
--- 	or nil
-L.Functionality.CAAManuallyDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nYou disabled '%s', but this addon relies on it for its sound-related functionality.\n\nPlease either turn it on again by clicking %s or adjust your %s sound settings.",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-L.Functionality.CAASayIfTargetedDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nYou disabled '%s', but this addon relies on it for its sound-related functionality.\n\nPlease either turn it on again by clicking %s or adjust your %s sound settings.",
-			addonNameWithIcon,
-			CAA_SAY_IF_TARGETED_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-
 L.Settings.EnabledLabel = "Enabled"
 L.Settings.EnabledTooltip = nil
 L.Settings.DisabledLabel = "Disabled"

@@ -580,31 +580,6 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 						value = value.text,
 						multiple = false,
 					})
-
-					if Private.IsMidnight then
-						selectPayloadCheckbox:AddInitializer(function(button, description, menu)
-							local playSampleButton = MenuTemplates.AttachUtilityButton(button)
-							playSampleButton.Texture:Hide()
-							playSampleButton:SetNormalTexture("common-icon-sound")
-							playSampleButton:SetPushedTexture("common-icon-sound-pressed")
-							playSampleButton:SetDisabledTexture("common-icon-sound-disabled")
-							playSampleButton:SetHighlightTexture("common-icon-sound", "ADD")
-							playSampleButton:GetHighlightTexture():SetAlpha(0.4)
-
-							MenuTemplates.SetUtilityButtonTooltipText(
-								playSampleButton,
-								COOLDOWN_VIEWER_SETTINGS_ALERT_MENU_PLAY_SAMPLE
-							)
-							MenuTemplates.SetUtilityButtonAnchor(
-								playSampleButton,
-								MenuVariants.GearButtonAnchor,
-								button
-							) -- gear means throw on the right
-							MenuTemplates.SetUtilityButtonClickHandler(playSampleButton, function()
-								Private.Utils.AttemptToPlaySound(value.soundKitID, Private.Enum.SoundChannel.Master)
-							end)
-						end)
-					end
 				elseif type(value) == "table" and soundCategoryKeyToText[tableKey] then
 					local nestedDescription = description:CreateButton(soundCategoryKeyToText[tableKey], nop, -1)
 					RecursiveAddSounds(nestedDescription, soundCategoryKeyToText, value, forcePlayOnSelection)
@@ -612,23 +587,11 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			end
 		end
 
-		local function AddCooldownViewerSounds(rootDescription)
-			local soundInfo = Private.Settings.GetCooldownViewerSounds()
-
-			RecursiveAddSounds(rootDescription, soundInfo.soundCategoryKeyToLabel, soundInfo.data, false)
-		end
-
-		local function AddCustomSounds(rootDescription)
+		local function Generator(owner, rootDescription, data)
+			-- intentionally separated so if the above fails, we can always at least show Custom sounds
 			local soundInfo = Private.Settings.GetCustomSoundGroups(34)
 
 			RecursiveAddSounds(rootDescription, soundInfo.soundCategoryKeyToLabel, soundInfo.data, true)
-		end
-
-		local function Generator(owner, rootDescription, data)
-			-- pcall this to guard against internal changes on the cd viewer side
-			pcall(AddCooldownViewerSounds, rootDescription)
-			-- intentionally separated so if the above fails, we can always at least show Custom sounds
-			AddCustomSounds(rootDescription)
 		end
 
 		---@param layoutName string

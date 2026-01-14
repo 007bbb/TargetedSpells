@@ -1,3 +1,8 @@
+## Version 1.0.7
+
+- further CN locale updates
+- removed Sound / TTS options for Midnight as it's no longer possible
+
 ## Version 1.0.6
 
 - add CN locale, thanks to nanjuekaien1

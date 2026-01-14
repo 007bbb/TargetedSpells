@@ -26,44 +26,6 @@ L.Functionality.CVarWarning = Private.IsMidnight
 		)
 	or nil
 
-L.Functionality.CAAEnabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nDieses AddOn hat automatisch die Einstellungen für '%s' aktiviert und konfiguriert da sie für Ton und Text-zur-Sprache benötigt werden.\n\nDu kannst sie an folgender Stelle finden: %s -> %s -> links %s > %s.\n\nAlternativ, gib folgendes in den Chat ein: /run Settings.OpenToCategory(18)",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			KEY_ESCAPE,
-			OPTIONS_MENU,
-			ACCESSIBILITY_LABEL,
-			ACCESSIBILITY_AUDIO_LABEL
-		)
-	or nil
-
--- L.Functionality.CAADisabledWarning = Private.IsMidnight
--- 		and string.format(
--- 			"%s This addon automatically disabled '%s' as you're no longer using neither Sound nor TTS.",
--- 			addonNameWithIcon,
--- 			CAA_COMBAT_AUDIO_ALERTS_LABEL
--- 		)
--- 	or nil
-L.Functionality.CAAManuallyDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nDu hast '%s' deaktiviert, aber dieses AddOn benötigt es für die tonbezogenen Funktionen.\n\nBitte schalte die Einstellung durch einen Klick auf %s wieder ein oder passe deine Toneinstellungen für %s an.",
-			addonNameWithIcon,
-			CAA_COMBAT_AUDIO_ALERTS_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-L.Functionality.CAASayIfTargetedDisabledWarning = Private.IsMidnight
-		and string.format(
-			"%s\nDu hast '%s' deaktiviert, aber dieses AddOn benötigt es für die tonbezogenen Funktionen.\n\nBitte schalte die Einstellung durch einen Klick auf %s wieder ein oder passe deine Toneinstellungen für %s an.",
-			addonNameWithIcon,
-			CAA_SAY_IF_TARGETED_LABEL,
-			ENABLE,
-			L.EditMode.TargetedSpellsSelfLabel
-		)
-	or nil
-
 L.Settings.EnabledLabel = "Aktiviert"
 L.Settings.EnabledTooltip = nil
 L.Settings.DisabledLabel = "Deaktiviert"
