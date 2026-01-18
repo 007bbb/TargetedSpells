@@ -1,3 +1,9 @@
+## Version 1.1.0
+
+- added Import/Export functionality
+  - this always includes _both_ Self and Party settings
+- updated French locale
+
 ## Version 1.0.7
 
 - further CN locale updates
