@@ -165,9 +165,9 @@ end
 function TargetedSpellsMixin:OnSettingChanged(key, value)
 	if self.kind == Private.Enum.FrameKind.Self then
 		if key == Private.Settings.Keys.Self.Width then
-			self:SetWidth(value)
+			PixelUtil.SetSize(self, value, TargetedSpellsSaved.Settings.Self.Height)
 		elseif key == Private.Settings.Keys.Self.Height then
-			self:SetHeight(value)
+			PixelUtil.SetSize(self, TargetedSpellsSaved.Settings.Self.Width, value)
 		elseif key == Private.Settings.Keys.Self.ShowDuration then
 			---@diagnostic disable-next-line: param-type-mismatch
 			self:SetShowDuration(value, TargetedSpellsSaved.Settings.Self.ShowDurationFractions)
@@ -193,9 +193,9 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 		end
 	else
 		if key == Private.Settings.Keys.Party.Width then
-			self:SetWidth(value)
+			PixelUtil.SetSize(self, value, TargetedSpellsSaved.Settings.Party.Height)
 		elseif key == Private.Settings.Keys.Party.Height then
-			self:SetHeight(value)
+			PixelUtil.SetSize(self, TargetedSpellsSaved.Settings.Party.Width, value)
 		elseif key == Private.Settings.Keys.Party.ShowDuration then
 			---@diagnostic disable-next-line: param-type-mismatch
 			self:SetShowDuration(value, TargetedSpellsSaved.Settings.Party.ShowDurationFractions)
@@ -254,7 +254,7 @@ local function CreateStar4Glow(parent)
 	Star4:SetPoint("CENTER")
 	Star4:SetFrameStrata(parent:GetFrameStrata())
 	Star4:SetFrameLevel(parent:GetFrameLevel() + 1)
-	Star4:SetSize(width * innerFactor, height * innerFactor)
+	PixelUtil.SetSize(Star4, width * innerFactor, height * innerFactor)
 
 	local Inner = Star4:CreateTexture(nil, "OVERLAY")
 	Inner:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
@@ -262,7 +262,7 @@ local function CreateStar4Glow(parent)
 	Inner:SetAlpha(0.9)
 	Inner:SetVertexColor(1, 0.85, 0.25)
 	Inner:SetPoint("CENTER")
-	Inner:SetSize(width * innerFactor, height * innerFactor)
+	PixelUtil.SetSize(Inner, width * innerFactor, height * innerFactor)
 	Star4.Inner = Inner
 
 	local Outer = Star4:CreateTexture(nil, "OVERLAY")
@@ -271,7 +271,7 @@ local function CreateStar4Glow(parent)
 	Outer:SetAlpha(0.6)
 	Outer:SetVertexColor(1, 0.75, 0.2)
 	Outer:SetPoint("CENTER")
-	Outer:SetSize(width * outerFactor, height * outerFactor)
+	PixelUtil.SetSize(Outer, width * outerFactor, height * outerFactor)
 	Star4.Outer = Outer
 
 	local Animation = Star4:CreateAnimationGroup()
@@ -436,7 +436,7 @@ function TargetedSpellsMixin:SetKind(kind)
 	local tableRef = kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
 		or TargetedSpellsSaved.Settings.Party
 
-	self:SetSize(tableRef.Width, tableRef.Height)
+	PixelUtil.SetSize(self, tableRef.Width, tableRef.Height)
 	self:SetFontSize(tableRef.FontSize)
 	self:HideGlow()
 	self:SetShowBorder(tableRef.ShowBorder)

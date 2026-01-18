@@ -1410,10 +1410,10 @@ function SelfEditModeMixin:ResizeEditModeFrame()
 
 	if direction == Private.Enum.Direction.Horizontal then
 		local totalWidth = (self.maxFrames * width) + (self.maxFrames - 1) * gap
-		self.editModeFrame:SetSize(totalWidth, height)
+		PixelUtil.SetSize(self.editModeFrame, totalWidth, height)
 	else
 		local totalHeight = (self.maxFrames * height) + (self.maxFrames - 1) * gap
-		self.editModeFrame:SetSize(width, totalHeight)
+		PixelUtil.SetSize(self.editModeFrame, width, totalHeight)
 	end
 end
 
@@ -1705,7 +1705,7 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 
 	local height = 16
 
-	self.editModeFrame:SetSize(width, height)
+	PixelUtil.SetSize(self.editModeFrame, width, height)
 	self.editModeFrame:ClearAllPoints()
 	self.editModeFrame:SetPoint("CENTER", parent, "TOP", 0, 16)
 end
