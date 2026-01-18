@@ -18,6 +18,17 @@
 ---@field FindAppropriateTTSVoiceId fun(): number
 ---@field PlayTTS fun(text: string, voiceId: number?, rate: number?)
 ---@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?
+---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs): fun()
+
+---@class StaticPopupDialogsArgs
+---@field text string
+---@field button1 string
+---@field button2 string?
+---@field OnAccept fun()?
+---@field hasEditBox boolean?
+---@field hasWideEditBox boolean?
+---@field editBoxWidth number?
+---@field hideOnEscape boolean?
 
 ---@class TargetedSpellsEnums
 
@@ -186,7 +197,7 @@
 ---@field private buildingFrames true|nil
 ---@field Init fun(self: TargetedSpellsEditModeMixin, displayName: string, frameKind: FrameKind)
 ---@field OnSettingsChanged fun(self: TargetedSpellsEditModeMixin, key: string, value: number|string)
----@field CreateSetting fun(self: TargetedSpellsEditModeMixin, key: string, defaults: SavedVariablesSettingsParty|SavedVariablesSettingsSelf): LibEditModeCheckbox | LibEditModeDropdown | LibEditModeSlider
+---@field CreateSetting fun(self: TargetedSpellsEditModeMixin, key: string, defaults: SavedVariablesSettingsParty|SavedVariablesSettingsSelf): LibEditModeButton|LibEditModeCheckbox | LibEditModeDropdown | LibEditModeSlider
 ---@field OnLayoutSettingChanged fun(self: TargetedSpellsEditModeMixin, key: string, value: number|string)
 ---@field AppendSettings fun(self: TargetedSpellsEditModeMixin)
 ---@field AcquireFrame fun(self: TargetedSpellsEditModeMixin): TargetedSpellsMixin
@@ -197,6 +208,14 @@
 ---@field StartDemo fun(self: TargetedSpellsEditModeMixin)
 ---@field ReleaseAllFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field EndDemo fun(self: TargetedSpellsEditModeMixin)
+---@field CreateImportExportButtons fun(self: TargetedSpellsEditModeMixin, kind: FrameKind) : LibEditModeButton[]
+---@field OnExportButtonClick fun(self: TargetedSpellsEditModeMixin)
+---@field OnImportButtonClick fun(self: TargetedSpellsEditModeMixin, kind: FrameKind)
+---@field OnImportConfirmation fun(self: TargetedSpellsEditModeMixin, args: ImportConfirmationArgs)
+
+---@class ImportConfirmationArgs
+---@field kind FrameKind
+---@field json string
 
 ---@class TargetedSpellsSelfEditMode : TargetedSpellsEditModeMixin
 ---@field private maxFrames number
@@ -269,6 +288,10 @@
 ---@class LibEditModeGetterSetter
 ---@field set fun(layoutName: string, value: number|string|boolean|table, fromReset: boolean)
 ---@field get fun(layoutName: string): number|string|boolean|table
+
+---@class LibEditModeButton
+---@field text string
+---@field click function
 
 ---@class LibEditModeCheckbox : LibEditModeSetting, LibEditModeGetterSetter
 

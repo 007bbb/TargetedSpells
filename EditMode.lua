@@ -76,6 +76,213 @@ function TargetedSpellsEditModeMixin:OnSettingsChanged(key, value)
 	end
 end
 
+function TargetedSpellsEditModeMixin:CreateImportExportButtons(kind)
+	return {
+		{
+			click = function()
+				self:OnImportButtonClick(kind)
+			end,
+			text = Private.L.Settings.Import,
+		},
+		{
+			click = function()
+				self:OnExportButtonClick()
+			end,
+			text = Private.L.Settings.Export,
+		},
+	}
+end
+
+function TargetedSpellsEditModeMixin:OnExportButtonClick()
+	local string = C_EncodingUtil.SerializeJSON(TargetedSpellsSaved.Settings)
+
+	Private.Utils.ShowStaticPopup({
+		text = Private.L.Settings.Export,
+		button1 = Private.L.Settings.Export,
+		hasEditBox = true,
+		hasWideEditBox = true,
+		editBoxWidth = 350,
+		hideOnEscape = true,
+		OnShow = function(popupSelf)
+			local editBox = popupSelf:GetEditBox()
+			editBox:SetText(string)
+			editBox:HighlightText()
+
+			local ctrlDown = false
+
+			editBox:SetScript("OnKeyDown", function(_, key)
+				if key == "LCTRL" or key == "RCTRL" or key == "LMETA" or key == "RMETA" then
+					ctrlDown = true
+				end
+			end)
+			editBox:SetScript("OnKeyUp", function(_, key)
+				C_Timer.After(0.2, function()
+					ctrlDown = false
+				end)
+
+				if ctrlDown and (key == "C" or key == "X") then
+					StaticPopup_Hide(addonName)
+				end
+			end)
+		end,
+		EditBoxOnEscapePressed = function(popupSelf)
+			popupSelf:GetParent():Hide()
+		end,
+		EditBoxOnTextChanged = function(popupSelf)
+			-- ctrl + x sets the text to "" but this triggers hiding and shouldn't trigger resetting the text
+			local currentText = popupSelf:GetText()
+
+			if currentText == "" or currentText == string then
+				return
+			end
+
+			popupSelf:SetText(string)
+		end,
+	})
+end
+
+function TargetedSpellsEditModeMixin:OnImportButtonClick(kind)
+	Private.Utils.ShowStaticPopup({
+		text = Private.L.Settings.Import,
+		button1 = Private.L.Settings.Import,
+		button2 = CLOSE,
+		hasEditBox = true,
+		hasWideEditBox = true,
+		editBoxWidth = 350,
+		hideOnEscape = true,
+		OnAccept = function(popupSelf)
+			local editBox = popupSelf:GetEditBox()
+			self:OnImportConfirmation({
+				json = editBox:GetText(),
+				kind = kind,
+			})
+		end,
+	})
+end
+
+function TargetedSpellsEditModeMixin:OnImportConfirmation(importArgs)
+	local ok, result = pcall(C_EncodingUtil.DeserializeJSON, importArgs.json)
+
+	if not ok then
+		if result ~= nil then
+			print(result)
+		end
+
+		return
+	end
+
+	-- just a type check
+	if result == nil then
+		return
+	end
+
+	local hasAnyChange = false
+
+	for kind, kindString in pairs(Private.Enum.FrameKind) do
+		local tableRef = TargetedSpellsSaved.Settings[kind]
+
+		if kindString == Private.Enum.FrameKind.Self then
+			local point, x, y = result[kind].Position.point, result[kind].Position.x, result[kind].Position.y
+
+			if point ~= tableRef.Position.point or x ~= tableRef.Position.x or y ~= tableRef.Position.y then
+				self.editModeFrame:ClearAllPoints()
+				self.editModeFrame:SetPoint(point, x, y)
+				tableRef.Position.point = point
+				tableRef.Position.x = x
+				tableRef.Position.y = y
+			end
+		end
+
+		local anyPrimaryLoadConditionIsDisabled = false
+
+		local defaults = kindString == Private.Enum.FrameKind.Self and Private.Settings.GetSelfDefaultSettings()
+			or Private.Settings.GetPartyDefaultSettings()
+		local eventKeys = kindString == Private.Enum.FrameKind.Self and Private.Settings.Keys.Self
+			or Private.Settings.Keys.Party
+
+		for key, defaultValue in pairs(defaults) do
+			local newValue = result[kind][key]
+			local expectedType = type(defaultValue)
+
+			if newValue and type(newValue) == expectedType then
+				local eventKey = eventKeys[key]
+				local hasChanges = false
+
+				if expectedType == "table" then
+					local enumToCompareAgainst = nil
+					if key == "LoadConditionContentType" then
+						enumToCompareAgainst = Private.Enum.ContentType
+					elseif key == "LoadConditionRole" then
+						enumToCompareAgainst = Private.Enum.Role
+					elseif key == "LoadConditionSoundContentType" then
+						enumToCompareAgainst = Private.Enum.ContentType
+					end
+
+					-- only other case is Position but that's taken care of above
+
+					if enumToCompareAgainst then
+						local newTable = {}
+						local allDisabled = true
+
+						for _, id in pairs(enumToCompareAgainst) do
+							if newValue[id] == nil then
+								newTable[id] = tableRef[key][id]
+							else
+								newTable[id] = newValue[id]
+
+								if newValue[id] ~= tableRef[key][id] then
+									hasChanges = true
+								end
+
+								if newValue[id] then
+									allDisabled = false
+								end
+							end
+						end
+
+						if key == "LoadConditionSoundContentType" and allDisabled then
+							allDisabled = false
+						end
+
+						if allDisabled then
+							anyPrimaryLoadConditionIsDisabled = true
+						end
+
+						if hasChanges then
+							tableRef[key] = newTable
+							Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKey, newTable)
+						end
+					end
+				elseif newValue ~= tableRef[key] then
+					tableRef[key] = newValue
+					hasChanges = true
+
+					if eventKey and hasChanges then
+						Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKey, newValue)
+					end
+				end
+
+				if hasChanges then
+					hasAnyChange = true
+				end
+			end
+		end
+
+		if anyPrimaryLoadConditionIsDisabled then
+			tableRef.Enabled = false
+			Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKeys.Enabled, false)
+		end
+	end
+
+	if hasAnyChange then
+		LibEditMode:RefreshFrameSettings(self.editModeFrame)
+	end
+end
+
+function TargetedSpellsEditModeMixin:OnImportCancellation()
+	-- Implement in your derived mixin.
+end
+
 function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 	local L = Private.L
 
@@ -510,7 +717,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 
 	if key == Private.Settings.Keys.Self.SoundChannel then
 		---@param layoutName string
-		---@param value string
+		---@param value number
 		local function Set(layoutName, value)
 			if TargetedSpellsSaved.Settings.Self.SoundChannel ~= value then
 				TargetedSpellsSaved.Settings.Self.SoundChannel = value
@@ -676,8 +883,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 		or key == Private.Settings.Keys.Party.LoadConditionContentType
 	then
 		local isSelf = key == Private.Settings.Keys.Self.LoadConditionContentType
-		local tableRef = isSelf and TargetedSpellsSaved.Settings.Self.LoadConditionContentType
-			or TargetedSpellsSaved.Settings.Party.LoadConditionContentType
+		local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
 
 		local function Generator(owner, rootDescription, data)
 			for label, id in pairs(Private.Enum.ContentType) do
@@ -688,16 +894,20 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 					)
 				then
 					local function IsEnabled()
-						return tableRef[id]
+						return kindTableRef.LoadConditionContentType[id]
 					end
 
 					local function Toggle()
-						tableRef[id] = not tableRef[id]
+						kindTableRef.LoadConditionContentType[id] = not kindTableRef.LoadConditionContentType[id]
 
-						Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef)
+						Private.EventRegistry:TriggerEvent(
+							Private.Enum.Events.SETTING_CHANGED,
+							key,
+							kindTableRef.LoadConditionContentType
+						)
 
 						local anyEnabled = false
-						for role, loadCondition in pairs(tableRef) do
+						for role, loadCondition in pairs(kindTableRef.LoadConditionContentType) do
 							if loadCondition then
 								anyEnabled = true
 								break
@@ -736,14 +946,18 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			local hasChanges = false
 
 			for id, bool in pairs(values) do
-				if tableRef[id] ~= bool then
-					tableRef[id] = bool
+				if kindTableRef.LoadConditionContentType[id] ~= bool then
+					kindTableRef.LoadConditionContentType[id] = bool
 					hasChanges = true
 				end
 			end
 
 			if hasChanges then
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef)
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					kindTableRef.LoadConditionContentType
+				)
 			end
 		end
 
@@ -820,30 +1034,30 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 
 	if key == Private.Settings.Keys.Self.LoadConditionRole or key == Private.Settings.Keys.Party.LoadConditionRole then
 		local isSelf = key == Private.Settings.Keys.Self.LoadConditionRole
-		local tableRef = isSelf and TargetedSpellsSaved.Settings.Self.LoadConditionRole
-			or TargetedSpellsSaved.Settings.Party.LoadConditionRole
+		local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
 
 		local function Generator(owner, rootDescription, data)
 			for label, id in pairs(Private.Enum.Role) do
 				local function IsEnabled()
-					return tableRef[id]
+					return kindTableRef.LoadConditionRole[id] == true
 				end
 
 				local function Toggle()
-					tableRef[id] = not tableRef[id]
+					kindTableRef.LoadConditionRole[id] = not kindTableRef.LoadConditionRole[id]
 
-					Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef)
+					Private.EventRegistry:TriggerEvent(
+						Private.Enum.Events.SETTING_CHANGED,
+						key,
+						kindTableRef.LoadConditionRole
+					)
 
 					local anyEnabled = false
-					for role, loadCondition in pairs(tableRef) do
+					for role, loadCondition in pairs(kindTableRef.LoadConditionRole) do
 						if loadCondition then
 							anyEnabled = true
 							break
 						end
 					end
-
-					local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self
-						or TargetedSpellsSaved.Settings.Party
 
 					if anyEnabled ~= kindTableRef.Enabled then
 						kindTableRef.Enabled = anyEnabled
@@ -870,14 +1084,18 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			local hasChanges = false
 
 			for id, bool in pairs(values) do
-				if tableRef[id] ~= bool then
-					tableRef[id] = bool
+				if kindTableRef.LoadConditionRole[id] ~= bool then
+					kindTableRef.LoadConditionRole[id] = bool
 					hasChanges = true
 				end
 			end
 
 			if hasChanges then
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef)
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					kindTableRef.LoadConditionRole
+				)
 			end
 		end
 
@@ -1443,6 +1661,7 @@ function SelfEditModeMixin:AppendSettings()
 	end
 
 	LibEditMode:AddFrameSettings(self.editModeFrame, settings)
+	LibEditMode:AddFrameSettingsButtons(self.editModeFrame, self:CreateImportExportButtons(Private.Enum.FrameKind.Self))
 end
 
 function SelfEditModeMixin:RestoreEditModePosition()
@@ -1689,6 +1908,10 @@ function PartyEditModeMixin:AppendSettings()
 	end
 
 	LibEditMode:AddFrameSettings(self.editModeFrame, settings)
+	LibEditMode:AddFrameSettingsButtons(
+		self.editModeFrame,
+		self:CreateImportExportButtons(Private.Enum.FrameKind.Party)
+	)
 end
 
 function PartyEditModeMixin:RepositionEditModeFrame()

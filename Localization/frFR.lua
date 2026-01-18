@@ -42,7 +42,7 @@ L.Settings.AddonCompartmentTooltipLine2 =
 L.Settings.LoadConditionContentTypeLabel = "Condition de chargement: Type de contenu"
 L.Settings.LoadConditionContentTypeLabelAbbreviated = "Charger dans le contenu"
 L.Settings.LoadConditionContentTypeTooltip = not Private.IsMidnight
-		and "This setting is only configurable via Edit Mode until the Midnight Pre-Patch due to lacking the settings primitives until then."
+		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
 	or nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "Monde ouvert",
@@ -56,7 +56,7 @@ L.Settings.LoadConditionContentTypeLabels = {
 L.Settings.LoadConditionRoleLabel = "Condition de chargement: Rôle"
 L.Settings.LoadConditionRoleLabelAbbreviated = "Chargement sur Rôle"
 L.Settings.LoadConditionRoleTooltip = not Private.IsMidnight
-		and "This setting is only configurable via Edit Mode until the Midnight Pre-Patch due to lacking the settings primitives until then."
+		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
 	or nil
 L.Settings.LoadConditionRoleLabels = {
 	[Private.Enum.Role.Healer] = "Healer",
@@ -131,22 +131,22 @@ L.Settings.SoundChannelLabels = {
 	[Private.Enum.SoundChannel.Dialog] = DIALOG_VOLUME,
 }
 
-L.Settings.LoadConditionSoundContentTypeLabel = "Load Condition: Son"
+L.Settings.LoadConditionSoundContentTypeLabel = "Condition de chargement: Son"
 L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "Jouer son dans le contenue"
 L.Settings.LoadConditionSoundContentTypeTooltip = not Private.IsMidnight
-		and "This setting is only configurable via Edit Mode until the Midnight Pre-Patch due to lacking the settings primitives until then."
+		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
 	or "Under which circumstances the above sound settings (both custom sound and TTS) should apply."
 L.Settings.LoadConditionSoundContentTypeLabels = L.Settings.LoadConditionContentTypeLabels
 
 L.Settings.ShowDurationLabel = "Montrer la durée"
 L.Settings.ShowDurationTooltip = nil
 
-L.Settings.ShowDurationFractionsLabel = "Show Fractions"
+L.Settings.ShowDurationFractionsLabel = "Montrer les nombres décimaux"
 L.Settings.ShowDurationFractionsTooltip = nil
 
-L.Settings.IndicateInterruptsLabel = "Indicate Interrupts"
+L.Settings.IndicateInterruptsLabel = "Montrer l'interruption"
 L.Settings.IndicateInterruptsTooltip =
-	"Desaturates the icon, shows an indicator on top of the icon and delays hiding the icon by 1 second. Does not work with channeled spells."
+	"Désature l'icône, affiche un indicateur par-dessus et retarde sa disparition de 1 seconde. Ne marche pas avec les sorts canalisés."
 
 L.Settings.ShowBorderLabel = "Montrer les contours"
 L.Settings.ShowBorderTooltip = nil
@@ -166,8 +166,8 @@ L.Settings.FrameSourceAnchorTooltip = nil
 L.Settings.FrameTargetAnchorLabel = "Target Anchor"
 L.Settings.FrameTargetAnchorTooltip = nil
 
-L.Settings.IncludeSelfInPartyLabel = "Include Self In Party"
-L.Settings.IncludeSelfInPartyTooltip = "Only works when using Raid-Style Party Frames."
+L.Settings.IncludeSelfInPartyLabel = "S'inclure dans le groupe"
+L.Settings.IncludeSelfInPartyTooltip = "Fonctionne uniquement avec les cadres de groupe Raid-Style."
 
 L.Settings.ClickToOpenSettingsLabel = "Cliquer pour ouvrir les paramètres"
 
@@ -178,3 +178,6 @@ L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsSpellTarget] = "Spell Target",
 	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Unit Target",
 }
+
+L.Settings.Import = "Importer"
+L.Settings.Export = "Exporter"

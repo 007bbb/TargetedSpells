@@ -70,11 +70,11 @@ Private.Enum.Grow = {
 
 ---@enum SoundChannel
 Private.Enum.SoundChannel = {
-	Master = MASTER_VOLUME,
-	Music = MUSIC_VOLUME,
-	SFX = FX_VOLUME,
-	Ambience = AMBIENCE_VOLUME,
-	Dialog = DIALOG_VOLUME,
+	Master = 0,
+	Music = 1,
+	SFX = 2,
+	Ambience = 3,
+	Dialog = 4,
 }
 
 ---@enum GlowType

@@ -178,3 +178,6 @@ L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsSpellTarget] = "Spell Target",
 	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Unit Target",
 }
+
+L.Settings.Import = "Import"
+L.Settings.Export = "Export"

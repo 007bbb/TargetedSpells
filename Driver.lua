@@ -538,26 +538,17 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 				self:RepositionFrames()
 			end
 		elseif name == "nameplateShowOffscreen" then
-			if StaticPopupDialogs[addonName] == nil then
-				StaticPopupDialogs[addonName] = {
-					id = addonName,
+			if value == "1" or value == 1 then
+			else
+				Private.Utils.ShowStaticPopup({
+					text = Private.L.Functionality.CVarWarning,
 					button1 = ENABLE,
 					button2 = CLOSE,
-					whileDead = true,
-					text = Private.L.Functionality.CVarWarning,
-					OnAccept = function(dialog, data)
+					OnAccept = function()
 						C_CVar.SetCVar("nameplateShowOffscreen", 1)
 						-- Settings.OpenToCategory(Settings.NAMEPLATE_OPTIONS_CATEGORY_ID, UNIT_NAMEPLATES_SHOW_OFFSCREEN)
 					end,
-				}
-			end
-
-			StaticPopup_Hide(addonName)
-
-			if value == "1" or value == 1 then
-			else
-				StaticPopup_Hide(addonName)
-				StaticPopup_Show(addonName)
+				})
 			end
 		end
 	elseif

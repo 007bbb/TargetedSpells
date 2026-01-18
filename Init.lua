@@ -35,13 +35,19 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
 	TargetedSpellsSaved.Settings.Party = TargetedSpellsSaved.Settings.Party or {}
 
 	for key, value in pairs(Private.Settings.GetSelfDefaultSettings()) do
-		if TargetedSpellsSaved.Settings.Self[key] == nil then
+		if
+			TargetedSpellsSaved.Settings.Self[key] == nil
+			or type(value) ~= type(TargetedSpellsSaved.Settings.Self[key])
+		then
 			TargetedSpellsSaved.Settings.Self[key] = value
 		end
 	end
 
 	for key, value in pairs(Private.Settings.GetPartyDefaultSettings()) do
-		if TargetedSpellsSaved.Settings.Party[key] == nil then
+		if
+			TargetedSpellsSaved.Settings.Party[key] == nil
+			or type(value) ~= type(TargetedSpellsSaved.Settings.Party[key])
+		then
 			TargetedSpellsSaved.Settings.Party[key] = value
 		end
 	end

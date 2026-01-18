@@ -112,3 +112,13 @@ function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
 
 	return nil
 end
+
+function Private.Utils.ShowStaticPopup(args)
+	args.id = addonName
+	args.whileDead = true
+
+	StaticPopupDialogs[addonName] = args
+
+	StaticPopup_Hide(addonName)
+	StaticPopup_Show(addonName)
+end

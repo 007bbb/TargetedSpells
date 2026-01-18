@@ -31,6 +31,8 @@ Private.Settings.Keys = {
 		TTSVoice = "TTS_VOICE_SELF",
 		IndicateInterrupts = "INDICATE_INTERRUPTS_SELF",
 		TargetingFilterApi = "TARGETING_FILTER_API_SELF",
+		Import = "IMPORT_SELF",
+		Export = "EXPORT_SELF",
 	},
 	Party = {
 		Enabled = "ENABLED_PARTY",
@@ -56,6 +58,8 @@ Private.Settings.Keys = {
 		ShowBorder = "BORDER_PARTY",
 		IndicateInterrupts = "INDICATE_INTERRUPTS_PARTY",
 		TargetingFilterApi = "TARGETING_FILTER_API_PARTY",
+		Import = "IMPORT_PARTY",
+		Export = "EXPORT_PARTY",
 	},
 }
 
@@ -1186,7 +1190,7 @@ table.insert(Private.LoginFnQueue, function()
 			local setting = Settings.RegisterProxySetting(
 				category,
 				key,
-				Settings.VarType.String,
+				Settings.VarType.Number,
 				L.Settings.SoundChannelLabel,
 				defaults.SoundChannel,
 				GetValue,

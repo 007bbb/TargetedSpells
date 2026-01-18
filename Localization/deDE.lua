@@ -177,3 +177,6 @@ L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsSpellTarget] = "Ziel des Zaubers",
 	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Ziel des Zaubers",
 }
+
+L.Settings.Import = "Importieren"
+L.Settings.Export = "Exportieren"
