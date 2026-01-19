@@ -17,6 +17,7 @@ function TargetedSpellsEditModeMixin:Init(displayName, frameKind)
 	self.editModeFrame = CreateFrame("Frame", displayName, UIParent)
 	self.editModeFrame:SetClampedToScreen(true)
 
+	Private.Utils.RegisterEditModeFrame(frameKind, self.editModeFrame)
 	Private.EventRegistry:RegisterCallback(Private.Enum.Events.SETTING_CHANGED, self.OnSettingsChanged, self)
 
 	LibEditMode:RegisterCallback("enter", GenerateClosure(self.StartDemo, self))
@@ -94,7 +95,7 @@ function TargetedSpellsEditModeMixin:CreateImportExportButtons(kind)
 end
 
 function TargetedSpellsEditModeMixin:OnExportButtonClick()
-	local string = C_EncodingUtil.SerializeJSON(TargetedSpellsSaved.Settings)
+	local string = Private.Utils.Export()
 
 	Private.Utils.ShowStaticPopup({
 		text = Private.L.Settings.Export,
@@ -153,7 +154,7 @@ function TargetedSpellsEditModeMixin:OnImportButtonClick(kind)
 		OnAccept = function(popupSelf)
 			local editBox = popupSelf:GetEditBox()
 			self:OnImportConfirmation({
-				json = editBox:GetText(),
+				encodedString = editBox:GetText(),
 				kind = kind,
 			})
 		end,
@@ -161,118 +162,7 @@ function TargetedSpellsEditModeMixin:OnImportButtonClick(kind)
 end
 
 function TargetedSpellsEditModeMixin:OnImportConfirmation(importArgs)
-	local ok, result = pcall(C_EncodingUtil.DeserializeJSON, importArgs.json)
-
-	if not ok then
-		if result ~= nil then
-			print(result)
-		end
-
-		return
-	end
-
-	-- just a type check
-	if result == nil then
-		return
-	end
-
-	local hasAnyChange = false
-
-	for kind, kindString in pairs(Private.Enum.FrameKind) do
-		local tableRef = TargetedSpellsSaved.Settings[kind]
-
-		if kindString == Private.Enum.FrameKind.Self then
-			local point, x, y = result[kind].Position.point, result[kind].Position.x, result[kind].Position.y
-
-			if point ~= tableRef.Position.point or x ~= tableRef.Position.x or y ~= tableRef.Position.y then
-				self.editModeFrame:ClearAllPoints()
-				self.editModeFrame:SetPoint(point, x, y)
-				tableRef.Position.point = point
-				tableRef.Position.x = x
-				tableRef.Position.y = y
-			end
-		end
-
-		local anyPrimaryLoadConditionIsDisabled = false
-
-		local defaults = kindString == Private.Enum.FrameKind.Self and Private.Settings.GetSelfDefaultSettings()
-			or Private.Settings.GetPartyDefaultSettings()
-		local eventKeys = kindString == Private.Enum.FrameKind.Self and Private.Settings.Keys.Self
-			or Private.Settings.Keys.Party
-
-		for key, defaultValue in pairs(defaults) do
-			local newValue = result[kind][key]
-			local expectedType = type(defaultValue)
-
-			if newValue and type(newValue) == expectedType then
-				local eventKey = eventKeys[key]
-				local hasChanges = false
-
-				if expectedType == "table" then
-					local enumToCompareAgainst = nil
-					if key == "LoadConditionContentType" then
-						enumToCompareAgainst = Private.Enum.ContentType
-					elseif key == "LoadConditionRole" then
-						enumToCompareAgainst = Private.Enum.Role
-					elseif key == "LoadConditionSoundContentType" then
-						enumToCompareAgainst = Private.Enum.ContentType
-					end
-
-					-- only other case is Position but that's taken care of above
-
-					if enumToCompareAgainst then
-						local newTable = {}
-						local allDisabled = true
-
-						for _, id in pairs(enumToCompareAgainst) do
-							if newValue[id] == nil then
-								newTable[id] = tableRef[key][id]
-							else
-								newTable[id] = newValue[id]
-
-								if newValue[id] ~= tableRef[key][id] then
-									hasChanges = true
-								end
-
-								if newValue[id] then
-									allDisabled = false
-								end
-							end
-						end
-
-						if key == "LoadConditionSoundContentType" and allDisabled then
-							allDisabled = false
-						end
-
-						if allDisabled then
-							anyPrimaryLoadConditionIsDisabled = true
-						end
-
-						if hasChanges then
-							tableRef[key] = newTable
-							Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKey, newTable)
-						end
-					end
-				elseif newValue ~= tableRef[key] then
-					tableRef[key] = newValue
-					hasChanges = true
-
-					if eventKey and hasChanges then
-						Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKey, newValue)
-					end
-				end
-
-				if hasChanges then
-					hasAnyChange = true
-				end
-			end
-		end
-
-		if anyPrimaryLoadConditionIsDisabled then
-			tableRef.Enabled = false
-			Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, eventKeys.Enabled, false)
-		end
-	end
+	local hasAnyChange = Private.Utils.Import(importArgs.encodedString)
 
 	if hasAnyChange then
 		LibEditMode:RefreshFrameSettings(self.editModeFrame)

@@ -18,7 +18,9 @@
 ---@field FindAppropriateTTSVoiceId fun(): number
 ---@field PlayTTS fun(text: string, voiceId: number?, rate: number?)
 ---@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?
----@field ShowStaticPopup fun(args: StaticPopupDialogsArgs): fun()
+---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
+---@field Import fun(string: string): boolean
+---@field Export fun(): string
 
 ---@class StaticPopupDialogsArgs
 ---@field text string
@@ -215,7 +217,7 @@
 
 ---@class ImportConfirmationArgs
 ---@field kind FrameKind
----@field json string
+---@field encodedString string
 
 ---@class TargetedSpellsSelfEditMode : TargetedSpellsEditModeMixin
 ---@field private maxFrames number
