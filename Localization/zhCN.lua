@@ -178,5 +178,5 @@ L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "单位目标",
 }
 
-L.Settings.Import = "进口"
-L.Settings.Export = "出口"
+L.Settings.Import = "导入"
+L.Settings.Export = "导出"
