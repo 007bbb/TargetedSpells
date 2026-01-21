@@ -1,6 +1,5 @@
 ---@type string, TargetedSpells
 local addonName, Private = ...
-local LibSharedMedia = LibStub("LibSharedMedia-3.0")
 
 ---@class TargetedSpellsSettings
 Private.Settings = {}
@@ -19,16 +18,10 @@ Private.Settings.Keys = {
 		GlowImportant = "GLOW_IMPORTANT_SELF",
 		GlowType = "GLOW_TYPE_SELF",
 		Grow = "FRAME_GROW_SELF",
-		PlaySound = "PLAY_SOUND_SELF",
-		Sound = "SOUND_SELF",
-		SoundChannel = "SOUND_CHANNEL_SELF",
 		ShowDuration = "SHOW_DURATION_SELF",
 		ShowDurationFractions = "SHOW_DURATION_FRACTIONS_SELF",
-		LoadConditionSoundContentType = "LOAD_CONDITION_SOUND_CONTENT_TYPE_SELF",
 		Opacity = "OPACITY_SELF",
 		ShowBorder = "BORDER_SELF",
-		PlayTTS = "PLAY_TTS_SELF",
-		TTSVoice = "TTS_VOICE_SELF",
 		IndicateInterrupts = "INDICATE_INTERRUPTS_SELF",
 		TargetingFilterApi = "TARGETING_FILTER_API_SELF",
 		Import = "IMPORT_SELF",
@@ -65,75 +58,53 @@ Private.Settings.Keys = {
 
 function Private.Settings.GetSettingsDisplayOrder(kind)
 	if kind == Private.Enum.FrameKind.Self then
-		local settings = {
+		return {
 			Private.Settings.Keys.Self.Enabled,
 			Private.Settings.Keys.Self.LoadConditionContentType,
 			Private.Settings.Keys.Self.LoadConditionRole,
+			Private.Settings.Keys.Self.TargetingFilterApi,
+			Private.Settings.Keys.Self.Width,
+			Private.Settings.Keys.Self.Height,
+			Private.Settings.Keys.Self.Gap,
+			Private.Settings.Keys.Self.Direction,
+			Private.Settings.Keys.Self.SortOrder,
+			Private.Settings.Keys.Self.Grow,
+			Private.Settings.Keys.Self.GlowImportant,
+			Private.Settings.Keys.Self.GlowType,
+			Private.Settings.Keys.Self.ShowDuration,
+			Private.Settings.Keys.Self.ShowDurationFractions,
+			Private.Settings.Keys.Self.FontSize,
+			Private.Settings.Keys.Self.ShowBorder,
+			Private.Settings.Keys.Self.IndicateInterrupts,
+			Private.Settings.Keys.Self.Opacity,
 		}
-
-		if Private.IsMidnight then
-			table.insert(settings, Private.Settings.Keys.Self.TargetingFilterApi)
-		end
-
-		table.insert(settings, Private.Settings.Keys.Self.Width)
-		table.insert(settings, Private.Settings.Keys.Self.Height)
-		table.insert(settings, Private.Settings.Keys.Self.Gap)
-		table.insert(settings, Private.Settings.Keys.Self.Direction)
-		table.insert(settings, Private.Settings.Keys.Self.SortOrder)
-		table.insert(settings, Private.Settings.Keys.Self.Grow)
-		table.insert(settings, Private.Settings.Keys.Self.GlowImportant)
-		table.insert(settings, Private.Settings.Keys.Self.GlowType)
-
-		if not Private.IsMidnight then
-			table.insert(settings, Private.Settings.Keys.Self.PlaySound)
-			table.insert(settings, Private.Settings.Keys.Self.Sound)
-			table.insert(settings, Private.Settings.Keys.Self.SoundChannel)
-			table.insert(settings, Private.Settings.Keys.Self.PlayTTS)
-			table.insert(settings, Private.Settings.Keys.Self.TTSVoice)
-		end
-
-		table.insert(settings, Private.Settings.Keys.Self.LoadConditionSoundContentType)
-		table.insert(settings, Private.Settings.Keys.Self.ShowDuration)
-		table.insert(settings, Private.Settings.Keys.Self.ShowDurationFractions)
-		table.insert(settings, Private.Settings.Keys.Self.FontSize)
-		table.insert(settings, Private.Settings.Keys.Self.ShowBorder)
-		table.insert(settings, Private.Settings.Keys.Self.IndicateInterrupts)
-		table.insert(settings, Private.Settings.Keys.Self.Opacity)
-
-		return settings
 	end
 
-	local settings = {
+	return {
 		Private.Settings.Keys.Party.Enabled,
 		Private.Settings.Keys.Party.LoadConditionContentType,
 		Private.Settings.Keys.Party.LoadConditionRole,
+		Private.Settings.Keys.Party.TargetingFilterApi,
+		Private.Settings.Keys.Party.IncludeSelfInParty,
+		Private.Settings.Keys.Party.Width,
+		Private.Settings.Keys.Party.Height,
+		Private.Settings.Keys.Party.Gap,
+		Private.Settings.Keys.Party.Direction,
+		Private.Settings.Keys.Party.SourceAnchor,
+		Private.Settings.Keys.Party.TargetAnchor,
+		Private.Settings.Keys.Party.Grow,
+		Private.Settings.Keys.Party.OffsetX,
+		Private.Settings.Keys.Party.OffsetY,
+		Private.Settings.Keys.Party.SortOrder,
+		Private.Settings.Keys.Party.GlowImportant,
+		Private.Settings.Keys.Party.GlowType,
+		Private.Settings.Keys.Party.ShowDuration,
+		Private.Settings.Keys.Party.ShowDurationFractions,
+		Private.Settings.Keys.Party.FontSize,
+		Private.Settings.Keys.Party.ShowBorder,
+		Private.Settings.Keys.Party.IndicateInterrupts,
+		Private.Settings.Keys.Party.Opacity,
 	}
-
-	if Private.IsMidnight then
-		table.insert(settings, Private.Settings.Keys.Party.TargetingFilterApi)
-	end
-
-	table.insert(settings, Private.Settings.Keys.Party.IncludeSelfInParty)
-	table.insert(settings, Private.Settings.Keys.Party.Width)
-	table.insert(settings, Private.Settings.Keys.Party.Height)
-	table.insert(settings, Private.Settings.Keys.Party.Gap)
-	table.insert(settings, Private.Settings.Keys.Party.Direction)
-	table.insert(settings, Private.Settings.Keys.Party.SourceAnchor)
-	table.insert(settings, Private.Settings.Keys.Party.TargetAnchor)
-	table.insert(settings, Private.Settings.Keys.Party.Grow)
-	table.insert(settings, Private.Settings.Keys.Party.OffsetX)
-	table.insert(settings, Private.Settings.Keys.Party.OffsetY)
-	table.insert(settings, Private.Settings.Keys.Party.SortOrder)
-	table.insert(settings, Private.Settings.Keys.Party.GlowImportant)
-	table.insert(settings, Private.Settings.Keys.Party.GlowType)
-	table.insert(settings, Private.Settings.Keys.Party.ShowDuration)
-	table.insert(settings, Private.Settings.Keys.Party.ShowDurationFractions)
-	table.insert(settings, Private.Settings.Keys.Party.FontSize)
-	table.insert(settings, Private.Settings.Keys.Party.ShowBorder)
-	table.insert(settings, Private.Settings.Keys.Party.IndicateInterrupts)
-	table.insert(settings, Private.Settings.Keys.Party.Opacity)
-
-	return settings
 end
 
 function Private.Settings.GetDefaultEditModeFramePosition()
@@ -226,17 +197,7 @@ function Private.Settings.GetSelfDefaultSettings()
 			[Private.Enum.Role.Tank] = true,
 			[Private.Enum.Role.Damager] = true,
 		},
-		PlaySound = true,
-		Sound = "Interface\\AddOns\\TargetedSpells\\Media\\Sounds\\WaterDrop.ogg",
-		SoundChannel = Private.Enum.SoundChannel.Master,
-		LoadConditionSoundContentType = {
-			[Private.Enum.ContentType.OpenWorld] = false,
-			[Private.Enum.ContentType.Delve] = true,
-			[Private.Enum.ContentType.Dungeon] = true,
-			[Private.Enum.ContentType.Raid] = false,
-			[Private.Enum.ContentType.Arena] = false,
-			[Private.Enum.ContentType.Battleground] = false,
-		},
+
 		SortOrder = Private.Enum.SortOrder.Ascending,
 		Grow = Private.Enum.Grow.Center,
 		ShowDuration = true,
@@ -247,8 +208,6 @@ function Private.Settings.GetSelfDefaultSettings()
 		ShowBorder = true,
 		GlowImportant = true,
 		GlowType = Private.Enum.GlowType.PixelGlow,
-		PlayTTS = false,
-		TTSVoice = Private.Utils.FindAppropriateTTSVoiceId(),
 		IndicateInterrupts = false,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 	}
@@ -292,179 +251,6 @@ function Private.Settings.GetPartyDefaultSettings()
 		IndicateInterrupts = true,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 	}
-end
-
-if not Private.IsMidnight then
-	---@type table<string|number, true>
-	local soundIsFileCache = {}
-
-	function Private.Settings.SoundIsFile(sound)
-		return soundIsFileCache[sound] or false
-	end
-
-	table.insert(Private.LoginFnQueue, function()
-		local customSounds = {
-			{ name = "TargetedSpells Water Drop", path = "WaterDrop.ogg" },
-			{ name = "TargetedSpells Banana Peel Slip", path = "BananaPeelSlip.ogg" },
-		}
-
-		for i, sound in pairs(customSounds) do
-			LibSharedMedia:Register(
-				"sound",
-				sound.name,
-				string.format("Interface\\AddOns\\TargetedSpells\\Media\\Sounds\\%s", sound.path)
-			)
-		end
-
-		local soundInfo = Private.Settings.GetCustomSoundGroups()
-
-		for group, sounds in pairs(soundInfo.data) do
-			for _, sound in pairs(sounds) do
-				soundIsFileCache[sound.soundKitID] = true
-			end
-		end
-	end)
-
-	LibSharedMedia.RegisterCallback(Private, "LibSharedMedia_Registered", function(_, mediaType, key)
-		if mediaType ~= "sound" then
-			return
-		end
-
-		local path = LibSharedMedia:Fetch("sound", key)
-
-		if path == nil or path == 1 then
-			return
-		end
-
-		soundIsFileCache[path] = true
-	end)
-end
-
--- this follows the structure of `CooldownViewerSoundData` in `Blizzard_CooldownViewer/CooldownViewerSoundAlertData.lua` for ease of function reuse
-function Private.Settings.GetCustomSoundGroups(groupSizeThreshold)
-	---@type SoundInfo
-	local soundInfo = {
-		data = {},
-		soundCategoryKeyToLabel = {},
-	}
-
-	local source = LibSharedMedia:HashTable(LibSharedMedia.MediaType.SOUND)
-	local groupedSounds = {}
-
-	---@param str string
-	---@param prefix string
-	---@return boolean
-	local function StartsWith(str, prefix)
-		return str:find(prefix, 1, true) == 1
-	end
-
-	for label, path in pairs(source) do
-		if path ~= 1 then
-			---@type string
-			local key = Private.L.Settings.SoundCategoryCustom
-
-			if type(path) == "string" and StartsWith(path, "Interface") then
-				-- path is case insensitive, normalize it
-				path = path:gsub([[\Addons\]], "\\AddOns\\")
-
-				---@type string|nil
-				local maybeAddonName = path:match([[AddOns[\/]([^\/]+)]])
-
-				if maybeAddonName then
-					key = maybeAddonName
-				end
-			elseif StartsWith(label, "BigWigs") then -- BW ships a couple game sound id references that are still prefixed with "BigWigs: (...)"
-				key = "BigWigs"
-			end
-
-			-- some sounds are labelled e.g. `Plater Steel` and get patched to only render `Steel`
-			if string.find(label, key) ~= nil then
-				label = label:gsub(key .. ": ", ""):gsub(key, ""):trim()
-			end
-
-			if groupedSounds[key] == nil then
-				groupedSounds[key] = {}
-			end
-
-			table.insert(groupedSounds[key], {
-				name = label,
-				path = path,
-			})
-		end
-	end
-
-	for groupName, sounds in pairs(groupedSounds) do
-		local needsSplitting = groupSizeThreshold ~= nil and #sounds > groupSizeThreshold or false
-		local groupCount = 0
-		local isCustomGroup = groupName == Private.L.Settings.SoundCategoryCustom
-		local tableKey = groupName
-
-		-- edit mode dropdowns need splitting as there's a max amount of elements to render within a dropdown
-		if needsSplitting then
-			groupCount = groupCount + 1
-			tableKey = isCustomGroup and string.format("%s %d", Private.L.Settings.SoundCategoryCustom, groupCount)
-				or string.format("%s %d", groupName, groupCount)
-		end
-
-		if soundInfo.data[tableKey] == nil then
-			soundInfo.data[tableKey] = {}
-			soundInfo.soundCategoryKeyToLabel[tableKey] = tableKey
-		end
-
-		local targetTable = soundInfo.data[tableKey]
-
-		for _, sound in pairs(sounds) do
-			if groupSizeThreshold ~= nil then
-				if #targetTable >= groupSizeThreshold then
-					groupCount = groupCount + 1
-
-					tableKey = isCustomGroup
-							and string.format("%s %d", Private.L.Settings.SoundCategoryCustom, groupCount)
-						or string.format("%s %d", groupName, groupCount)
-
-					if soundInfo.data[tableKey] == nil then
-						soundInfo.data[tableKey] = {}
-						soundInfo.soundCategoryKeyToLabel[tableKey] = tableKey
-					end
-
-					targetTable = soundInfo.data[tableKey]
-				end
-			end
-
-			table.insert(targetTable, {
-				soundKitID = sound.path,
-				text = sound.name,
-			})
-		end
-	end
-
-	return soundInfo
-end
-
-function Private.Settings.SampleTTSVoice(voiceId)
-	-- iterate spellbook until we find the first spec-connected page.
-	-- play TTS for the first spell we find on that page to demo voice
-	for i = 1, C_SpellBook.GetNumSpellBookSkillLines() do
-		local skillLineInfo = C_SpellBook.GetSpellBookSkillLineInfo(i)
-
-		if skillLineInfo.specID then
-			for j = skillLineInfo.itemIndexOffset + 1, skillLineInfo.itemIndexOffset + skillLineInfo.numSpellBookItems do
-				local spellBookItemInfo = C_SpellBook.GetSpellBookItemInfo(j, Enum.SpellBookSpellBank.Player)
-				if
-					spellBookItemInfo.itemType == Enum.SpellBookItemType.Spell
-					or spellBookItemInfo.itemType == Enum.SpellBookItemType.FutureSpell
-				then
-					local name = C_Spell.GetSpellName(spellBookItemInfo.actionID)
-
-					if name then
-						Private.Utils.PlayTTS(name, voiceId, 1.5)
-
-						return
-					end
-				end
-			end
-		end
-	end
 end
 
 function Private.Settings.IsContentTypeAvailableForKind(kind, contentTypeId)
@@ -951,388 +737,6 @@ table.insert(Private.LoginFnQueue, function()
 			}
 		end
 
-		if key == Private.Settings.Keys.Self.PlayTTS then
-			local function GetValue()
-				return TargetedSpellsSaved.Settings.Self.PlayTTS
-			end
-
-			local function SetValue(value)
-				TargetedSpellsSaved.Settings.Self.PlayTTS = not TargetedSpellsSaved.Settings.Self.PlayTTS
-				Private.EventRegistry:TriggerEvent(
-					Private.Enum.Events.SETTING_CHANGED,
-					key,
-					TargetedSpellsSaved.Settings.Self.PlayTTS
-				)
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Boolean,
-				L.Settings.PlayTTSLabel,
-				defaults.PlayTTS,
-				GetValue,
-				SetValue
-			)
-			local initializer = Settings.CreateCheckbox(category, setting, L.Settings.PlayTTSTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
-		if key == Private.Settings.Keys.Self.LoadConditionSoundContentType then
-			if Private.IsMidnight then
-				local defaultValue = GetMask(Private.Enum.ContentType, function(id)
-					return defaults.LoadConditionSoundContentType[id]
-				end)
-
-				local function GetValue()
-					return GetMask(Private.Enum.ContentType, function(id)
-						return TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id]
-					end)
-				end
-
-				local function SetValue(mask)
-					local hasChanges = false
-					local anyEnabled = false
-
-					for label, id in pairs(Private.Enum.ContentType) do
-						local enabled = DecodeBitToBool(mask, id)
-
-						if enabled ~= TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id] then
-							TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id] = enabled
-							hasChanges = true
-						end
-
-						if enabled then
-							anyEnabled = true
-						end
-					end
-
-					if not hasChanges then
-						return
-					end
-
-					Private.EventRegistry:TriggerEvent(
-						Private.Enum.Events.SETTING_CHANGED,
-						key,
-						TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType
-					)
-
-					if anyEnabled ~= TargetedSpellsSaved.Settings.Self.PlaySound then
-						TargetedSpellsSaved.Settings.Self.PlaySound = anyEnabled
-						Private.EventRegistry:TriggerEvent(
-							Private.Enum.Events.SETTING_CHANGED,
-							Private.Settings.Keys.Self.PlaySound,
-							anyEnabled
-						)
-					end
-				end
-
-				local setting = Settings.RegisterProxySetting(
-					category,
-					key,
-					Settings.VarType.Number,
-					L.Settings.LoadConditionSoundContentTypeLabel,
-					defaultValue,
-					GetValue,
-					SetValue
-				)
-
-				local function GetOptions()
-					local container = Settings.CreateControlTextContainer()
-
-					for label, id in pairs(Private.Enum.ContentType) do
-						if Private.Settings.IsContentTypeAvailableForKind(Private.Enum.FrameKind.Self, id) then
-							local function IsEnabled()
-								return TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id]
-							end
-
-							local function Toggle()
-								TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id] =
-									not TargetedSpellsSaved.Settings.Self.LoadConditionSoundContentType[id]
-							end
-
-							local translated = L.Settings.LoadConditionSoundContentTypeLabels[id]
-
-							container:AddCheckbox(
-								id,
-								translated,
-								L.Settings.LoadConditionSoundContentTypeTooltip,
-								IsEnabled,
-								Toggle
-							)
-						end
-					end
-
-					return container:GetData()
-				end
-
-				local initializer = Settings.CreateDropdown(
-					category,
-					setting,
-					GetOptions,
-					L.Settings.LoadConditionSoundContentTypeTooltip
-				)
-
-				return {
-					initializer = initializer,
-					hideSteppers = true,
-					IsSectionEnabled = nil,
-				}
-			end
-
-			local function GetValue()
-				return 0
-			end
-
-			local function SetValue() end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Number,
-				L.Settings.LoadConditionSoundContentTypeLabel,
-				0,
-				GetValue,
-				SetValue
-			)
-
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-
-				for label, id in pairs(Private.Enum.ContentType) do
-					local translated = L.Settings.LoadConditionSoundContentTypeLabels[id]
-
-					container:Add(id, translated, L.Settings.LoadConditionSoundContentTypeTooltip)
-				end
-
-				return container:GetData()
-			end
-
-			local initializer =
-				Settings.CreateDropdown(category, setting, GetOptions, L.Settings.LoadConditionSoundContentTypeTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = true,
-				IsSectionEnabled = function()
-					return false
-				end,
-			}
-		end
-
-		if key == Private.Settings.Keys.Self.TTSVoice then
-			local function GetValue()
-				return TargetedSpellsSaved.Settings.Self.TTSVoice
-			end
-
-			local function SetValue(value)
-				TargetedSpellsSaved.Settings.Self.TTSVoice = value
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
-
-				Private.Settings.SampleTTSVoice(value)
-			end
-
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-
-				for _, voice in pairs(C_VoiceChat.GetTtsVoices()) do
-					container:Add(voice.voiceID, voice.name)
-				end
-
-				return container:GetData()
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Number,
-				L.Settings.TTSVoiceLabel,
-				defaults.TTSVoice or 0,
-				GetValue,
-				SetValue
-			)
-			local initializer = Settings.CreateDropdown(category, setting, GetOptions, L.Settings.TTSVoiceTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
-		if key == Private.Settings.Keys.Self.SoundChannel then
-			local function GetValue()
-				return TargetedSpellsSaved.Settings.Self.SoundChannel
-			end
-
-			local function SetValue(value)
-				TargetedSpellsSaved.Settings.Self.SoundChannel = value
-
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
-			end
-
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-
-				for label, value in pairs(Private.Enum.SoundChannel) do
-					local translated = L.Settings.SoundChannelLabels[value]
-					container:Add(value, translated)
-				end
-
-				return container:GetData()
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Number,
-				L.Settings.SoundChannelLabel,
-				defaults.SoundChannel,
-				GetValue,
-				SetValue
-			)
-
-			local initializer = Settings.CreateDropdown(category, setting, GetOptions, L.Settings.SoundChannelTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
-		if key == Private.Settings.Keys.Self.Sound then
-			local function GetValue()
-				return tostring(TargetedSpellsSaved.Settings.Self.Sound)
-			end
-
-			local function IsNumeric(str)
-				return tonumber(str) ~= nil
-			end
-
-			local function SetValue(value)
-				local sound = IsNumeric(value) and tonumber(value) or value
-
-				Private.Utils.AttemptToPlaySound(sound, Private.Enum.SoundChannel.Master)
-
-				if TargetedSpellsSaved.Settings.Self.Sound ~= sound then
-					TargetedSpellsSaved.Settings.Self.Sound = sound
-
-					Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, sound)
-				end
-			end
-
-			---@param soundCategoryKeyToText table<string, string>
-			---@param currentTable table<string, CustomSound[]> | CustomSound[]
-			---@param categoryName string?
-			local function RecursiveAddSounds(container, soundCategoryKeyToText, currentTable, categoryName)
-				for tableKey, value in pairs(currentTable) do
-					if value.soundKitID and value.text then
-						container:Add(tostring(value.soundKitID), string.format("%s - %s", categoryName, value.text))
-					elseif type(value) == "table" and soundCategoryKeyToText[tableKey] then
-						RecursiveAddSounds(container, soundCategoryKeyToText, value, soundCategoryKeyToText[tableKey])
-					end
-				end
-			end
-
-			local function GetOptions(owner, rootDescription)
-				local container = Settings.CreateControlTextContainer()
-
-				local soundInfo = Private.Settings.GetCustomSoundGroups()
-				RecursiveAddSounds(container, soundInfo.soundCategoryKeyToLabel, soundInfo.data)
-
-				return container:GetData()
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.String,
-				L.Settings.SoundLabel,
-				tostring(defaults.Sound),
-				GetValue,
-				SetValue
-			)
-
-			-- a bit icky but there's no native way of making the dropdown scrollable without introducing a template and this is easier
-			-- ty to .numy
-			hooksecurefunc(
-				Settings,
-				"InitDropdown",
-				function(dropdown, settingBeingCreated, elementInserter, initTooltip)
-					if setting ~= settingBeingCreated then
-						return
-					end
-
-					dropdown:SetupMenu(function(_dropdown, rootDescription)
-						local extent = 20
-						local maxCharacters = 20
-						local maxScrollExtent = extent * maxCharacters
-						rootDescription:SetScrollMode(maxScrollExtent)
-
-						if Private.IsMidnight then
-							elementInserter(settingBeingCreated, rootDescription)
-						else
-							local function IsSelected(optionData)
-								return settingBeingCreated:GetValue() == optionData.value
-							end
-
-							local function OnSelect(optionData)
-								return settingBeingCreated:SetValue(optionData.value)
-							end
-
-							elementInserter(rootDescription, IsSelected, OnSelect)
-						end
-					end)
-				end
-			)
-
-			local initializer = Settings.CreateDropdown(category, setting, GetOptions, L.Settings.SoundTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
-		if key == Private.Settings.Keys.Self.PlaySound then
-			local function GetValue()
-				return TargetedSpellsSaved.Settings.Self.PlaySound
-			end
-
-			local function SetValue(value)
-				TargetedSpellsSaved.Settings.Self.PlaySound = not TargetedSpellsSaved.Settings.Self.PlaySound
-				Private.EventRegistry:TriggerEvent(
-					Private.Enum.Events.SETTING_CHANGED,
-					key,
-					TargetedSpellsSaved.Settings.Self.PlaySound
-				)
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Boolean,
-				L.Settings.PlaySoundLabel,
-				defaults.PlaySound,
-				GetValue,
-				SetValue
-			)
-			local initializer = Settings.CreateCheckbox(category, setting, L.Settings.PlaySoundTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
 		if key == Private.Settings.Keys.Self.GlowType or key == Private.Settings.Keys.Party.GlowType then
 			local tableRef = key == Private.Settings.Keys.Self.GlowType and TargetedSpellsSaved.Settings.Self
 				or TargetedSpellsSaved.Settings.Party
@@ -1694,101 +1098,62 @@ table.insert(Private.LoginFnQueue, function()
 			key == Private.Settings.Keys.Self.LoadConditionRole
 			or key == Private.Settings.Keys.Party.LoadConditionRole
 		then
-			if Private.IsMidnight then
-				local isSelf = key == Private.Settings.Keys.Self.LoadConditionRole
-				local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
+			local isSelf = key == Private.Settings.Keys.Self.LoadConditionRole
+			local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
 
-				local defaultValue = GetMask(Private.Enum.Role, function(id)
-					return defaults.LoadConditionRole[id]
-				end)
-
-				local function GetValue()
-					return GetMask(Private.Enum.Role, function(id)
-						return kindTableRef.LoadConditionRole[id]
-					end)
-				end
-
-				local function SetValue(mask)
-					local hasChanges = false
-					local anyEnabled = false
-
-					for label, id in pairs(Private.Enum.Role) do
-						local enabled = DecodeBitToBool(mask, id)
-
-						if enabled ~= kindTableRef.LoadConditionRole[id] then
-							kindTableRef.LoadConditionRole[id] = enabled
-							hasChanges = true
-						end
-
-						if enabled then
-							anyEnabled = true
-						end
-					end
-
-					if not hasChanges then
-						return
-					end
-
-					Private.EventRegistry:TriggerEvent(
-						Private.Enum.Events.SETTING_CHANGED,
-						key,
-						kindTableRef.LoadConditionRole
-					)
-
-					if anyEnabled ~= kindTableRef.Enabled then
-						kindTableRef.Enabled = anyEnabled
-						Private.EventRegistry:TriggerEvent(
-							Private.Enum.Events.SETTING_CHANGED,
-							isSelf and Private.Settings.Keys.Self.Enabled or Private.Settings.Keys.Party.Enabled,
-							anyEnabled
-						)
-					end
-				end
-
-				local setting = Settings.RegisterProxySetting(
-					category,
-					key,
-					Settings.VarType.Number,
-					L.Settings.LoadConditionRoleLabel,
-					defaultValue,
-					GetValue,
-					SetValue
-				)
-
-				local function GetOptions()
-					local container = Settings.CreateControlTextContainer()
-
-					for label, id in pairs(Private.Enum.Role) do
-						local translated = L.Settings.LoadConditionRoleLabels[id]
-
-						container:AddCheckbox(id, translated, L.Settings.LoadConditionRoleTooltip)
-					end
-
-					return container:GetData()
-				end
-
-				local initializer =
-					Settings.CreateDropdown(category, setting, GetOptions, L.Settings.LoadConditionRoleTooltip)
-
-				return {
-					initializer = initializer,
-					hideSteppers = true,
-					IsSectionEnabled = nil,
-				}
-			end
+			local defaultValue = GetMask(Private.Enum.Role, function(id)
+				return defaults.LoadConditionRole[id]
+			end)
 
 			local function GetValue()
-				return 0
+				return GetMask(Private.Enum.Role, function(id)
+					return kindTableRef.LoadConditionRole[id]
+				end)
 			end
 
-			local function SetValue() end
+			local function SetValue(mask)
+				local hasChanges = false
+				local anyEnabled = false
+
+				for label, id in pairs(Private.Enum.Role) do
+					local enabled = DecodeBitToBool(mask, id)
+
+					if enabled ~= kindTableRef.LoadConditionRole[id] then
+						kindTableRef.LoadConditionRole[id] = enabled
+						hasChanges = true
+					end
+
+					if enabled then
+						anyEnabled = true
+					end
+				end
+
+				if not hasChanges then
+					return
+				end
+
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					kindTableRef.LoadConditionRole
+				)
+
+				if anyEnabled ~= kindTableRef.Enabled then
+					kindTableRef.Enabled = anyEnabled
+					Private.EventRegistry:TriggerEvent(
+						Private.Enum.Events.SETTING_CHANGED,
+						isSelf and Private.Settings.Keys.Self.Enabled or Private.Settings.Keys.Party.Enabled,
+						anyEnabled
+					)
+				end
+			end
 
 			local setting = Settings.RegisterProxySetting(
 				category,
 				key,
 				Settings.VarType.Number,
 				L.Settings.LoadConditionRoleLabel,
-				0,
+				defaultValue,
 				GetValue,
 				SetValue
 			)
@@ -1799,7 +1164,7 @@ table.insert(Private.LoginFnQueue, function()
 				for label, id in pairs(Private.Enum.Role) do
 					local translated = L.Settings.LoadConditionRoleLabels[id]
 
-					container:Add(id, translated, L.Settings.LoadConditionRoleTooltip)
+					container:AddCheckbox(id, translated, L.Settings.LoadConditionRoleTooltip)
 				end
 
 				return container:GetData()
@@ -1811,9 +1176,7 @@ table.insert(Private.LoginFnQueue, function()
 			return {
 				initializer = initializer,
 				hideSteppers = true,
-				IsSectionEnabled = function()
-					return false
-				end,
+				IsSectionEnabled = nil,
 			}
 		end
 
@@ -1821,115 +1184,62 @@ table.insert(Private.LoginFnQueue, function()
 			key == Private.Settings.Keys.Self.LoadConditionContentType
 			or key == Private.Settings.Keys.Party.LoadConditionContentType
 		then
-			if Private.IsMidnight then
-				local isSelf = key == Private.Settings.Keys.Self.LoadConditionContentType
-				local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
+			local isSelf = key == Private.Settings.Keys.Self.LoadConditionContentType
+			local kindTableRef = isSelf and TargetedSpellsSaved.Settings.Self or TargetedSpellsSaved.Settings.Party
 
-				local defaultValue = GetMask(Private.Enum.ContentType, function(id)
-					return defaults.LoadConditionContentType[id]
-				end)
-
-				local function GetValue()
-					return GetMask(Private.Enum.ContentType, function(id)
-						return kindTableRef.LoadConditionContentType[id]
-					end)
-				end
-
-				local function SetValue(mask)
-					local hasChanges = false
-					local anyEnabled = false
-
-					for label, id in pairs(Private.Enum.ContentType) do
-						local enabled = DecodeBitToBool(mask, id)
-
-						if enabled ~= kindTableRef.LoadConditionContentType[id] then
-							kindTableRef.LoadConditionContentType[id] = enabled
-							hasChanges = true
-						end
-
-						if enabled then
-							anyEnabled = true
-						end
-					end
-
-					if not hasChanges then
-						return
-					end
-
-					Private.EventRegistry:TriggerEvent(
-						Private.Enum.Events.SETTING_CHANGED,
-						key,
-						kindTableRef.LoadConditionContentType
-					)
-
-					if anyEnabled ~= kindTableRef.Enabled then
-						kindTableRef.Enabled = anyEnabled
-						Private.EventRegistry:TriggerEvent(
-							Private.Enum.Events.SETTING_CHANGED,
-							isSelf and Private.Settings.Keys.Self.Enabled or Private.Settings.Keys.Party.Enabled,
-							anyEnabled
-						)
-					end
-				end
-
-				local setting = Settings.RegisterProxySetting(
-					category,
-					key,
-					Settings.VarType.Number,
-					L.Settings.LoadConditionContentTypeLabel,
-					defaultValue,
-					GetValue,
-					SetValue
-				)
-
-				local function GetOptions()
-					local container = Settings.CreateControlTextContainer()
-
-					for label, id in pairs(Private.Enum.ContentType) do
-						local function IsEnabled()
-							return kindTableRef.LoadConditionContentType[id]
-						end
-
-						local function Toggle()
-							kindTableRef.LoadConditionContentType[id] = not kindTableRef.LoadConditionContentType[id]
-						end
-
-						local translated = L.Settings.LoadConditionContentTypeLabels[id]
-
-						container:AddCheckbox(
-							id,
-							translated,
-							L.Settings.LoadConditionContentTypeTooltip,
-							IsEnabled,
-							Toggle
-						)
-					end
-
-					return container:GetData()
-				end
-
-				local initializer =
-					Settings.CreateDropdown(category, setting, GetOptions, L.Settings.LoadConditionContentTypeTooltip)
-
-				return {
-					initializer = initializer,
-					hideSteppers = true,
-					IsSectionEnabled = nil,
-				}
-			end
+			local defaultValue = GetMask(Private.Enum.ContentType, function(id)
+				return defaults.LoadConditionContentType[id]
+			end)
 
 			local function GetValue()
-				return 0
+				return GetMask(Private.Enum.ContentType, function(id)
+					return kindTableRef.LoadConditionContentType[id]
+				end)
 			end
 
-			local function SetValue() end
+			local function SetValue(mask)
+				local hasChanges = false
+				local anyEnabled = false
+
+				for label, id in pairs(Private.Enum.ContentType) do
+					local enabled = DecodeBitToBool(mask, id)
+
+					if enabled ~= kindTableRef.LoadConditionContentType[id] then
+						kindTableRef.LoadConditionContentType[id] = enabled
+						hasChanges = true
+					end
+
+					if enabled then
+						anyEnabled = true
+					end
+				end
+
+				if not hasChanges then
+					return
+				end
+
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					kindTableRef.LoadConditionContentType
+				)
+
+				if anyEnabled ~= kindTableRef.Enabled then
+					kindTableRef.Enabled = anyEnabled
+					Private.EventRegistry:TriggerEvent(
+						Private.Enum.Events.SETTING_CHANGED,
+						isSelf and Private.Settings.Keys.Self.Enabled or Private.Settings.Keys.Party.Enabled,
+						anyEnabled
+					)
+				end
+			end
 
 			local setting = Settings.RegisterProxySetting(
 				category,
 				key,
 				Settings.VarType.Number,
 				L.Settings.LoadConditionContentTypeLabel,
-				0,
+				defaultValue,
 				GetValue,
 				SetValue
 			)
@@ -1938,9 +1248,17 @@ table.insert(Private.LoginFnQueue, function()
 				local container = Settings.CreateControlTextContainer()
 
 				for label, id in pairs(Private.Enum.ContentType) do
-					local translated = L.Settings.LoadConditionRoleLabels[id]
+					local function IsEnabled()
+						return kindTableRef.LoadConditionContentType[id]
+					end
 
-					container:Add(id, translated, L.Settings.LoadConditionContentTypeTooltip)
+					local function Toggle()
+						kindTableRef.LoadConditionContentType[id] = not kindTableRef.LoadConditionContentType[id]
+					end
+
+					local translated = L.Settings.LoadConditionContentTypeLabels[id]
+
+					container:AddCheckbox(id, translated, L.Settings.LoadConditionContentTypeTooltip, IsEnabled, Toggle)
 				end
 
 				return container:GetData()
@@ -1952,9 +1270,7 @@ table.insert(Private.LoginFnQueue, function()
 			return {
 				initializer = initializer,
 				hideSteppers = true,
-				IsSectionEnabled = function()
-					return false
-				end,
+				IsSectionEnabled = nil,
 			}
 		end
 

@@ -20,15 +20,13 @@ L.Settings.EditModeReminder =
 L.EditMode.TargetedSpellsSelfLabel = "目标法术 - 自身"
 L.EditMode.TargetedSpellsPartyLabel = "目标法术 - 小队"
 
-L.Functionality.CVarWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\n姓名板设置 '%s' 已被禁用。\n\n没有它，%s 将无法对屏幕外的敌人生效。\n\n点击 '%s' 以重新启用。",
-			addonNameWithIcon,
-			UNIT_NAMEPLATES_SHOW_OFFSCREEN,
-			addonName,
-			ENABLE
-		)
-	or nil
+L.Functionality.CVarWarning = string.format(
+	"%s\n\n姓名板设置 '%s' 已被禁用。\n\n没有它，%s 将无法对屏幕外的敌人生效。\n\n点击 '%s' 以重新启用。",
+	addonNameWithIcon,
+	UNIT_NAMEPLATES_SHOW_OFFSCREEN,
+	addonName,
+	ENABLE
+)
 
 L.Settings.EnabledLabel = "启用"
 L.Settings.EnabledTooltip = nil
@@ -41,9 +39,7 @@ L.Settings.AddonCompartmentTooltipLine2 =
 
 L.Settings.LoadConditionContentTypeLabel = "加载条件：内容更新"
 L.Settings.LoadConditionContentTypeLabelAbbreviated = "在以下内容更新中加载"
-L.Settings.LoadConditionContentTypeTooltip = not Private.IsMidnight
-		and "此设置仅可通过编辑模式配置，直到《至暗之夜》前夕补丁，因为在此之前缺少缺少系统设置功能。"
-	or nil
+L.Settings.LoadConditionContentTypeTooltip = nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "世界",
 	[Private.Enum.ContentType.Delve] = "地下堡",
@@ -55,9 +51,7 @@ L.Settings.LoadConditionContentTypeLabels = {
 
 L.Settings.LoadConditionRoleLabel = "加载条件：职责"
 L.Settings.LoadConditionRoleLabelAbbreviated = "在以下职责加载"
-L.Settings.LoadConditionRoleTooltip = not Private.IsMidnight
-		and "此设置仅可通过编辑模式配置，直到《至暗之夜》前夕补丁，因为在此之前缺少系统设置功能。"
-	or nil
+L.Settings.LoadConditionRoleTooltip = nil
 L.Settings.LoadConditionRoleLabels = {
 	[Private.Enum.Role.Healer] = "治疗",
 	[Private.Enum.Role.Tank] = "坦克",
@@ -106,36 +100,6 @@ L.Settings.GlowTypeLabels = {
 	[Private.Enum.GlowType.ProcGlow] = "触发发光",
 	[Private.Enum.GlowType.Star4] = "四星发光",
 }
-
-L.Settings.PlaySoundLabel = "播放音效"
-L.Settings.PlaySoundTooltip = "当以你为目标的法术开始时播放音效。会禁用语音播报！"
-
-L.Settings.PlayTTSLabel = "语音播报"
-L.Settings.PlayTTSTooltip = "当以你为目标的法术开始时，使用语音播报法术名称。会禁用音效！"
-
-L.Settings.TTSVoiceLabel = "选择播报语音"
-L.Settings.TTSVoiceTooltip = "选择用于播报的语音。"
-
-L.Settings.SoundLabel = "音效"
-L.Settings.SoundCategoryCustom = "自定义"
-L.Settings.SoundTooltip = "点击更改，也可点击预览音效。注意：使用主声道音量！"
-
-L.Settings.SoundChannelLabel = "音效声道"
-L.Settings.SoundChannelTooltip = nil
-L.Settings.SoundChannelLabels = {
-	[Private.Enum.SoundChannel.Master] = MASTER_VOLUME,
-	[Private.Enum.SoundChannel.Music] = MUSIC_VOLUME,
-	[Private.Enum.SoundChannel.SFX] = FX_VOLUME,
-	[Private.Enum.SoundChannel.Ambience] = AMBIENCE_VOLUME,
-	[Private.Enum.SoundChannel.Dialog] = DIALOG_VOLUME,
-}
-
-L.Settings.LoadConditionSoundContentTypeLabel = "加载条件：音效"
-L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "在以下内容中播放音效"
-L.Settings.LoadConditionSoundContentTypeTooltip = not Private.IsMidnight
-		and "此设置仅可通过编辑模式配置，直到《至暗之夜》前夕补丁，因为在此之前缺少系统设置功能。"
-	or "上述音效设置（包括自定义音效和语音播报）在何种情况下生效。"
-L.Settings.LoadConditionSoundContentTypeLabels = L.Settings.LoadConditionContentTypeLabels
 
 L.Settings.ShowDurationLabel = "显示持续时间"
 L.Settings.ShowDurationTooltip = nil

@@ -38,13 +38,6 @@
     - width, height, gap, direction, sort order, grow
   - glow important spells
     - 5 kinds of glows
-  - play sound - (War Within only)
-    - consumes all cooldown manager sounds (12.0+ only)
-    - `LibSharedMedia` integration
-    - ships two sounds
-    - sound channel selection
-  - play tts - (War Within only)
-    - voice selection, automatically picking the most likely based on your game locale
   - option to selectively play sound/tts based on content type you're in
   - show duration
     - option for fraction of seconds
@@ -85,27 +78,6 @@
 ### Sound / TTS
 
 No longer possible in Midnight after the Beta Build 65337 as expected.
-
-~~Built on top of Blizzards recently added Combat Audio Alerts (and thus requiring that to be enabled), it's unfortunately unreliable. You can test this with `TargetedSpells` disabled relatively easily in Follower Dungeons.
-
-There's also a non-zero chance that Blizzard will simply **prevent** overriding this functionality, I was honestly surprised that it's currently possible which may or may not be intentional.~~
-
-#### Sound / TTS Sometimes Not Playing
-
-**Unfixable for addon authors, Blizzard needs to fix the missing events.**. Possibly also not a big issue in practice.
-
-Blizzards function solely relies on the `UNIT_TARGET` event which sometimes (~10-20% of the time) simply doesn't fire, confirmed via `/etrace`. Ironically, if in such a case the enemy is casting something on you, the `UnitIsSpellTarget` API will correctly identify you're actually being cast on. But since the event they're looking for doesn't occur, nothing happens.
-
-In these cases you'll see the spell icon for the spell being cast, but no sound will be played, making this addon - for now - clearly superior over default UI functionality.
-
-There's also the following edge case: if an enemy does not change target between two consecutive spells on you, it'll only announce the first one, as the enemy hasn't swapped back and forth between tank and you between the casts. In that case, again, the addon will correctly show both spells on you, but again, no sound will be played for the second spell.
-
-#### Sound / TTS Only Sometimes Playing As Tank
-
-Goes hand in hand with the above. The Blizzard function is intended to only fire on enemies changing target to you. You as a tank should be targeted most of the time, so the only times this will work as expected are:
-
-- an enemy spamcasts spells, first on another player (targeting them), then on you
-- someone else had aggro first, then you and instantly started casting
 
 ### Sorting
 

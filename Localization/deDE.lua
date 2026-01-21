@@ -16,15 +16,13 @@ L.Settings.EditModeReminder =
 L.EditMode.TargetedSpellsSelfLabel = "Targeted Spells - Spieler"
 L.EditMode.TargetedSpellsPartyLabel = "Targeted Spells - Gruppe"
 
-L.Functionality.CVarWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nDie Namensplaketteneinstellung '%s' wurde deaktiviert.\n\nOhne funktioniert %s nicht bei Gegnern die außerhalb des Bildschirms anfangen zu wirken.\n\nKlicke '%s' um die Einstellung wieder zu aktivieren.",
-			addonNameWithIcon,
-			UNIT_NAMEPLATES_SHOW_OFFSCREEN,
-			addonName,
-			ENABLE
-		)
-	or nil
+L.Functionality.CVarWarning = string.format(
+	"%s\n\nDie Namensplaketteneinstellung '%s' wurde deaktiviert.\n\nOhne funktioniert %s nicht bei Gegnern die außerhalb des Bildschirms anfangen zu wirken.\n\nKlicke '%s' um die Einstellung wieder zu aktivieren.",
+	addonNameWithIcon,
+	UNIT_NAMEPLATES_SHOW_OFFSCREEN,
+	addonName,
+	ENABLE
+)
 
 L.Settings.EnabledLabel = "Aktiviert"
 L.Settings.EnabledTooltip = nil
@@ -37,9 +35,7 @@ L.Settings.AddonCompartmentTooltipLine2 =
 
 L.Settings.LoadConditionContentTypeLabel = "Ladebedingung: Spielbereich"
 L.Settings.LoadConditionContentTypeLabelAbbreviated = "In Spielbereich laden"
-L.Settings.LoadConditionContentTypeTooltip = not Private.IsMidnight
-		and "Diese Einstellung ist bis zum Midnight Pre-Patch nur via Bearbeitungsmodus konfigurierbar."
-	or nil
+L.Settings.LoadConditionContentTypeTooltip = nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "Offene Welt",
 	[Private.Enum.ContentType.Delve] = "Tiefen",
@@ -51,9 +47,7 @@ L.Settings.LoadConditionContentTypeLabels = {
 
 L.Settings.LoadConditionRoleLabel = "Ladebedingung: Rolle"
 L.Settings.LoadConditionRoleLabelAbbreviated = "In Rolle laden"
-L.Settings.LoadConditionRoleTooltip = not Private.IsMidnight
-		and "Diese Einstellung ist bis zum Midnight Pre-Patch nur via Bearbeitungsmodus konfigurierbar."
-	or nil
+L.Settings.LoadConditionRoleTooltip = nil
 
 L.Settings.LoadConditionRoleLabels = {
 	[Private.Enum.Role.Healer] = "Heiler",
@@ -104,37 +98,6 @@ L.Settings.GlowTypeLabels = {
 	[Private.Enum.GlowType.ProcGlow] = "Proc Glow",
 	[Private.Enum.GlowType.Star4] = "Star 4",
 }
-
-L.Settings.PlaySoundLabel = "Ton abspielen"
-L.Settings.PlaySoundTooltip =
-	"Spielt den ausgewählten Ton ab wenn euch ein Zauber anvisiert. DEAKTIVIERT TEXT-ZU-SPRACHE!"
-L.Settings.SoundTooltip = "Klicken für Vorschau und ändern. Warnung: nutzt Master Tonkanal!"
-
-L.Settings.PlayTTSLabel = "Text-zu-Sprache abspielen"
-L.Settings.PlayTTSTooltip =
-	"Spricht den Zaubernamen via Text-zu-Sprache wenn euch ein Zauber anvisiert. DEAKTIVIERT TONEINSTELLUNG!"
-
-L.Settings.SoundLabel = "Ton"
-L.Settings.SoundCategoryCustom = "Extra"
-L.Settings.SoundTooltip =
-	"Klicken um zu ändern - spielt Ton als Vorschau ab. Achtung: Master Tonkanallautstärke wird genutzt!"
-
-L.Settings.SoundChannelLabel = "Tonkanal"
-L.Settings.SoundChannelTooltip = nil
-L.Settings.SoundChannelLabels = {
-	[Private.Enum.SoundChannel.Master] = MASTER_VOLUME,
-	[Private.Enum.SoundChannel.Music] = MUSIC_VOLUME,
-	[Private.Enum.SoundChannel.SFX] = FX_VOLUME,
-	[Private.Enum.SoundChannel.Ambience] = AMBIENCE_VOLUME,
-	[Private.Enum.SoundChannel.Dialog] = DIALOG_VOLUME,
-}
-
-L.Settings.LoadConditionSoundContentTypeLabel = "Ladebedinging: Ton"
-L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "Ton in Spielbereich abspielen"
-L.Settings.LoadConditionSoundContentTypeTooltip = not Private.IsMidnight
-		and "Diese Einstellung ist bis zum Midnight Pre-Patch nur via Bearbeitungsmodus konfigurierbar."
-	or "Bestimmt in welchen Situationen die obigen Toneinstellungen genutzt werden, sowohl eigene Töne als auch Text-zu-Sprache."
-L.Settings.LoadConditionSoundContentTypeLabels = L.Settings.LoadConditionContentTypeLabels
 
 L.Settings.ShowDurationLabel = "Dauer anzeigen"
 L.Settings.ShowDurationTooltip = nil

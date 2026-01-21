@@ -20,85 +20,16 @@ function Private.Utils.SortFrames(frames, sortOrder)
 	local isAscending = sortOrder == Private.Enum.SortOrder.Ascending
 
 	table.sort(frames, function(a, b)
-		if Private.IsMidnight then
-			if isAscending then
-				return a:GetStartTime() < b:GetStartTime()
-			end
-
-			return a:GetStartTime() > b:GetStartTime()
-		end
-
 		if isAscending then
-			return a:GetStartTime() + a:GetDuration() < b:GetStartTime() + b:GetDuration()
+			return a:GetStartTime() < b:GetStartTime()
 		end
 
-		return a:GetStartTime() + a:GetDuration() > b:GetStartTime() + b:GetDuration()
+		return a:GetStartTime() > b:GetStartTime()
 	end)
-end
-
-do
-	local handle = nil
-	local channels = tInvert(Private.Enum.SoundChannel)
-
-	function Private.Utils.AttemptToPlaySound(sound, channel)
-		if handle ~= nil then
-			StopSound(handle)
-			handle = nil
-		end
-
-		local channelToUse = channels[channel]
-		local isFile = Private.Settings.SoundIsFile(sound)
-
-		if not isFile and type(sound) == "number" then
-			handle = select(3, pcall(PlaySound, sound, channelToUse, false))
-		else
-			handle = select(3, pcall(PlaySoundFile, sound, channelToUse))
-		end
-	end
 end
 
 function Private.Utils.RollDice()
 	return math.random(1, 6) == 6
-end
-
-function Private.Utils.FindAppropriateTTSVoiceId()
-	local locale = GAME_LOCALE or GetLocale()
-
-	local ttsVoiceId = C_TTSSettings.GetVoiceOptionID(Enum.TtsVoiceType.Standard)
-	local patternToLookFor = nil
-
-	if locale == "deDE" then
-		patternToLookFor = "German"
-	elseif locale == "enUS" or locale == "enGB" then
-		patternToLookFor = "English"
-	end
-
-	if patternToLookFor ~= nil then
-		for _, voice in pairs(C_VoiceChat.GetTtsVoices()) do
-			if string.find(voice.name, patternToLookFor) ~= nil then
-				return voice.voiceID
-			end
-		end
-	end
-
-	return ttsVoiceId
-end
-
-function Private.Utils.PlayTTS(text, voiceId, rate)
-	rate = rate or 2
-	voiceId = voiceId or TargetedSpellsSaved.Settings.Self.TTSVoice
-
-	if Private.IsMidnight then
-		C_VoiceChat.SpeakText(voiceId, text, rate, C_TTSSettings.GetSpeechVolume())
-	else
-		C_VoiceChat.SpeakText(
-			voiceId,
-			text,
-			Enum.VoiceTtsDestination.QueuedLocalPlayback,
-			rate,
-			C_TTSSettings.GetSpeechVolume()
-		)
-	end
 end
 
 function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
@@ -195,8 +126,6 @@ do
 							enumToCompareAgainst = Private.Enum.ContentType
 						elseif key == "LoadConditionRole" then
 							enumToCompareAgainst = Private.Enum.Role
-						elseif key == "LoadConditionSoundContentType" then
-							enumToCompareAgainst = Private.Enum.ContentType
 						end
 
 						-- only other case is Position but that's taken care of above
@@ -219,10 +148,6 @@ do
 										allDisabled = false
 									end
 								end
-							end
-
-							if key == "LoadConditionSoundContentType" and allDisabled then
-								allDisabled = false
 							end
 
 							if allDisabled then

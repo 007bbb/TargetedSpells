@@ -20,15 +20,13 @@ L.Settings.EditModeReminder =
 L.EditMode.TargetedSpellsSelfLabel = "Targeted Spells - Self"
 L.EditMode.TargetedSpellsPartyLabel = "Targeted Spells - Party"
 
-L.Functionality.CVarWarning = Private.IsMidnight
-		and string.format(
-			"%s\n\nThe Nameplate Setting '%s' was disabled.\n\nWithout it, %s will not work on off-screen enemies.\n\nClick '%s' to enable it again.",
-			addonNameWithIcon,
-			UNIT_NAMEPLATES_SHOW_OFFSCREEN,
-			addonName,
-			ENABLE
-		)
-	or nil
+L.Functionality.CVarWarning = string.format(
+	"%s\n\nThe Nameplate Setting '%s' was disabled.\n\nWithout it, %s will not work on off-screen enemies.\n\nClick '%s' to enable it again.",
+	addonNameWithIcon,
+	UNIT_NAMEPLATES_SHOW_OFFSCREEN,
+	addonName,
+	ENABLE
+)
 
 L.Settings.EnabledLabel = "Activé"
 L.Settings.EnabledTooltip = nil
@@ -41,9 +39,7 @@ L.Settings.AddonCompartmentTooltipLine2 =
 
 L.Settings.LoadConditionContentTypeLabel = "Condition de chargement: Type de contenu"
 L.Settings.LoadConditionContentTypeLabelAbbreviated = "Charger dans le contenu"
-L.Settings.LoadConditionContentTypeTooltip = not Private.IsMidnight
-		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
-	or nil
+L.Settings.LoadConditionContentTypeTooltip = nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "Monde ouvert",
 	[Private.Enum.ContentType.Delve] = "Gouffre",
@@ -55,9 +51,7 @@ L.Settings.LoadConditionContentTypeLabels = {
 
 L.Settings.LoadConditionRoleLabel = "Condition de chargement: Rôle"
 L.Settings.LoadConditionRoleLabelAbbreviated = "Chargement sur Rôle"
-L.Settings.LoadConditionRoleTooltip = not Private.IsMidnight
-		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
-	or nil
+L.Settings.LoadConditionRoleTooltip = nil
 L.Settings.LoadConditionRoleLabels = {
 	[Private.Enum.Role.Healer] = "Healer",
 	[Private.Enum.Role.Tank] = "Tank",
@@ -106,37 +100,6 @@ L.Settings.GlowTypeLabels = {
 	[Private.Enum.GlowType.ProcGlow] = "Proc Glow",
 	[Private.Enum.GlowType.Star4] = "Star 4",
 }
-
-L.Settings.PlaySoundLabel = "Jouer le son"
-L.Settings.PlaySoundTooltip = "Joue un son quand un sort vous ciblant commence. DESACTIVER TTS!"
-L.Settings.PlayTTSLabel = "Jouer TTS"
-L.Settings.PlayTTSTooltip =
-	"Joue le nom du sort en utilisant Text-To-Speech quand un sort vous cilblant commence. DESCATIVER SON!"
-
-L.Settings.TTSVoiceLabel = "Voix TTS"
-L.Settings.TTSVoiceTooltip = "Selectionner la voix utilisée pour Text-To-Speech."
-
-L.Settings.SoundLabel = "Son"
-L.Settings.SoundCategoryCustom = "Personnalisé"
-L.Settings.SoundTooltip =
-	"Cliquer pour changer, mais cliquer aussi pour prévision du son. Attention: Master channel volume!"
-
-L.Settings.SoundChannelLabel = "Sound Channel"
-L.Settings.SoundChannelTooltip = nil
-L.Settings.SoundChannelLabels = {
-	[Private.Enum.SoundChannel.Master] = MASTER_VOLUME,
-	[Private.Enum.SoundChannel.Music] = MUSIC_VOLUME,
-	[Private.Enum.SoundChannel.SFX] = FX_VOLUME,
-	[Private.Enum.SoundChannel.Ambience] = AMBIENCE_VOLUME,
-	[Private.Enum.SoundChannel.Dialog] = DIALOG_VOLUME,
-}
-
-L.Settings.LoadConditionSoundContentTypeLabel = "Condition de chargement: Son"
-L.Settings.LoadConditionSoundContentTypeLabelAbbreviated = "Jouer son dans le contenue"
-L.Settings.LoadConditionSoundContentTypeTooltip = not Private.IsMidnight
-		and "Ce paramètre n'est configurable que via le Mode Édition jusqu'au Pre-Patch Midnight, car les éléments de configuration nécessaires sont indisponibles jusque-là."
-	or "Under which circumstances the above sound settings (both custom sound and TTS) should apply."
-L.Settings.LoadConditionSoundContentTypeLabels = L.Settings.LoadConditionContentTypeLabels
 
 L.Settings.ShowDurationLabel = "Montrer la durée"
 L.Settings.ShowDurationTooltip = nil

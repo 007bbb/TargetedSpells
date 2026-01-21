@@ -68,15 +68,6 @@ Private.Enum.Grow = {
 	End = 3,
 }
 
----@enum SoundChannel
-Private.Enum.SoundChannel = {
-	Master = 0,
-	Music = 1,
-	SFX = 2,
-	Ambience = 3,
-	Dialog = 4,
-}
-
 ---@enum GlowType
 Private.Enum.GlowType = {
 	PixelGlow = 1,
