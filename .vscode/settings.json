@@ -55,7 +55,11 @@
     "CreateSettingsListSectionHeaderInitializer",
     "IconDataProviderMixin",
     "IconDataProviderExtraType",
-    "assertsafe"
+    "assertsafe",
+    "PixelUtil",
+    "RunNextFrame",
+    "GenerateClosure",
+    "PlayerUtil"
   ],
   "stylua.targetReleaseVersion": "latest",
   "Lua.diagnostics.disable": ["assign-type-mismatch"],

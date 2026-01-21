@@ -1,7 +1,6 @@
 ---@meta
 
 ---@class TargetedSpells
----@field IsMidnight boolean
 ---@field EventRegistry CallbackRegistryMixin
 ---@field Events table<string, string>
 ---@field Enum TargetedSpellsEnums
@@ -13,10 +12,7 @@
 ---@class TargetedSpellsUtils
 ---@field CalculateCoordinate fun(index: number, dimension: number, gap: number, parentDimension: number, total: number, offset: number, grow: Grow): number
 ---@field SortFrames fun(frames: TargetedSpellsMixin[], sortOrder: SortOrder)
----@field AttemptToPlaySound fun(sound: string|number, channel: SoundChannel)
 ---@field RollDice fun(): boolean
----@field FindAppropriateTTSVoiceId fun(): number
----@field PlayTTS fun(text: string, voiceId: number?, rate: number?)
 ---@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?
 ---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
 ---@field Import fun(string: string): boolean
@@ -33,10 +29,6 @@
 ---@field hideOnEscape boolean?
 
 ---@class TargetedSpellsEnums
-
----@class CustomSound
----@field soundKitID number|string
----@field text string
 
 ---@class SliderSettings
 ---@field min number
@@ -59,14 +51,7 @@
 ---@field GetSliderSettingsForOption fun(key: string): SliderSettings
 ---@field GetSelfDefaultSettings fun(): SavedVariablesSettingsSelf
 ---@field GetPartyDefaultSettings fun(): SavedVariablesSettingsParty
----@field GetCustomSoundGroups fun(groupSizeThreshold: number?):  SoundInfo
----@field SampleTTSVoice fun(voiceId: number)
 ---@field IsContentTypeAvailableForKind fun(kind: FrameKind, contentTypeId: ContentType): boolean
----@field SoundIsFile fun(sound: string|number): boolean
-
----@class SoundInfo
----@field soundCategoryKeyToLabel table<string, string>
----@field data table<string, CustomSound[]>
 
 ---@class SavedVariables
 ---@field Settings SavedVariablesSettings
@@ -89,10 +74,6 @@
 ---@field Direction Direction
 ---@field LoadConditionContentType table<number, boolean>
 ---@field LoadConditionRole table<number, boolean>
----@field PlaySound boolean
----@field SoundChannel SoundChannel
----@field Sound string
----@field LoadConditionSoundContentType table<number, boolean>
 ---@field SortOrder SortOrder
 ---@field Grow Grow
 ---@field ShowDuration boolean
@@ -103,8 +84,6 @@
 ---@field GlowImportant boolean
 ---@field GlowType GlowType
 ---@field Opacity number
----@field PlayTTS boolean
----@field TTSVoice number
 ---@field IndicateInterrupts boolean
 ---@field TargetingFilterApi TargetingFilterApi
 
@@ -145,9 +124,9 @@
 ---@field private Icon Texture
 ---@field private Cooldown ExtendedCooldownTypes
 ---@field private kind FrameKind?
----@field private unit string? -- secret?
+---@field private unit string?
 ---@field private startTime number?
----@field private duration DurationObjectDummy|number|nil -- secret
+---@field private duration DurationObjectDummy|number|nil
 ---@field private spellId number? -- secret
 ---@field private id number? -- secret
 ---@field private _AutoCastGlow Frame?
@@ -163,7 +142,7 @@
 ---@field SetId fun(self: TargetedSpellsMixin, id: number?)
 ---@field GetId fun(self: TargetedSpellsMixin): number?
 ---@field SetInterrupted fun(self: TargetedSpellsMixin, interruptInfo: InterruptInfo)
----@field CanBeHidden fun(self: TargetedSpellsMixin, exceptSpellId:number?, id: number|string|nil): boolean
+---@field CanBeHidden fun(self: TargetedSpellsMixin, id: number|string|nil): boolean
 ---@field OnUpdate fun(self: TargetedSpellsMixin, elapsed: number)
 ---@field SetShowDuration fun(self: TargetedSpellsMixin, showDuration: boolean, showFractions: boolean)
 ---@field SetShowBorder fun(self: TargetedSpellsMixin, bool: boolean)
@@ -187,8 +166,6 @@
 ---@field PostCreate fun(self: TargetedSpellsMixin, unit: string, kind: FrameKind, castingUnit: string?)
 ---@field Reset fun(self: TargetedSpellsMixin)
 ---@field SetFontSize fun(self: TargetedSpellsMixin, fontSize: number)
----@field AttemptToPlaySound fun(self: TargetedSpellsMixin, contentType: ContentType, unit: string)
----@field AttemptToPlayTTS fun(self: TargetedSpellsMixin, contentType: ContentType, unit: string)
 
 ---@class TargetedSpellsEditModeMixin : Frame
 ---@field protected editModeFrame Frame
@@ -256,12 +233,11 @@
 ---@field SetupFrame fun(self: TargetedSpellsDriver, isBoot: boolean)
 ---@field AcquireFrames fun(self: TargetedSpellsDriver, castingUnit: string): TargetedSpellsMixin[]
 ---@field RepositionFrames fun(self: TargetedSpellsDriver)
----@field ReleaseFrameForUnit fun(self: TargetedSpellsDriver, unit: string, removeUnit: boolean, exceptSpellId?: number, id?: number): boolean
+---@field ReleaseFrameForUnit fun(self: TargetedSpellsDriver, unit: string, removeUnit: boolean, id?: number): boolean
 ---@field LoadConditionsProhibitExecution fun(self: TargetedSpellsDriver, kind: FrameKind): boolean
 ---@field UnitIsIrrelevant fun(self: TargetedSpellsDriver, unit: string, skipTargetCheck?: boolean): boolean
 ---@field OnFrameEvent fun(self: TargetedSpellsDriver, listenerFrame: Frame, event: WowEvent, ...)
 ---@field OnSettingsChanged fun(self: TargetedSpellsDriver, key: string, value: number|string|table)
----@field MaybeApplyCombatAudioAlertOverride fun(self: TargetedSpellsMixin)
 ---@field ReleaseFrame fun(self: TargetedSpellsDriver, frame: TargetedSpellsMixin)
 ---@field DetermineSpellDelayRequirement fun(self: TargetedSpellsDriver): boolean
 ---@field MaybeMarkAsInterruptedAndDelay fun(self: TargetedSpellsDriver, unit: string, id: number|string|nil, interruptedBy: string?): boolean
@@ -392,14 +368,6 @@ PlayerUtil = {
 		return ""
 	end,
 }
-
-COOLDOWN_VIEWER_SETTINGS_ALERT_MENU_PLAY_SAMPLE = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_ANIMALS = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_DEVICES = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_IMPACTS = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_INSTRUMENTS = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR2 = ""
-COOLDOWN_VIEWER_SETTINGS_SOUND_ALERT_CATEGORY_WAR3 = ""
 
 UNIT_NAMEPLATES_SHOW_OFFSCREEN = ""
 
