@@ -12,8 +12,6 @@
 
 ## Features
 
-- compatible with both The War Within and Midnight
-- no sound overlap if multiple spells target the player at the same time
 - deep Edit Mode integration thanks to [LibEditMode](https://github.com/p3lim-wow/LibEditMode/wiki/LibEditMode)
   - additional exhaustive Settings menu integration
 - support for both raid-style and classic party frames
@@ -33,7 +31,7 @@
   - enabled state
   - load conditions, supporting dungeons, delves, arena, battlegrounds and raids
   - role-based load conditions: tank, healer, dps (unsurprisingly)
-  - targeting API (12.0+ only)
+  - targeting API
   - layouting options
     - width, height, gap, direction, sort order, grow
   - glow important spells
@@ -55,7 +53,7 @@
   - enabled state
   - load conditions, supporting dungeons, delves, arena, battlegrounds and raids
   - role-based load conditions: tank, healer, dps (unsurprisingly)
-  - targeting API (12.0+ only)
+  - targeting API
   - option to include self in party
   - layouting options
     - width, height, gap, direction, sort order, grow, source & target anchoring, manual x/y offsets
@@ -112,11 +110,6 @@ _However_, you can work around this with the `Gap` settings:
 **Currently not possible due to API restrictions.**
 
 While it's possible to apply a glow to the affected player frame, the underlying data for it is secret, so the next cast that happens to target the same player **while the first is still pending** is forced to remove the glow.
-
-## Sounds
-
-- [WaterDrop - Attribution 3.0 - Mike Koenig](https://soundbible.com/1126-Water-Drop.html)
-- [BananaPeelSlip - Sampling Plus 1.0 Generic - Mike Koenig](https://soundbible.com/1438-Banana-Peel-Slip.html)
 
 ## Honorary Mentions
 
