@@ -126,7 +126,7 @@
 ---@field private kind FrameKind?
 ---@field private unit string?
 ---@field private startTime number?
----@field private duration DurationObjectDummy|nil
+---@field private duration DurationObjectDummy|number|nil
 ---@field private spellId number? -- secret
 ---@field private id number? -- secret
 ---@field private _AutoCastGlow Frame?

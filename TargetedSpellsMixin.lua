@@ -85,7 +85,8 @@ local function OnUpdate(self, elapsed)
 		return
 	end
 
-	local remainingDuration = self.duration:GetRemainingDuration()
+	local remainingDuration = type(self.duration) == "number" and self.startTime + self.duration - GetTime()
+		or self.duration:GetRemainingDuration()
 
 	self.DurationText:SetFormattedText("%.1f", remainingDuration)
 end
