@@ -56,10 +56,7 @@
     "IconDataProviderMixin",
     "IconDataProviderExtraType",
     "assertsafe",
-    "PixelUtil",
-    "RunNextFrame",
-    "GenerateClosure",
-    "PlayerUtil"
+    "PixelUtil"
   ],
   "stylua.targetReleaseVersion": "latest",
   "Lua.diagnostics.disable": ["assign-type-mismatch"],

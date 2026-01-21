@@ -1,8 +1,16 @@
 ## Version 1.1.0
 
-- added Import/Export functionality
+- NEW: Import/Export functionality
   - this always includes _both_ Self and Party settings
 - updated French locale
+- removed all pre-Midnight code
+
+KNOWN ISSUES:
+
+- due to the state of the 12.0.0 patch, in some cases casts may not get cleaned up until the nameplate gets removed or the caster casts again.
+  - this fixes itself with the 12.0.1 patch
+- selecting an element in EditMode throws an error
+  - this should fix itself with the 12.0.1 patch
 
 ## Version 1.0.7
 
