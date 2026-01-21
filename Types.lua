@@ -124,7 +124,7 @@
 ---@field private Icon Texture
 ---@field private Cooldown ExtendedCooldownTypes
 ---@field private kind FrameKind?
----@field private unit string? -- secret?
+---@field private unit string?
 ---@field private startTime number?
 ---@field private duration DurationObjectDummy|nil
 ---@field private spellId number? -- secret
@@ -238,10 +238,9 @@
 ---@field UnitIsIrrelevant fun(self: TargetedSpellsDriver, unit: string, skipTargetCheck?: boolean): boolean
 ---@field OnFrameEvent fun(self: TargetedSpellsDriver, listenerFrame: Frame, event: WowEvent, ...)
 ---@field OnSettingsChanged fun(self: TargetedSpellsDriver, key: string, value: number|string|table)
----@field MaybeApplyCombatAudioAlertOverride fun(self: TargetedSpellsMixin)
 ---@field ReleaseFrame fun(self: TargetedSpellsDriver, frame: TargetedSpellsMixin)
 ---@field DetermineSpellDelayRequirement fun(self: TargetedSpellsDriver): boolean
----@field MfaybeMarkAsInterruptedAndDelay fun(self: TargetedSpellsDriver, unit: string, id: number|string|nil, interruptedBy: string?): boolean
+---@field MaybeMarkAsInterruptedAndDelay fun(self: TargetedSpellsDriver, unit: string, id: number|string|nil, interruptedBy: string?): boolean
 
 ----- type patching / completion
 
