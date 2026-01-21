@@ -1,3 +1,7 @@
+## Version 1.1.1
+
+- remove now-redundant sounds
+
 ## Version 1.1.0
 
 - NEW: Import/Export functionality
