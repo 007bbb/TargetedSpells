@@ -18,7 +18,6 @@
 - supported third-party unit frame addons:
   - [Danders Frames](https://www.curseforge.com/wow/addons/danders-frames)
   - more coming when the dust settles
-- while it lasts: integration for Plater scripts indicating important spells (**becomes obsolete with Midnight Pre-Patch**)
 - blizzlike look - built on top of the Cooldown Manager design
 - customization options are heavily inspired by what's available in WeakAuras - that's where the aura lived before, so resurrecting most of that functionality only makes sense
 - not vibecoded
