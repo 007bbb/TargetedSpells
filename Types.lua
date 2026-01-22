@@ -450,7 +450,10 @@ DandersFrames = nil
 ---@type Frame?
 DandersPartyGroupContainer = nil
 
----@type table?
+---@class Grid2
+---@field GetUnitFrames fun(self: Grid2, unit: string): table<Frame, true>
+
+---@type Grid2?
 Grid2 = nil
 
 ---@type Frame?

@@ -33,17 +33,8 @@ function Private.Utils.RollDice()
 end
 
 function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
-	if Grid2 and Grid2LayoutFrame and Grid2LayoutHeader1 then
-		for i = 1, 5 do
-			local name = string.format("Grid2LayoutHeader1UnitButton%d", i)
-			local maybeFrame = _G[name]
-
-			if maybeFrame and maybeFrame.unit == unit then
-				return maybeFrame
-			end
-		end
-
-		return nil
+	if Grid2 then
+		return (next(Grid2:GetUnitFrames(unit)))
 	elseif DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
 		local frame = DandersFrames.Api.GetFrameForUnit(unit, kind)
 

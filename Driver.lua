@@ -337,7 +337,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		or event == "UNIT_SPELLCAST_CHANNEL_START"
 		or event == "UNIT_SPELLCAST_EMPOWER_START"
 	then
-		local unit, castGuid, spellId, castId = ...
+		local unit, castGuid, spellId, id = ...
 
 		if self:UnitIsIrrelevant(unit) then
 			return
@@ -345,10 +345,8 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 
 		if event == "UNIT_SPELLCAST_EMPOWER_START" then
 			spellId = select(4, ...)
-			castId = select(3, ...)
+			id = select(3, ...)
 		end
-
-		local id = castId
 
 		C_Timer.After(
 			self.delay,
@@ -375,38 +373,21 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		end
 
 		local delayEvent = Private.Enum.Events.DELAYED_UNIT_SPELLCAST_START
-		---@type number|nil
-		local spellId = nil
-		---@type number|nil
-		local startTime = nil
-		---@type number|string|nil
-		local id = nil
+		local startTime = GetTime()
 
-		local _, _, _, _, _, _, _, _, castingSpellId, castId = UnitCastingInfo(unit)
-
-		spellId = castingSpellId
-		id = castId
+		local _, _, _, _, _, _, _, _, spellId, castId = UnitCastingInfo(unit)
 
 		if spellId == nil then
-			_, _, _, _, _, _, _, castingSpellId, _, _, castId = UnitChannelInfo(unit)
+			_, _, _, _, _, _, _, spellId, _, _, castId = UnitChannelInfo(unit)
 
-			spellId = castingSpellId
-			id = castId
 			delayEvent = Private.Enum.Events.DELAYED_UNIT_SPELLCAST_CHANNEL_START
-		end
-
-		-- best we can do. _possibly_ wrong depending on when the enemy turned
-		startTime = GetTime()
-
-		if spellId == nil then
-			return
 		end
 
 		self:OnFrameEvent(self.frame, delayEvent, {
 			unit = unit,
 			spellId = spellId,
 			startTime = startTime,
-			id = id,
+			id = castId,
 		})
 	elseif event == "NAME_PLATE_UNIT_ADDED" then
 		---@type string
@@ -416,22 +397,14 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			return
 		end
 
-		local spellId = nil
 		local startTime = nil
 		---@type DurationObjectDummy|number|nil
 		local durationOrCastTime = nil
-		---@type number|string|nil
-		local id = nil
 
-		local _, _, _, _, _, _, _, _, castingSpellId, castId = UnitCastingInfo(unit)
-
-		spellId = castingSpellId
-		id = castId
+		local _, _, _, _, _, _, _, _, spellId, id = UnitCastingInfo(unit)
 
 		if spellId == nil then
-			_, _, _, _, _, _, _, castingSpellId, _, _, castId = UnitChannelInfo(unit)
-			spellId = castingSpellId
-			id = castId
+			_, _, _, _, _, _, _, spellId, _, _, id = UnitChannelInfo(unit)
 		end
 
 		if spellId == nil then
@@ -522,9 +495,9 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			return
 		end
 
-		---@type number|string|nil
+		---@type number|nil
 		local id = nil
-
+		---@type string|nil
 		local interruptedBy = nil
 
 		if event == "UNIT_SPELLCAST_CHANNEL_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then
@@ -627,7 +600,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		or event == "PLAYER_SPECIALIZATION_CHANGED"
 		or event == "UPDATE_INSTANCE_INFO"
 	then
-		local name, instanceType, difficultyId = GetInstanceInfo()
+		local _, instanceType, difficultyId = GetInstanceInfo()
 		-- equivalent to `instanceType == "none"`
 		local nextContentType = Private.Enum.ContentType.OpenWorld
 
@@ -654,9 +627,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			end
 		end
 
-		if nextContentType ~= self.contentType then
-			self.contentType = nextContentType
-		end
+		self.contentType = nextContentType
 
 		local specId = PlayerUtil.GetCurrentSpecID()
 
@@ -750,32 +721,34 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 	local frames = self.frames[unit]
 
 	for i, frame in pairs(frames) do
-		local tableRef = frame:GetKind() == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
-			or TargetedSpellsSaved.Settings.Party
+		local indicateInterrupts = frame:GetKind() == Private.Enum.FrameKind.Self
+				and TargetedSpellsSaved.Settings.Self.IndicateInterrupts
+			or TargetedSpellsSaved.Settings.Party.IndicateInterrupts
 
-		if tableRef.IndicateInterrupts then
+		if indicateInterrupts then
 			frame:SetInterrupted(interruptInfo)
 
 			kindsToDelay[frame:GetKind()] = true
 		end
 	end
 
-	if kindsToDelay[Private.Enum.FrameKind.Self] or kindsToDelay[Private.Enum.FrameKind.Party] then
-		---@type DelayInfo
-		local delayInfo = {
-			unit = unit,
-			kinds = kindsToDelay,
-			id = id,
-		}
-
-		C_Timer.After(
-			1,
-			GenerateClosure(self.OnFrameEvent, self, self.frame, Private.Enum.Events.DELAYED_FRAME_CLEANUP, delayInfo)
-		)
-		return true
+	if not kindsToDelay[Private.Enum.FrameKind.Self] and not kindsToDelay[Private.Enum.FrameKind.Party] then
+		return false
 	end
 
-	return false
+	---@type DelayInfo
+	local delayInfo = {
+		unit = unit,
+		kinds = kindsToDelay,
+		id = id,
+	}
+
+	C_Timer.After(
+		1,
+		GenerateClosure(self.OnFrameEvent, self, self.frame, Private.Enum.Events.DELAYED_FRAME_CLEANUP, delayInfo)
+	)
+
+	return true
 end
 
 table.insert(Private.LoginFnQueue, GenerateClosure(TargetedSpellsDriver.Init, TargetedSpellsDriver))
