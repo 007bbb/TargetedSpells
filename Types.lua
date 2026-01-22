@@ -449,3 +449,12 @@ DandersFrames = nil
 
 ---@type Frame?
 DandersPartyGroupContainer = nil
+
+---@type table?
+Grid2 = nil
+
+---@type Frame?
+Grid2LayoutFrame = nil
+
+---@type Frame?
+Grid2LayoutHeader1 = nil

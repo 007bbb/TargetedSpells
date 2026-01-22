@@ -1,6 +1,7 @@
 ## Version 1.1.1
 
 - remove now-redundant sounds
+- preliminary support for Grid2
 
 ## Version 1.1.0
 
