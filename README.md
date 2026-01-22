@@ -16,6 +16,7 @@
   - additional exhaustive Settings menu integration
 - support for both raid-style and classic party frames
 - supported third-party unit frame addons:
+  - [Grid2](https://www.curseforge.com/wow/addons/grid2)
   - [Danders Frames](https://www.curseforge.com/wow/addons/danders-frames)
   - more coming when the dust settles
 - blizzlike look - built on top of the Cooldown Manager design
