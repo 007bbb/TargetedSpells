@@ -1,8 +1,13 @@
 ## Version 1.1.2
 
 - harden Grid2 support
+  - now uses their API to determine the best frame
+  - now correctly layers on top of the frame
 - fixed a bug where changing the duration fraction or interrupt indication setting would toggle enabled state
 - NEW: option to toggle cooldown swipe animation
+- fixed a bug where interrupt indicators were incorrectly showing for Self despite explicitly turned off
+- fixed a bug leading to incorrect layouting when Source and Target anchors were set to Center for Party frames
+- improved loading speed slightly should other addons toggle Edit Mode on login
 
 ## Version 1.1.1
 

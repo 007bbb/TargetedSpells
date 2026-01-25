@@ -105,46 +105,47 @@ end
 
 -- this is where 3rd party unit frames would need addition
 ---@param unit string
----@return Frame?
+---@return Frame?, boolean
 local function FindParentFrameForPartyMember(unit)
-	local thirdPartyFrame = Private.Utils.FindThirdPartyGroupFrameForUnit(unit, Private.Enum.FrameKind.Party)
+	local thirdPartyFrame, useTopLevel =
+		Private.Utils.FindThirdPartyGroupFrameForUnit(unit, Private.Enum.FrameKind.Party)
 
 	if thirdPartyFrame then
-		return thirdPartyFrame
+		return thirdPartyFrame, useTopLevel
 	end
 
 	if unit == "player" then
 		if not EditModeManagerFrame:UseRaidStylePartyFrames() then
 			-- non-raid style party frames don't include the player
-			return nil
+			return nil, false
 		end
 
 		for _, frame in pairs(CompactPartyFrame.memberUnitFrames) do
 			if frame.unit == "player" then
-				return frame
+				return frame, false
 			end
 		end
 
-		return nil
+		return nil, false
 	end
 
 	if EditModeManagerFrame:UseRaidStylePartyFrames() then
 		for _, frame in pairs(CompactPartyFrame.memberUnitFrames) do
 			if frame.unit == unit then
-				return frame
+				return frame, false
 			end
 		end
 
-		return nil
+		return nil, false
 	end
 
 	for memberFrame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
 		if memberFrame.unitToken == unit then
-			return memberFrame
+			return memberFrame, false
 		end
 	end
 
-	return nil
+	return nil, false
 end
 
 function TargetedSpellsDriver:RepositionFrames()
@@ -201,10 +202,10 @@ function TargetedSpellsDriver:RepositionFrames()
 					y = Private.Utils.CalculateCoordinate(i, width, gap, height, total, 0, grow)
 				end
 
-				frame:Reposition(point, self.frame, "CENTER", x, y)
+				frame:Reposition(point, self.frame, "CENTER", x, y, false)
 			end
 		else
-			local parentFrame = FindParentFrameForPartyMember(targetUnit)
+			local parentFrame, useTopLevel = FindParentFrameForPartyMember(targetUnit)
 
 			if parentFrame ~= nil then
 				local width, height, gap, sortOrder, sourceAnchor, targetAnchor, direction, grow, offsetX, offsetY =
@@ -235,7 +236,7 @@ function TargetedSpellsDriver:RepositionFrames()
 						y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
 					end
 
-					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y)
+					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
 				end
 			end
 		end
@@ -720,9 +721,13 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 	local frames = self.frames[unit]
 
 	for i, frame in pairs(frames) do
-		local indicateInterrupts = frame:GetKind() == Private.Enum.FrameKind.Self
-				and TargetedSpellsSaved.Settings.Self.IndicateInterrupts
-			or TargetedSpellsSaved.Settings.Party.IndicateInterrupts
+		local indicateInterrupts = false
+
+		if frame:GetKind() == Private.Enum.FrameKind.Self then
+			indicateInterrupts = TargetedSpellsSaved.Settings.Self.IndicateInterrupts
+		else
+			indicateInterrupts = TargetedSpellsSaved.Settings.Party.IndicateInterrupts
+		end
 
 		if indicateInterrupts then
 			frame:SetInterrupted(interruptInfo)

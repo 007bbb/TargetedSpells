@@ -361,9 +361,10 @@ function TargetedSpellsMixin:ClearStartTime()
 	self.startTime = nil
 end
 
-function TargetedSpellsMixin:Reposition(point, relativeTo, relativePoint, offsetX, offsetY)
+function TargetedSpellsMixin:Reposition(point, relativeTo, relativePoint, offsetX, offsetY, useTopLevel)
 	self:ClearAllPoints()
 	self:SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
+	self:SetToplevel(useTopLevel)
 	self:Show()
 end
 

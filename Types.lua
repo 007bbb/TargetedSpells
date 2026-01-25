@@ -13,7 +13,7 @@
 ---@field CalculateCoordinate fun(index: number, dimension: number, gap: number, parentDimension: number, total: number, offset: number, grow: Grow): number
 ---@field SortFrames fun(frames: TargetedSpellsMixin[], sortOrder: SortOrder)
 ---@field RollDice fun(): boolean
----@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?
+---@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?, boolean
 ---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
 ---@field Import fun(string: string): boolean
 ---@field Export fun(): string
@@ -160,7 +160,7 @@
 ---@field SetSpellId fun(self: TargetedSpellsMixin, spellId: number?)
 ---@field ShouldBeShown fun(self: TargetedSpellsMixin): boolean
 ---@field ClearStartTime fun(self: TargetedSpellsMixin)
----@field Reposition fun(self: TargetedSpellsMixin, point: string, relativeTo: Frame, relativePoint: string, offsetX: number, offsetY: number)
+---@field Reposition fun(self: TargetedSpellsMixin, point: string, relativeTo: Frame, relativePoint: string, offsetX: number, offsetY: number, useTopLevel: boolean)
 ---@field SetUnit fun(self: TargetedSpellsMixin, unit: string)
 ---@field SetKind fun(self: TargetedSpellsMixin, kind: FrameKind)
 ---@field GetKind fun(self: TargetedSpellsMixin): FrameKind?
@@ -169,8 +169,11 @@
 ---@field Reset fun(self: TargetedSpellsMixin)
 ---@field SetFontSize fun(self: TargetedSpellsMixin, fontSize: number)
 
+---@class EditModeFrame : frame
+---@field firstFrameTimestamp number
+
 ---@class TargetedSpellsEditModeMixin : Frame
----@field protected editModeFrame Frame
+---@field protected editModeFrame EditModeFrame
 ---@field private demoPlaying boolean
 ---@field private framePool FramePool
 ---@field private frames table<number, TargetedSpellsMixin[]> | TargetedSpellsMixin[]
@@ -193,6 +196,7 @@
 ---@field OnExportButtonClick fun(self: TargetedSpellsEditModeMixin)
 ---@field OnImportButtonClick fun(self: TargetedSpellsEditModeMixin, kind: FrameKind)
 ---@field OnImportConfirmation fun(self: TargetedSpellsEditModeMixin, args: ImportConfirmationArgs)
+---@field IsPastLoadingScreen fun(self: TargetedSpellsEditModeMixin): boolean
 
 ---@class ImportConfirmationArgs
 ---@field kind FrameKind

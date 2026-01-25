@@ -5,12 +5,14 @@ local addonName, Private = ...
 Private.Utils = {}
 
 function Private.Utils.CalculateCoordinate(index, dimension, gap, parentDimension, total, offset, grow)
+	local step = dimension + gap
+
 	if grow == Private.Enum.Grow.Start then
-		return (index - 1) * (dimension + gap) - parentDimension / 2 + offset
+		return (index - 1) * step - parentDimension / 2 + offset
 	elseif grow == Private.Enum.Grow.Center then
-		return (index - 1) * (dimension + gap) - total / 2 + offset
+		return (index - 1) * step - total / 2 + dimension / 2 + offset
 	elseif grow == Private.Enum.Grow.End then
-		return parentDimension / 2 - index * (dimension + gap) + offset
+		return parentDimension / 2 - index * step + offset
 	end
 
 	return 0
@@ -34,16 +36,16 @@ end
 
 function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
 	if Grid2 then
-		return (next(Grid2:GetUnitFrames(unit)))
+		return (next(Grid2:GetUnitFrames(unit))), true
 	elseif DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
 		local frame = DandersFrames.Api.GetFrameForUnit(unit, kind)
 
 		if frame then
-			return frame
+			return frame, false
 		end
 	end
 
-	return nil
+	return nil, false
 end
 
 function Private.Utils.ShowStaticPopup(args)

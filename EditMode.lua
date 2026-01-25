@@ -16,6 +16,16 @@ function TargetedSpellsEditModeMixin:Init(displayName, frameKind)
 	}
 	self.editModeFrame = CreateFrame("Frame", displayName, UIParent)
 	self.editModeFrame:SetClampedToScreen(true)
+	-- some addons such as BetterCooldownManager toggle the edit mode briefly on login/loading screen end
+	-- which would toggle demos on our end. by flipping this bool, we can avoid that entirely, speeding up load time
+	self.editModeFrame.firstFrameTimestamp = 0
+
+	self.editModeFrame:RegisterEvent("FIRST_FRAME_RENDERED")
+	self.editModeFrame:SetScript("OnEvent", function(self, event)
+		self.firstFrameTimestamp = GetTime()
+		self:SetScript("OnEvent", nil)
+		self:UnregisterAllEvents()
+	end)
 
 	Private.Utils.RegisterEditModeFrame(frameKind, self.editModeFrame)
 	Private.EventRegistry:RegisterCallback(Private.Enum.Events.SETTING_CHANGED, self.OnSettingsChanged, self)
@@ -24,6 +34,10 @@ function TargetedSpellsEditModeMixin:Init(displayName, frameKind)
 	LibEditMode:RegisterCallback("exit", GenerateClosure(self.EndDemo, self))
 
 	self:AppendSettings()
+end
+
+function TargetedSpellsEditModeMixin:IsPastLoadingScreen()
+	return (GetTime() - self.editModeFrame.firstFrameTimestamp) > 1
 end
 
 function TargetedSpellsEditModeMixin:OnSettingsChanged(key, value)
@@ -1348,12 +1362,12 @@ function SelfEditModeMixin:RepositionPreviewFrames()
 			y = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, 0, grow)
 		end
 
-		frame:Reposition(point, self.editModeFrame, "CENTER", x, y)
+		frame:Reposition(point, self.editModeFrame, "CENTER", x, y, false)
 	end
 end
 
 function SelfEditModeMixin:StartDemo()
-	if self.demoPlaying or not TargetedSpellsSaved.Settings.Self.Enabled then
+	if self.demoPlaying or not TargetedSpellsSaved.Settings.Self.Enabled or not self:IsPastLoadingScreen() then
 		return
 	end
 
@@ -1361,7 +1375,10 @@ function SelfEditModeMixin:StartDemo()
 	self.buildingFrames = true
 
 	for index = 1, self.maxFrames do
-		self.frames[index] = self.frames[index] or self:AcquireFrame()
+		if self.frames[index] == nil then
+			self.frames[index] = self:AcquireFrame()
+		end
+
 		local frame = self.frames[index]
 
 		if frame then
@@ -1640,7 +1657,7 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 		if activeFrameCount > 0 then
 			Private.Utils.SortFrames(activeFrames, sortOrder)
 
-			local parentFrame = Private.Utils.FindThirdPartyGroupFrameForUnit(
+			local parentFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(
 				i == 5 and "player" or string.format("party%d", i),
 				Private.Enum.FrameKind.Party
 			)
@@ -1672,7 +1689,7 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 						y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
 					end
 
-					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y)
+					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
 				end
 			end
 		end
@@ -1680,7 +1697,7 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 end
 
 function PartyEditModeMixin:StartDemo()
-	if self.demoPlaying or not TargetedSpellsSaved.Settings.Party.Enabled then
+	if self.demoPlaying or not TargetedSpellsSaved.Settings.Party.Enabled or not self:IsPastLoadingScreen() then
 		return
 	end
 
