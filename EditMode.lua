@@ -257,6 +257,35 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 		}
 	end
 
+	if key == Private.Settings.Keys.Self.ShowSwipe or key == Private.Settings.Keys.Party.ShowSwipe then
+		local tableRef = key == Private.Settings.Keys.Self.ShowSwipe and TargetedSpellsSaved.Settings.Self
+			or TargetedSpellsSaved.Settings.Party
+
+		---@param layoutName string
+		local function Get(layoutName)
+			return tableRef.ShowSwipe
+		end
+
+		---@param layoutName string
+		---@param value boolean
+		local function Set(layoutName, value)
+			if value ~= tableRef.ShowSwipe then
+				tableRef.ShowSwipe = value
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
+			end
+		end
+
+		---@type LibEditModeCheckbox
+		return {
+			name = L.Settings.ShowSwipeLabel,
+			kind = Enum.EditModeSettingDisplayType.Checkbox,
+			desc = L.Settings.ShowSwipeTooltip,
+			default = defaults.ShowSwipe,
+			get = Get,
+			set = Set,
+		}
+	end
+
 	if
 		key == Private.Settings.Keys.Self.IndicateInterrupts
 		or key == Private.Settings.Keys.Party.IndicateInterrupts

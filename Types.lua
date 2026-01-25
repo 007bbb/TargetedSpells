@@ -86,6 +86,7 @@
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
 ---@field TargetingFilterApi TargetingFilterApi
+---@field ShowSwipe boolean
 
 ---@class SavedVariablesSettingsParty
 ---@field Enabled boolean
@@ -110,6 +111,7 @@
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
 ---@field TargetingFilterApi TargetingFilterApi
+---@field ShowSwipe boolean
 
 ---@class TargetedSpellsSelfPreviewFrame: Frame
 ---@field GetChildren fun(self: TargetedSpellsSelfPreviewFrame): TargetedSpellsMixin
@@ -228,7 +230,6 @@
 ---@field private frame Frame
 ---@field private role Role
 ---@field private contentType ContentType
----@field private sawPlayerLogin boolean
 ---@field frames table<string, TargetedSpellsMixin[]>
 ---@field SetupFrame fun(self: TargetedSpellsDriver, isBoot: boolean)
 ---@field AcquireFrames fun(self: TargetedSpellsDriver, castingUnit: string): TargetedSpellsMixin[]

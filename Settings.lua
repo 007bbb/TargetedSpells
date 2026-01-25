@@ -26,6 +26,7 @@ Private.Settings.Keys = {
 		TargetingFilterApi = "TARGETING_FILTER_API_SELF",
 		Import = "IMPORT_SELF",
 		Export = "EXPORT_SELF",
+		ShowSwipe = "SWIPE_SELF",
 	},
 	Party = {
 		Enabled = "ENABLED_PARTY",
@@ -53,6 +54,7 @@ Private.Settings.Keys = {
 		TargetingFilterApi = "TARGETING_FILTER_API_PARTY",
 		Import = "IMPORT_PARTY",
 		Export = "EXPORT_PARTY",
+		ShowSwipe = "SWIPE_PARTY",
 	},
 }
 
@@ -75,6 +77,7 @@ function Private.Settings.GetSettingsDisplayOrder(kind)
 			Private.Settings.Keys.Self.ShowDurationFractions,
 			Private.Settings.Keys.Self.FontSize,
 			Private.Settings.Keys.Self.ShowBorder,
+			Private.Settings.Keys.Self.ShowSwipe,
 			Private.Settings.Keys.Self.IndicateInterrupts,
 			Private.Settings.Keys.Self.Opacity,
 		}
@@ -102,6 +105,7 @@ function Private.Settings.GetSettingsDisplayOrder(kind)
 		Private.Settings.Keys.Party.ShowDurationFractions,
 		Private.Settings.Keys.Party.FontSize,
 		Private.Settings.Keys.Party.ShowBorder,
+		Private.Settings.Keys.Party.ShowSwipe,
 		Private.Settings.Keys.Party.IndicateInterrupts,
 		Private.Settings.Keys.Party.Opacity,
 	}
@@ -197,7 +201,6 @@ function Private.Settings.GetSelfDefaultSettings()
 			[Private.Enum.Role.Tank] = true,
 			[Private.Enum.Role.Damager] = true,
 		},
-
 		SortOrder = Private.Enum.SortOrder.Ascending,
 		Grow = Private.Enum.Grow.Center,
 		ShowDuration = true,
@@ -210,6 +213,7 @@ function Private.Settings.GetSelfDefaultSettings()
 		GlowType = Private.Enum.GlowType.PixelGlow,
 		IndicateInterrupts = false,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
+		ShowSwipe = true,
 	}
 end
 
@@ -250,6 +254,7 @@ function Private.Settings.GetPartyDefaultSettings()
 		GlowType = Private.Enum.GlowType.PixelGlow,
 		IndicateInterrupts = true,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
+		ShowSwipe = true,
 	}
 end
 
@@ -347,6 +352,38 @@ table.insert(Private.LoginFnQueue, function()
 			}
 		end
 
+		if key == Private.Settings.Keys.Self.ShowSwipe or key == Private.Settings.Keys.Party.ShowSwipe then
+			local tableRef = key == Private.Settings.Keys.Self.ShowSwipe and TargetedSpellsSaved.Settings.Self
+				or TargetedSpellsSaved.Settings.Party
+
+			local function GetValue()
+				return tableRef.ShowSwipe
+			end
+
+			local function SetValue(value)
+				tableRef.ShowSwipe = not tableRef.ShowSwipe
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef.ShowSwipe)
+			end
+
+			local setting = Settings.RegisterProxySetting(
+				category,
+				key,
+				Settings.VarType.Boolean,
+				L.Settings.ShowSwipeLabel,
+				defaults.ShowSwipe,
+				GetValue,
+				SetValue
+			)
+
+			local initializer = Settings.CreateCheckbox(category, setting, L.Settings.ShowSwipeTooltip)
+
+			return {
+				initializer = initializer,
+				hideSteppers = false,
+				IsSectionEnabled = nil,
+			}
+		end
+
 		if
 			key == Private.Settings.Keys.Self.IndicateInterrupts
 			or key == Private.Settings.Keys.Party.IndicateInterrupts
@@ -360,7 +397,11 @@ table.insert(Private.LoginFnQueue, function()
 
 			local function SetValue(value)
 				tableRef.IndicateInterrupts = not tableRef.IndicateInterrupts
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef.Enabled)
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					tableRef.IndicateInterrupts
+				)
 			end
 
 			local setting = Settings.RegisterProxySetting(
@@ -396,7 +437,11 @@ table.insert(Private.LoginFnQueue, function()
 
 			local function SetValue(value)
 				tableRef.ShowDurationFractions = not tableRef.ShowDurationFractions
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef.Enabled)
+				Private.EventRegistry:TriggerEvent(
+					Private.Enum.Events.SETTING_CHANGED,
+					key,
+					tableRef.ShowDurationFractions
+				)
 			end
 
 			local setting = Settings.RegisterProxySetting(

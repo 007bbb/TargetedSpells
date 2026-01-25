@@ -1,3 +1,9 @@
+## Version 1.1.2
+
+- harden Grid2 support
+- fixed a bug where changing the duration fraction or interrupt indication setting would toggle enabled state
+- NEW: option to toggle cooldown swipe animation
+
 ## Version 1.1.1
 
 - remove now-redundant sounds
@@ -14,8 +20,6 @@ KNOWN ISSUES:
 
 - due to the state of the 12.0.0 patch, in some cases casts may not get cleaned up until the nameplate gets removed or the caster casts again.
   - this fixes itself with the 12.0.1 patch
-- selecting an element in EditMode throws an error
-  - this should fix itself with the 12.0.1 patch
 
 ## Version 1.0.7
 

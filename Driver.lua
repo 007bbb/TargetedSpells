@@ -10,7 +10,6 @@ function TargetedSpellsDriver:Init()
 	self.frames = {}
 	self.role = Private.Enum.Role.Damager
 	self.contentType = Private.Enum.ContentType.OpenWorld
-	self.sawPlayerLogin = false
 
 	Private.EventRegistry:RegisterCallback(Private.Enum.Events.SETTING_CHANGED, self.OnSettingsChanged, self)
 

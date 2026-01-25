@@ -175,6 +175,9 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 			self.Cooldown:SetHideCountdownNumbers(value)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self.DurationText:SetShown(value)
+		elseif key == Private.Settings.Keys.Self.ShowSwipe then
+			---@diagnostic disable-next-line: param-type-mismatch
+			self.Cooldown:SetDrawSwipe(value)
 		end
 	else
 		if key == Private.Settings.Keys.Party.Width then
@@ -203,6 +206,9 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 			self.Cooldown:SetHideCountdownNumbers(value)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self.DurationText:SetShown(value)
+		elseif key == Private.Settings.Keys.Party.ShowSwipe then
+			---@diagnostic disable-next-line: param-type-mismatch
+			self.Cooldown:SetDrawSwipe(value)
 		end
 	end
 end
@@ -381,6 +387,7 @@ function TargetedSpellsMixin:SetKind(kind)
 	self:SetShowBorder(tableRef.ShowBorder)
 	self:SetAlpha(tableRef.Opacity)
 	self:SetShowDuration(tableRef.ShowDuration, tableRef.ShowDurationFractions)
+	self.Cooldown:SetDrawSwipe(tableRef.ShowSwipe)
 end
 
 function TargetedSpellsMixin:GetKind()
@@ -431,6 +438,7 @@ function TargetedSpellsMixin:Reset()
 		or TargetedSpellsSaved.Settings.Party
 
 	self:SetShowDuration(tableRef.ShowDuration, tableRef.ShowDurationFractions)
+	self.Cooldown:SetDrawSwipe(tableRef.ShowSwipe)
 end
 
 function TargetedSpellsMixin:SetFontSize(fontSize)

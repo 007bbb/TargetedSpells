@@ -109,6 +109,8 @@ L.Settings.IndicateInterruptsLabel = "Unterbrechungen anzeigen"
 L.Settings.IndicateInterruptsTooltip =
 	"Desaturiert das Icon, zeigt einen Indikator an und verzögert das Ausblenden des Icons um eine Sekunde. Funktioniert nicht bei kanalisierten Zaubern."
 
+L.Settings.ShowSwipeLabel = "Abklingzeitsanimation anzeigen"
+
 L.Settings.ShowBorderLabel = "Rahmen"
 L.Settings.ShowBorderTooltip = nil
 
