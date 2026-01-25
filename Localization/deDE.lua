@@ -12,7 +12,7 @@ end
 local L = Private.L
 
 L.Settings.EditModeReminder =
-	"Der Bearbeitungsmodus beinhaltet Echtzeitvorschau aller Einstellungen.\nDiese Einstellungen sind nur hier damit man auch im Kampf bearbeiten kann."
+	"Der Bearbeitungsmodus beinhaltet eine Echtzeitvorschau aller Einstellungen.\nDiese Einstellungen sind hier nur damit man sie auch im Kampf bearbeiten kann."
 L.EditMode.TargetedSpellsSelfLabel = "Targeted Spells - Spieler"
 L.EditMode.TargetedSpellsPartyLabel = "Targeted Spells - Gruppe"
 
@@ -140,7 +140,7 @@ L.Settings.TargetingFilterApiTooltip =
 	"Es gibt feine Unterschiede zwischen diesen Funktionen.\n\nZiel des Zaubers: nutzt das vom Spiel kommunizierte eigentliche Ziel des Zaubers, unabhängig davon wen der Gegner aktuell anvisiert. Funktioniert nicht bei Zaubern die von sich aus bereits große rote Pfeile über den betroffenen Spielern anzeigen.\n\nAktuelles Ziel: nutzt das aktuelle Ziel des wirkenden Gegners. Kann auch Zauber anzeigen die nicht notwendigerweise nur das aktuelle Ziel beeinträchtigen werden wie beispielsweise gruppenweite Schadenszauber."
 L.Settings.TargetingFilterApiLabels = {
 	[Private.Enum.TargetingFilterApi.UnitIsSpellTarget] = "Ziel des Zaubers",
-	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Ziel des Zaubers",
+	[Private.Enum.TargetingFilterApi.UnitIsUnit] = "Aktuelles Ziel des Gegners",
 }
 
 L.Settings.Import = "Importieren"
