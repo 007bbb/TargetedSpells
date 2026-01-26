@@ -91,11 +91,11 @@ function TargetedSpellsEditModeMixin:OnSettingsChanged(key, value)
 	end
 end
 
-function TargetedSpellsEditModeMixin:CreateImportExportButtons(kind)
+function TargetedSpellsEditModeMixin:CreateImportExportButtons()
 	return {
 		{
 			click = function()
-				self:OnImportButtonClick(kind)
+				self:OnImportButtonClick()
 			end,
 			text = Private.L.Settings.Import,
 		},
@@ -156,7 +156,7 @@ function TargetedSpellsEditModeMixin:OnExportButtonClick()
 	})
 end
 
-function TargetedSpellsEditModeMixin:OnImportButtonClick(kind)
+function TargetedSpellsEditModeMixin:OnImportButtonClick()
 	Private.Utils.ShowStaticPopup({
 		text = Private.L.Settings.Import,
 		button1 = Private.L.Settings.Import,
@@ -167,16 +167,13 @@ function TargetedSpellsEditModeMixin:OnImportButtonClick(kind)
 		hideOnEscape = true,
 		OnAccept = function(popupSelf)
 			local editBox = popupSelf:GetEditBox()
-			self:OnImportConfirmation({
-				encodedString = editBox:GetText(),
-				kind = kind,
-			})
+			self:OnImportConfirmation(editBox:GetText())
 		end,
 	})
 end
 
-function TargetedSpellsEditModeMixin:OnImportConfirmation(importArgs)
-	local hasAnyChange = Private.Utils.Import(importArgs.encodedString)
+function TargetedSpellsEditModeMixin:OnImportConfirmation(encodedString)
+	local hasAnyChange = Private.Utils.Import(encodedString)
 
 	if hasAnyChange then
 		LibEditMode:RefreshFrameSettings(self.editModeFrame)
@@ -1290,7 +1287,7 @@ function SelfEditModeMixin:AppendSettings()
 	end
 
 	LibEditMode:AddFrameSettings(self.editModeFrame, settings)
-	LibEditMode:AddFrameSettingsButtons(self.editModeFrame, self:CreateImportExportButtons(Private.Enum.FrameKind.Self))
+	LibEditMode:AddFrameSettingsButtons(self.editModeFrame, self:CreateImportExportButtons())
 end
 
 function SelfEditModeMixin:RestoreEditModePosition()
@@ -1302,7 +1299,6 @@ function SelfEditModeMixin:RestoreEditModePosition()
 	)
 end
 
----@param frame Frame
 function SelfEditModeMixin:OnEditModePositionChanged(frame, layoutName, point, x, y)
 	TargetedSpellsSaved.Settings.Self.Position.point = point
 	TargetedSpellsSaved.Settings.Self.Position.x = x
@@ -1540,17 +1536,17 @@ function PartyEditModeMixin:AppendSettings()
 	end
 
 	LibEditMode:AddFrameSettings(self.editModeFrame, settings)
-	LibEditMode:AddFrameSettingsButtons(
-		self.editModeFrame,
-		self:CreateImportExportButtons(Private.Enum.FrameKind.Party)
-	)
+	LibEditMode:AddFrameSettingsButtons(self.editModeFrame, self:CreateImportExportButtons())
 end
 
 function PartyEditModeMixin:RepositionEditModeFrame()
 	local parent = PartyFrame
 	local width = 125
 
-	if DandersFrames and DandersPartyGroupContainer then
+	if ElvUI and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
+		parent = ElvUF_Party
+		width = ElvUF_Party:GetWidth()
+	elseif DandersFrames and DandersPartyGroupContainer then
 		parent = DandersPartyGroupContainer
 		width = DandersPartyGroupContainer:GetWidth()
 	elseif self.useRaidStylePartyFrames then
@@ -1596,7 +1592,7 @@ function PartyEditModeMixin:OnLayoutSettingChanged(key, value)
 			end
 		end
 	elseif key == Private.Settings.Keys.Party.GlowType then
-		if not Private.Settings.Keys.Party.GlowImportant then
+		if not TargetedSpellsSaved.Settings.Party.GlowImportant then
 			return
 		end
 

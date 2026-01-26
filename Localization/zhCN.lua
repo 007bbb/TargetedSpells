@@ -112,6 +112,7 @@ L.Settings.IndicateInterruptsTooltip =
 	"使图标去色，在图标上显示标记，并延迟1秒隐藏图标。对引导类法术无效。"
 
 L.Settings.ShowSwipeLabel = "Show Swipe"
+L.Settings.ShowSwipeTooltip = nil
 
 L.Settings.ShowBorderLabel = "显示边框"
 L.Settings.ShowBorderTooltip = nil

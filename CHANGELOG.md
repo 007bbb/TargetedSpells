@@ -1,3 +1,10 @@
+## Version 1.1.3
+
+- performance improvements
+- fixed a bug where changing the Party glow in Edit Mode type wouldn't respect the Glow setting if that was disabled
+- preliminary ElvUI support
+- increase OffsetX / OffsetY for Party frames to 200
+
 ## Version 1.1.2
 
 - harden Grid2 support

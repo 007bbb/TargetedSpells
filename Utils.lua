@@ -18,16 +18,20 @@ function Private.Utils.CalculateCoordinate(index, dimension, gap, parentDimensio
 	return 0
 end
 
-function Private.Utils.SortFrames(frames, sortOrder)
-	local isAscending = sortOrder == Private.Enum.SortOrder.Ascending
+do
+	local function sortAsc(a, b)
+		return a:GetStartTime() < b:GetStartTime()
+	end
 
-	table.sort(frames, function(a, b)
-		if isAscending then
-			return a:GetStartTime() < b:GetStartTime()
-		end
-
+	local function sortDesc(a, b)
 		return a:GetStartTime() > b:GetStartTime()
-	end)
+	end
+
+	function Private.Utils.SortFrames(frames, sortOrder)
+		local isAscending = sortOrder == Private.Enum.SortOrder.Ascending
+
+		table.sort(frames, isAscending and sortAsc or sortDesc)
+	end
 end
 
 function Private.Utils.RollDice()
@@ -35,7 +39,21 @@ function Private.Utils.RollDice()
 end
 
 function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
-	if Grid2 then
+	if ElvUI and ElvUI[1].db.unitframe.units.party.enable then
+		for i = 1, 5 do
+			local frameName = string.format("ElvUF_PartyGroup1UnitButton%d", i)
+
+			if _G[frameName] then
+				local frame = _G[frameName]
+
+				if frame.unit == unit then
+					return frame, false
+				end
+			end
+		end
+
+		return nil, false
+	elseif Grid2 then
 		return (next(Grid2:GetUnitFrames(unit))), true
 	elseif DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
 		local frame = DandersFrames.Api.GetFrameForUnit(unit, kind)

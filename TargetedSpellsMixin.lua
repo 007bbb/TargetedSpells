@@ -44,7 +44,7 @@ function TargetedSpellsMixin:GetId()
 	return self.id
 end
 
-function TargetedSpellsMixin:SetInterrupted(interruptInfo)
+function TargetedSpellsMixin:SetInterrupted(name, color)
 	self.wasInterrupted = true
 	self.doNotHideBefore = GetTime() + 0.95
 	self.InterruptIcon:Show()
@@ -53,14 +53,14 @@ function TargetedSpellsMixin:SetInterrupted(interruptInfo)
 	self:SetShowDuration(false, false)
 	self:HideGlow()
 
-	if interruptInfo.name == nil then
+	if name == nil then
 		return
 	end
 
-	self.InterruptSource:SetText(interruptInfo.name)
+	self.InterruptSource:SetText(name)
 
-	if interruptInfo.color ~= nil then
-		self.InterruptSource:SetTextColor(interruptInfo.color.r, interruptInfo.color.g, interruptInfo.color.b)
+	if color ~= nil then
+		self.InterruptSource:SetTextColor(color.r, color.g, color.b)
 	end
 
 	self.InterruptSource:Show()

@@ -112,6 +112,7 @@ L.Settings.IndicateInterruptsTooltip =
 	"Desaturates the icon, shows an indicator on top of the icon and delays hiding the icon by 1 second. Does not work with channeled spells."
 
 L.Settings.ShowSwipeLabel = "Show Swipe"
+L.Settings.ShowSwipeTooltip = nil
 
 L.Settings.ShowBorderLabel = "Show Border"
 L.Settings.ShowBorderTooltip = nil

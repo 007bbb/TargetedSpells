@@ -166,8 +166,8 @@ function Private.Settings.GetSliderSettingsForOption(key)
 
 	if key == Private.Settings.Keys.Party.OffsetX or key == Private.Settings.Keys.Party.OffsetY then
 		return {
-			min = -100,
-			max = 100,
+			min = -200,
+			max = 200,
 			step = 1,
 		}
 	end

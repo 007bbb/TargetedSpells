@@ -112,6 +112,7 @@ L.Settings.IndicateInterruptsTooltip =
 	"Désature l'icône, affiche un indicateur par-dessus et retarde sa disparition de 1 seconde. Ne marche pas avec les sorts canalisés."
 
 L.Settings.ShowSwipeLabel = "Show Swipe"
+L.Settings.ShowSwipeTooltip = nil
 
 L.Settings.ShowBorderLabel = "Montrer les contours"
 L.Settings.ShowBorderTooltip = nil

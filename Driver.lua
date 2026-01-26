@@ -64,38 +64,43 @@ function TargetedSpellsDriver:SetupFrame(isBoot)
 	end
 end
 
-function TargetedSpellsDriver:AcquireFrames(castingUnit)
+do
+	---@type table<string, TargetedSpellsMixin[]>
 	local frames = {}
 
-	if
-		TargetedSpellsSaved.Settings.Self.Enabled
-		and not self:LoadConditionsProhibitExecution(Private.Enum.FrameKind.Self)
-	then
-		local selfTargetingFrame = self.framePool:Acquire()
-		selfTargetingFrame:SetParent(self.frame)
-		selfTargetingFrame:PostCreate("player", Private.Enum.FrameKind.Self, castingUnit)
-		table.insert(frames, selfTargetingFrame)
-	end
+	function TargetedSpellsDriver:AcquireFrames(castingUnit)
+		table.wipe(frames)
 
-	if
-		TargetedSpellsSaved.Settings.Party.Enabled
-		and IsInGroup()
-		and not self:LoadConditionsProhibitExecution(Private.Enum.FrameKind.Party)
-	then
-		local partyMemberCount = GetNumGroupMembers()
+		if
+			TargetedSpellsSaved.Settings.Self.Enabled
+			and not self:LoadConditionsProhibitExecution(Private.Enum.FrameKind.Self)
+		then
+			local selfTargetingFrame = self.framePool:Acquire()
+			selfTargetingFrame:SetParent(self.frame)
+			selfTargetingFrame:PostCreate("player", Private.Enum.FrameKind.Self, castingUnit)
+			table.insert(frames, selfTargetingFrame)
+		end
 
-		for i = 1, partyMemberCount do
-			local unit = i == partyMemberCount and "player" or "party" .. i
+		if
+			TargetedSpellsSaved.Settings.Party.Enabled
+			and IsInGroup()
+			and not self:LoadConditionsProhibitExecution(Private.Enum.FrameKind.Party)
+		then
+			local partyMemberCount = GetNumGroupMembers()
 
-			if (unit == "player" and TargetedSpellsSaved.Settings.Party.IncludeSelfInParty) or unit ~= "player" then
-				local frame = self.framePool:Acquire()
-				frame:PostCreate(unit, Private.Enum.FrameKind.Party, castingUnit)
-				table.insert(frames, frame)
+			for i = 1, partyMemberCount do
+				local unit = i == partyMemberCount and "player" or "party" .. i
+
+				if (unit == "player" and TargetedSpellsSaved.Settings.Party.IncludeSelfInParty) or unit ~= "player" then
+					local frame = self.framePool:Acquire()
+					frame:PostCreate(unit, Private.Enum.FrameKind.Party, castingUnit)
+					table.insert(frames, frame)
+				end
 			end
 		end
-	end
 
-	return frames
+		return frames
+	end
 end
 
 function TargetedSpellsDriver:ReleaseFrame(frame)
@@ -151,7 +156,6 @@ end
 function TargetedSpellsDriver:RepositionFrames()
 	---@type table<string, TargetedSpellsMixin[]>
 	local activeFrames = {}
-
 	for sourceUnit, frames in pairs(self.frames) do
 		for i, frame in pairs(frames) do
 			if frame then
@@ -179,13 +183,9 @@ function TargetedSpellsDriver:RepositionFrames()
 	for targetUnit, frames in pairs(activeFrames) do
 		-- may not use "player" here as the unit token in party for the player is identical
 		if targetUnit == Private.Enum.FrameKind.Self then
+			local tableRef = TargetedSpellsSaved.Settings.Self
 			local width, height, gap, sortOrder, direction, grow =
-				TargetedSpellsSaved.Settings.Self.Width,
-				TargetedSpellsSaved.Settings.Self.Height,
-				TargetedSpellsSaved.Settings.Self.Gap,
-				TargetedSpellsSaved.Settings.Self.SortOrder,
-				TargetedSpellsSaved.Settings.Self.Direction,
-				TargetedSpellsSaved.Settings.Self.Grow
+				tableRef.Width, tableRef.Height, tableRef.Gap, tableRef.SortOrder, tableRef.Direction, tableRef.Grow
 			local isHorizontal = direction == Private.Enum.Direction.Horizontal
 			local point = isHorizontal and "LEFT" or "BOTTOM"
 			local total = (#frames * (isHorizontal and width or height)) + (#frames - 1) * gap
@@ -208,17 +208,18 @@ function TargetedSpellsDriver:RepositionFrames()
 			local parentFrame, useTopLevel = FindParentFrameForPartyMember(targetUnit)
 
 			if parentFrame ~= nil then
+				local tableRef = TargetedSpellsSaved.Settings.Party
 				local width, height, gap, sortOrder, sourceAnchor, targetAnchor, direction, grow, offsetX, offsetY =
-					TargetedSpellsSaved.Settings.Party.Width,
-					TargetedSpellsSaved.Settings.Party.Height,
-					TargetedSpellsSaved.Settings.Party.Gap,
-					TargetedSpellsSaved.Settings.Party.SortOrder,
-					TargetedSpellsSaved.Settings.Party.SourceAnchor,
-					TargetedSpellsSaved.Settings.Party.TargetAnchor,
-					TargetedSpellsSaved.Settings.Party.Direction,
-					TargetedSpellsSaved.Settings.Party.Grow,
-					TargetedSpellsSaved.Settings.Party.OffsetX,
-					TargetedSpellsSaved.Settings.Party.OffsetY
+					tableRef.Width,
+					tableRef.Height,
+					tableRef.Gap,
+					tableRef.SortOrder,
+					tableRef.SourceAnchor,
+					tableRef.TargetAnchor,
+					tableRef.Direction,
+					tableRef.Grow,
+					tableRef.OffsetX,
+					tableRef.OffsetY
 
 				Private.Utils.SortFrames(frames, sortOrder)
 
@@ -292,7 +293,7 @@ function TargetedSpellsDriver:LoadConditionsProhibitExecution(kind)
 end
 
 function TargetedSpellsDriver:UnitIsIrrelevant(unit, skipTargetCheck)
-	if string.find(unit, "nameplate") == nil then
+	if string.sub(unit, 1, 9) ~= "nameplate" then
 		return true
 	end
 
@@ -694,10 +695,8 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 		return false
 	end
 
-	local interruptInfo = {
-		name = nil,
-		color = nil,
-	}
+	local interruptName = nil
+	local interruptColor = nil
 
 	if interruptedBy ~= nil then
 		local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(interruptedBy)
@@ -709,8 +708,8 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 			end
 		end
 
-		interruptInfo.name = name
-		interruptInfo.color = englishClass and C_ClassColor.GetClassColor(englishClass) or nil
+		interruptName = name
+		interruptColor = englishClass and C_ClassColor.GetClassColor(englishClass) or nil
 	end
 
 	local kindsToDelay = {
@@ -730,7 +729,7 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 		end
 
 		if indicateInterrupts then
-			frame:SetInterrupted(interruptInfo)
+			frame:SetInterrupted(interruptName, interruptColor)
 
 			kindsToDelay[frame:GetKind()] = true
 		end

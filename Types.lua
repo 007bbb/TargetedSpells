@@ -17,6 +17,7 @@
 ---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
 ---@field Import fun(string: string): boolean
 ---@field Export fun(): string
+---@field RegisterEditModeFrame fun(frameKind: FrameKind, frame: Frame)
 
 ---@class StaticPopupDialogsArgs
 ---@field text string
@@ -39,10 +40,6 @@
 ---@field unit string
 ---@field kinds table<FrameKind, boolean>
 ---@field id number|string|nil
-
----@class InterruptInfo
----@field name string?
----@field color ColorMixin?
 
 ---@class TargetedSpellsSettings
 ---@field Keys table<'Self' | 'Party', table<string, string>>
@@ -143,15 +140,15 @@
 ---@field OnLoad fun(self: TargetedSpellsMixin)
 ---@field SetId fun(self: TargetedSpellsMixin, id: number?)
 ---@field GetId fun(self: TargetedSpellsMixin): number?
----@field SetInterrupted fun(self: TargetedSpellsMixin, interruptInfo: InterruptInfo)
+---@field SetInterrupted fun(self: TargetedSpellsMixin, name: string?, color: colorRGB?)
 ---@field CanBeHidden fun(self: TargetedSpellsMixin, id: number|string|nil): boolean
 ---@field OnUpdate fun(self: TargetedSpellsMixin, elapsed: number)
 ---@field SetShowDuration fun(self: TargetedSpellsMixin, showDuration: boolean, showFractions: boolean)
 ---@field SetShowBorder fun(self: TargetedSpellsMixin, bool: boolean)
 ---@field OnSizeChanged fun(self: TargetedSpellsMixin, width: number, height: number)
----@field OnSettingChanged fun(self: TargetedSpellsMixin, key: string, value: number|string)
+---@field OnSettingChanged fun(self: TargetedSpellsMixin, key: string, value: number|string|boolean|table)
 ---@field SetDuration fun(self: TargetedSpellsMixin, duration: DurationObjectDummy|number)
----@field GetDuration fun(self: TargetedSpellsMixin): DurationObjectDummy|number)?
+---@field GetDuration fun(self: TargetedSpellsMixin): (DurationObjectDummy|number|nil)
 ---@field SetStartTime fun(self: TargetedSpellsMixin, startTime: number?)
 ---@field GetStartTime fun(self: TargetedSpellsMixin): number?
 ---@field ShowGlow fun(self: TargetedSpellsMixin, isImportant: boolean) -- secret bool, but passed explicitly in EditMode code
@@ -192,15 +189,11 @@
 ---@field StartDemo fun(self: TargetedSpellsEditModeMixin)
 ---@field ReleaseAllFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field EndDemo fun(self: TargetedSpellsEditModeMixin)
----@field CreateImportExportButtons fun(self: TargetedSpellsEditModeMixin, kind: FrameKind) : LibEditModeButton[]
+---@field CreateImportExportButtons fun(self: TargetedSpellsEditModeMixin) : LibEditModeButton[]
 ---@field OnExportButtonClick fun(self: TargetedSpellsEditModeMixin)
----@field OnImportButtonClick fun(self: TargetedSpellsEditModeMixin, kind: FrameKind)
----@field OnImportConfirmation fun(self: TargetedSpellsEditModeMixin, args: ImportConfirmationArgs)
+---@field OnImportButtonClick fun(self: TargetedSpellsEditModeMixin)
+---@field OnImportConfirmation fun(self: TargetedSpellsEditModeMixin, encodedString: string)
 ---@field IsPastLoadingScreen fun(self: TargetedSpellsEditModeMixin): boolean
-
----@class ImportConfirmationArgs
----@field kind FrameKind
----@field encodedString string
 
 ---@class TargetedSpellsSelfEditMode : TargetedSpellsEditModeMixin
 ---@field private maxFrames number
