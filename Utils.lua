@@ -39,7 +39,7 @@ function Private.Utils.RollDice()
 end
 
 function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
-	if ElvUI and ElvUI[1].db.unitframe.units.party.enable then
+	if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable then
 		for i = 1, 5 do
 			local frameName = string.format("ElvUF_PartyGroup1UnitButton%d", i)
 

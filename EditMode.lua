@@ -1543,7 +1543,7 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 	local parent = PartyFrame
 	local width = 125
 
-	if ElvUI and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
+	if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
 		parent = ElvUF_Party
 		width = ElvUF_Party:GetWidth()
 	elseif DandersFrames and DandersPartyGroupContainer then

@@ -459,3 +459,9 @@ Grid2LayoutFrame = nil
 
 ---@type Frame?
 Grid2LayoutHeader1 = nil
+
+---@type table<string, table> | nil
+ElvUI = nil
+
+---@type Frame?
+ElvUF_Party = nil
