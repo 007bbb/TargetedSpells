@@ -37,8 +37,8 @@ L.Settings.AddonCompartmentTooltipLine1 =
 L.Settings.AddonCompartmentTooltipLine2 =
 	string.format("%s 已%s", WrapTextInColorCode(L.EditMode.TargetedSpellsPartyLabel, "ffeda55f"), "%s")
 
-L.Settings.LoadConditionContentTypeLabel = "加载条件：内容更新"
-L.Settings.LoadConditionContentTypeLabelAbbreviated = "在以下内容更新中加载"
+L.Settings.LoadConditionContentTypeLabel = "加载条件：区域"
+L.Settings.LoadConditionContentTypeLabelAbbreviated = "在以下区域中加载"
 L.Settings.LoadConditionContentTypeTooltip = nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "世界",
