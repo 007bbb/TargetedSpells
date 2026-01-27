@@ -37,8 +37,8 @@ L.Settings.AddonCompartmentTooltipLine1 =
 L.Settings.AddonCompartmentTooltipLine2 =
 	string.format("%s 已%s", WrapTextInColorCode(L.EditMode.TargetedSpellsPartyLabel, "ffeda55f"), "%s")
 
-L.Settings.LoadConditionContentTypeLabel = "加载条件：内容更新"
-L.Settings.LoadConditionContentTypeLabelAbbreviated = "在以下内容更新中加载"
+L.Settings.LoadConditionContentTypeLabel = "加载条件：区域"
+L.Settings.LoadConditionContentTypeLabelAbbreviated = "在以下区域中加载"
 L.Settings.LoadConditionContentTypeTooltip = nil
 L.Settings.LoadConditionContentTypeLabels = {
 	[Private.Enum.ContentType.OpenWorld] = "世界",
@@ -96,8 +96,8 @@ L.Settings.GlowTypeTooltip = nil
 L.Settings.GlowTypeLabels = {
 	[Private.Enum.GlowType.PixelGlow] = "像素发光",
 	[Private.Enum.GlowType.AutoCastGlow] = "自动施法发光",
-	[Private.Enum.GlowType.ButtonGlow] = "按钮发光",
-	[Private.Enum.GlowType.ProcGlow] = "触发发光",
+	[Private.Enum.GlowType.ButtonGlow] = "快捷键发光",
+	[Private.Enum.GlowType.ProcGlow] = "脉冲发光",
 	[Private.Enum.GlowType.Star4] = "四星发光",
 }
 
@@ -111,7 +111,7 @@ L.Settings.IndicateInterruptsLabel = "标记可打断法术"
 L.Settings.IndicateInterruptsTooltip =
 	"使图标去色，在图标上显示标记，并延迟1秒隐藏图标。对引导类法术无效。"
 
-L.Settings.ShowSwipeLabel = "Show Swipe"
+L.Settings.ShowSwipeLabel = "显示滑动"
 L.Settings.ShowSwipeTooltip = nil
 
 L.Settings.ShowBorderLabel = "显示边框"
