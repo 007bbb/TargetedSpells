@@ -96,8 +96,8 @@ L.Settings.GlowTypeTooltip = nil
 L.Settings.GlowTypeLabels = {
 	[Private.Enum.GlowType.PixelGlow] = "像素发光",
 	[Private.Enum.GlowType.AutoCastGlow] = "自动施法发光",
-	[Private.Enum.GlowType.ButtonGlow] = "按钮发光",
-	[Private.Enum.GlowType.ProcGlow] = "触发发光",
+	[Private.Enum.GlowType.ButtonGlow] = "快捷键发光",
+	[Private.Enum.GlowType.ProcGlow] = "脉冲发光",
 	[Private.Enum.GlowType.Star4] = "四星发光",
 }
 
