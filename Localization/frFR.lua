@@ -147,3 +147,6 @@ L.Settings.TargetingFilterApiLabels = {
 
 L.Settings.Import = "Importer"
 L.Settings.Export = "Exporter"
+
+L.Settings.FontLabel = "Police"
+L.Settings.FontTooltip = nil

@@ -1,5 +1,6 @@
 ---@type string, TargetedSpells
 local addonName, Private = ...
+local LibSharedMedia = LibStub("LibSharedMedia-3.0")
 
 ---@class TargetedSpellsSettings
 Private.Settings = {}
@@ -27,6 +28,7 @@ Private.Settings.Keys = {
 		Import = "IMPORT_SELF",
 		Export = "EXPORT_SELF",
 		ShowSwipe = "SWIPE_SELF",
+		Font = "FONT_SELF",
 	},
 	Party = {
 		Enabled = "ENABLED_PARTY",
@@ -55,6 +57,7 @@ Private.Settings.Keys = {
 		Import = "IMPORT_PARTY",
 		Export = "EXPORT_PARTY",
 		ShowSwipe = "SWIPE_PARTY",
+		Font = "FONT_PARTY",
 	},
 }
 
@@ -75,6 +78,7 @@ function Private.Settings.GetSettingsDisplayOrder(kind)
 			Private.Settings.Keys.Self.GlowType,
 			Private.Settings.Keys.Self.ShowDuration,
 			Private.Settings.Keys.Self.ShowDurationFractions,
+			Private.Settings.Keys.Self.Font,
 			Private.Settings.Keys.Self.FontSize,
 			Private.Settings.Keys.Self.ShowBorder,
 			Private.Settings.Keys.Self.ShowSwipe,
@@ -103,6 +107,7 @@ function Private.Settings.GetSettingsDisplayOrder(kind)
 		Private.Settings.Keys.Party.GlowType,
 		Private.Settings.Keys.Party.ShowDuration,
 		Private.Settings.Keys.Party.ShowDurationFractions,
+		Private.Settings.Keys.Party.Font,
 		Private.Settings.Keys.Party.FontSize,
 		Private.Settings.Keys.Party.ShowBorder,
 		Private.Settings.Keys.Party.ShowSwipe,
@@ -214,6 +219,7 @@ function Private.Settings.GetSelfDefaultSettings()
 		IndicateInterrupts = false,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 		ShowSwipe = true,
+		Font = "Fonts\\FRIZQT__.TTF",
 	}
 end
 
@@ -255,8 +261,17 @@ function Private.Settings.GetPartyDefaultSettings()
 		IndicateInterrupts = true,
 		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 		ShowSwipe = true,
+		Font = "Fonts\\FRIZQT__.TTF",
 	}
 end
+
+function Private.Settings.GetFontOptions()
+	return LibSharedMedia:HashTable(LibSharedMedia.MediaType.FONT)
+end
+
+C_Timer.After(3, function()
+	Private.Settings.GetFontOptions()
+end)
 
 function Private.Settings.IsContentTypeAvailableForKind(kind, contentTypeId)
 	if kind == Private.Enum.FrameKind.Self then
@@ -344,6 +359,49 @@ table.insert(Private.LoginFnQueue, function()
 			)
 			local initializer =
 				Settings.CreateDropdown(category, setting, GetOptions, L.Settings.TargetingFilterApiTooltip)
+
+			return {
+				initializer = initializer,
+				hideSteppers = false,
+				IsSectionEnabled = nil,
+			}
+		end
+
+		if key == Private.Settings.Keys.Self.Font or key == Private.Settings.Keys.Party.Font then
+			local tableRef = key == Private.Settings.Keys.Self.Font and TargetedSpellsSaved.Settings.Self
+				or TargetedSpellsSaved.Settings.Party
+
+			local function GetValue()
+				return tableRef.Font
+			end
+
+			local function SetValue(value)
+				tableRef.Font = value
+
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
+			end
+
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				local fonts = Private.Settings.GetFontOptions()
+
+				for label, path in pairs(fonts) do
+					container:Add(path, label)
+				end
+
+				return container:GetData()
+			end
+
+			local setting = Settings.RegisterProxySetting(
+				category,
+				key,
+				Settings.VarType.String,
+				L.Settings.FontLabel,
+				defaults.Font,
+				GetValue,
+				SetValue
+			)
+			local initializer = Settings.CreateDropdown(category, setting, GetOptions, L.Settings.FontTooltip)
 
 			return {
 				initializer = initializer,

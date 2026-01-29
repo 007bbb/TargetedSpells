@@ -52,6 +52,7 @@
 ---@field GetSelfDefaultSettings fun(): SavedVariablesSettingsSelf
 ---@field GetPartyDefaultSettings fun(): SavedVariablesSettingsParty
 ---@field IsContentTypeAvailableForKind fun(kind: FrameKind, contentTypeId: ContentType): boolean
+---@field GetFontOptions fun(): table<string, string>
 
 ---@class SavedVariables
 ---@field Settings SavedVariablesSettings
@@ -87,6 +88,7 @@
 ---@field IndicateInterrupts boolean
 ---@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
+---@field Font string
 
 ---@class SavedVariablesSettingsParty
 ---@field Enabled boolean
@@ -112,6 +114,7 @@
 ---@field IndicateInterrupts boolean
 ---@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
+---@field Font string
 
 ---@class TargetedSpellsSelfPreviewFrame: Frame
 ---@field GetChildren fun(self: TargetedSpellsSelfPreviewFrame): TargetedSpellsMixin
@@ -167,7 +170,8 @@
 ---@field GetUnit fun(self: TargetedSpellsMixin): string
 ---@field PostCreate fun(self: TargetedSpellsMixin, unit: string, kind: FrameKind, castingUnit: string?)
 ---@field Reset fun(self: TargetedSpellsMixin)
----@field SetFontSize fun(self: TargetedSpellsMixin, fontSize: number)
+---@field SetFontSize fun(self: TargetedSpellsMixin)
+---@field SetFont fun(self: TargetedSpellsMixin)
 
 ---@class EditModeFrame : frame
 ---@field firstFrameTimestamp number

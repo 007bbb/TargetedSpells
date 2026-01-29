@@ -158,7 +158,9 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self:SetShowDuration(value, TargetedSpellsSaved.Settings.Self.ShowDurationFractions)
 		elseif key == Private.Settings.Keys.Self.FontSize then
-			self:SetFontSize(value)
+			self:SetFontSize()
+		elseif key == Private.Settings.Keys.Self.Font then
+			self:SetFont()
 		elseif key == Private.Settings.Keys.Self.Opacity then
 			self:SetAlpha(value)
 		elseif key == Private.Settings.Keys.Self.ShowBorder then
@@ -189,7 +191,9 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self:SetShowDuration(value, TargetedSpellsSaved.Settings.Party.ShowDurationFractions)
 		elseif key == Private.Settings.Keys.Party.FontSize then
-			self:SetFontSize(value)
+			self:SetFontSize()
+		elseif key == Private.Settings.Keys.Party.Font then
+			self:SetFont()
 		elseif key == Private.Settings.Keys.Party.Opacity then
 			self:SetAlpha(value)
 		elseif key == Private.Settings.Keys.Party.ShowBorder then
@@ -384,7 +388,8 @@ function TargetedSpellsMixin:SetKind(kind)
 		or TargetedSpellsSaved.Settings.Party
 
 	PixelUtil.SetSize(self, tableRef.Width, tableRef.Height)
-	self:SetFontSize(tableRef.FontSize)
+	self:SetFontSize()
+	self:SetFont()
 	self:HideGlow()
 	self:SetShowBorder(tableRef.ShowBorder)
 	self:SetAlpha(tableRef.Opacity)
@@ -443,7 +448,7 @@ function TargetedSpellsMixin:Reset()
 	self.Cooldown:SetDrawSwipe(tableRef.ShowSwipe)
 end
 
-function TargetedSpellsMixin:SetFontSize(fontSize)
+function TargetedSpellsMixin:SetFontSize()
 	local tableRef = self.kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
 		or TargetedSpellsSaved.Settings.Party
 
@@ -457,9 +462,30 @@ function TargetedSpellsMixin:SetFontSize(fontSize)
 
 	local font, size, flags = fontString:GetFont()
 
-	if size == fontSize then
+	if size == tableRef.FontSize then
 		return
 	end
 
-	fontString:SetFont(font, fontSize, flags)
+	fontString:SetFont(font, tableRef.FontSize, flags)
+end
+
+function TargetedSpellsMixin:SetFont()
+	local tableRef = self.kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
+		or TargetedSpellsSaved.Settings.Party
+
+	local fontString = nil
+
+	if tableRef.ShowDurationFractions then
+		fontString = self.DurationText
+	else
+		fontString = self.Cooldown:GetCountdownFontString()
+	end
+
+	local font, size, flags = fontString:GetFont()
+
+	if font == tableRef.Font then
+		return
+	end
+
+	fontString:SetFont(tableRef.Font, size, flags)
 end

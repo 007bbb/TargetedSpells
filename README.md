@@ -17,6 +17,7 @@
 - support for both raid-style and classic party frames
 - supported third-party unit frame addons:
   - [ElvUI](https://tukui.org/elvui)
+    - automatically applies ElvUI skinning
   - [Grid2](https://www.curseforge.com/wow/addons/grid2)
   - [Danders Frames](https://www.curseforge.com/wow/addons/danders-frames)
   - more coming when the dust settles
@@ -39,7 +40,7 @@
     - 5 kinds of glows
   - show duration
     - option for fraction of seconds
-  - font size
+  - font and font size
   - show border
   - opacity
   - option to selectively toggle this feature based on player role or content type
@@ -61,7 +62,7 @@
     - 5 kinds of glows
   - show duration
     - option for fraction of seconds
-  - font size
+  - font and font size
   - show border
   - opacity
   - option to selectively toggle this feature based on player role or content type
@@ -121,6 +122,8 @@ Due to the Targeted Spells party options being dynamically anchored in Edit Mode
 
 Equally, there is `_G.TargetedSpellsAPI.UnregisterFrameByName(frameName)`. It'll return `false` if the frame was not previously registered and otherwise also `true`.
 
+Remember you can easily test whether things work simply by opening the Edit Mode.
+
 ### Importing / Exporting
 
 - `_G.TargetedSpellsAPI.Import(string)`
@@ -132,6 +135,7 @@ Equally, there is `_G.TargetedSpellsAPI.UnregisterFrameByName(frameName)`. It'll
 - [Targeted by Damage Spells by Causese](https://wago.io/TsFNFG1H7)
 - [Wago.tools](https://wago.tools/db2)
 - all public repositories mirroring Blizzard Interface Code
+- Krakón, Luckyone, Isaure, Ziv, Zorthas for helping me testing/translating
 
 ## Legal
 

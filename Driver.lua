@@ -515,10 +515,6 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			return
 		end
 
-		if event == "UNIT_SPELLCAST_INTERRUPTED" and self:MaybeMarkAsInterruptedAndDelay(unit, id) then
-			return
-		end
-
 		if self:ReleaseFrameForUnit(unit, true, id) then
 			self:RepositionFrames()
 		end

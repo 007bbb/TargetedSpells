@@ -234,6 +234,50 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 		}
 	end
 
+	if key == Private.Settings.Keys.Self.Font or key == Private.Settings.Keys.Party.Font then
+		local tableRef = key == Private.Settings.Keys.Self.Font and TargetedSpellsSaved.Settings.Self
+			or TargetedSpellsSaved.Settings.Party
+
+		---@param layoutName string
+		---@param value string
+		local function Set(layoutName, value)
+			if tableRef.Font ~= value then
+				tableRef.Font = value
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
+			end
+		end
+
+		local function Generator(owner, rootDescription, data)
+			local fonts = Private.Settings.GetFontOptions()
+
+			for label, path in pairs(fonts) do
+				local function IsEnabled()
+					return tableRef.Font == path
+				end
+
+				local function SetProxy()
+					Set(LibEditMode:GetActiveLayoutName(), path)
+				end
+
+				rootDescription:CreateCheckbox(label, IsEnabled, SetProxy, {
+					value = path,
+					multiple = false,
+				})
+			end
+		end
+
+		---@type LibEditModeDropdown
+		return {
+			name = L.Settings.FontLabel,
+			kind = Enum.EditModeSettingDisplayType.Dropdown,
+			desc = L.Settings.FontTooltip,
+			default = defaults.Font,
+			multiple = false,
+			generator = Generator,
+			set = Set,
+		}
+	end
+
 	if key == Private.Settings.Keys.Self.Opacity or key == Private.Settings.Keys.Party.Opacity then
 		local tableRef = key == Private.Settings.Keys.Self.Opacity and TargetedSpellsSaved.Settings.Self
 			or TargetedSpellsSaved.Settings.Party
