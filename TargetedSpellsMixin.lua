@@ -34,6 +34,7 @@ function TargetedSpellsMixin:OnLoad()
 	self.Cooldown:SetCountdownFont("GameFontHighlightHugeOutline")
 	self.wasInterrupted = false
 	self.doNotHideBefore = nil
+	Private.Utils.MaybeApplyElvUISkin(self)
 end
 
 function TargetedSpellsMixin:SetId(id)

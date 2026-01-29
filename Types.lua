@@ -20,6 +20,7 @@
 ---@field RegisterEditModeFrame fun(frameKind: FrameKind, frame: Frame)
 ---@field RegisterFrameByName fun(frameName: string): boolean
 ---@field UnregisterFrameByName fun(frameName: string): boolean
+---@field MaybeApplyElvUISkin fun(frame: TargetedSpellsMixin)
 
 ---@class StaticPopupDialogsArgs
 ---@field text string
