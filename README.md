@@ -16,6 +16,7 @@
   - additional exhaustive Settings menu integration
 - support for both raid-style and classic party frames
 - supported third-party unit frame addons:
+  - [ElvUI](https://tukui.org/elvui)
   - [Grid2](https://www.curseforge.com/wow/addons/grid2)
   - [Danders Frames](https://www.curseforge.com/wow/addons/danders-frames)
   - more coming when the dust settles
@@ -36,7 +37,6 @@
     - width, height, gap, direction, sort order, grow
   - glow important spells
     - 5 kinds of glows
-  - option to selectively play sound/tts based on content type you're in
   - show duration
     - option for fraction of seconds
   - font size
@@ -70,8 +70,6 @@
     - handy for vod review
 
 ## Known Issues / Limitations
-
-**All of these below apply to 12.0 / Midnight onwards only.**
 
 ### Sound / TTS
 
@@ -110,6 +108,23 @@ _However_, you can work around this with the `Gap` settings:
 **Currently not possible due to API restrictions.**
 
 While it's possible to apply a glow to the affected player frame, the underlying data for it is secret, so the next cast that happens to target the same player **while the first is still pending** is forced to remove the glow.
+
+## API
+
+### Registering Third-Party Unit Frames
+
+Use `_G.TargetedSpellsAPI.RegisterFrameByName(frameName)` to register a third-party unit frame **by name**.
+
+It expects that your frame has a `unit` property referring to the unit token. The function always returns `true`.
+
+Due to the Targeted Spells party options being dynamically anchored in Edit Mode to the **parent** of `party1`, ideally your party frames are within a container. It doesn't need to get registered and gets automatically detected based on whichever of your registered frames contains `party1`.
+
+Equally, there is `_G.TargetedSpellsAPI.UnregisterFrameByName(frameName)`. It'll return `false` if the frame was not previously registered and otherwise also `true`.
+
+### Importing / Exporting
+
+- `_G.TargetedSpellsAPI.Import(string)`
+- `_G.TargetedSpellsAPI.Export(): string`
 
 ## Honorary Mentions
 

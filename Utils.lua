@@ -38,12 +38,57 @@ function Private.Utils.RollDice()
 	return math.random(1, 6) == 6
 end
 
-function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
-	if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable then
-		for i = 1, 5 do
-			local frameName = string.format("ElvUF_PartyGroup1UnitButton%d", i)
+do
+	---@type table<string, true>
+	local thirdPartyFrameNames = {}
+	local registerdFrames = 0
+	local hasManualThirdPartyRegistrations = false
 
-			if _G[frameName] then
+	function Private.Utils.RegisterFrameByName(frameName)
+		thirdPartyFrameNames[frameName] = true
+		hasManualThirdPartyRegistrations = true
+		registerdFrames = registerdFrames + 1
+
+		return true
+	end
+
+	function Private.Utils.UnregisterFrameByName(frameName)
+		if thirdPartyFrameNames[frameName] == nil then
+			return false
+		end
+
+		thirdPartyFrameNames[frameName] = nil
+		registerdFrames = registerdFrames - 1
+		hasManualThirdPartyRegistrations = registerdFrames > 0
+
+		if not hasManualThirdPartyRegistrations then
+			table.wipe(thirdPartyFrameNames)
+		end
+
+		return true
+	end
+
+	function Private.Utils.HasThirdPartyCandidates()
+		return hasManualThirdPartyRegistrations
+	end
+
+	for index = 1, C_AddOns.GetNumAddOns() do
+		local meta = C_AddOns.GetAddOnMetadata(index, "X-oUF")
+
+		if meta and _G[meta] then
+			hooksecurefunc(_G[meta], "SpawnHeader", function(ref)
+				for _, header in next, ref.headers do
+					for unitIndex = 1, 5 do
+						Private.Utils.RegisterFrameByName(string.format("%sUnitButton%d", header:GetName(), unitIndex))
+					end
+				end
+			end)
+		end
+	end
+
+	function Private.Utils.FindThirdPartyGroupFrameForUnit(unit)
+		if hasManualThirdPartyRegistrations then
+			for frameName, bool in pairs(thirdPartyFrameNames) do
 				local frame = _G[frameName]
 
 				if frame.unit == unit then
@@ -52,18 +97,34 @@ function Private.Utils.FindThirdPartyGroupFrameForUnit(unit, kind)
 			end
 		end
 
-		return nil, false
-	elseif Grid2 then
-		return (next(Grid2:GetUnitFrames(unit))), true
-	elseif DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
-		local frame = DandersFrames.Api.GetFrameForUnit(unit, kind)
+		if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable then
+			for i = 1, 5 do
+				local frameName = string.format("ElvUF_PartyGroup1UnitButton%d", i)
 
-		if frame then
-			return frame, false
+				if _G[frameName] then
+					local frame = _G[frameName]
+
+					if frame.unit == unit then
+						return frame, false
+					end
+				end
+			end
 		end
-	end
 
-	return nil, false
+		if Grid2 then
+			return (next(Grid2:GetUnitFrames(unit))), true
+		end
+
+		if DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
+			local frame = DandersFrames.Api.GetFrameForUnit(unit, Private.Enum.FrameKind.Party)
+
+			if frame then
+				return frame, false
+			end
+		end
+
+		return nil, false
+	end
 end
 
 function Private.Utils.ShowStaticPopup(args)
@@ -217,4 +278,6 @@ end
 _G.TargetedSpellsAPI = {
 	Import = Private.Utils.Import,
 	Export = Private.Utils.Export,
+	RegisterFrameByName = Private.Utils.RegisterFrameByName,
+	UnregisterFrameByName = Private.Utils.UnregisterFrameByName,
 }

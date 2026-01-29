@@ -1542,14 +1542,35 @@ end
 function PartyEditModeMixin:RepositionEditModeFrame()
 	local parent = PartyFrame
 	local width = 125
+	local foundMatch = false
 
-	if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
+	if Private.Utils.HasThirdPartyCandidates() then
+		local maybeFrame = Private.Utils.FindThirdPartyGroupFrameForUnit("party1")
+
+		if maybeFrame then
+			local maybeParent = maybeFrame:GetParent()
+
+			if maybeParent then
+				parent = maybeParent
+				width = maybeParent:GetWidth()
+				foundMatch = true
+			end
+		end
+	end
+
+	if not foundMatch and ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
 		parent = ElvUF_Party
 		width = ElvUF_Party:GetWidth()
-	elseif DandersFrames and DandersPartyGroupContainer then
+		foundMatch = true
+	end
+
+	if not foundMatch and DandersFrames and DandersPartyGroupContainer then
 		parent = DandersPartyGroupContainer
 		width = DandersPartyGroupContainer:GetWidth()
-	elseif self.useRaidStylePartyFrames then
+		foundMatch = true
+	end
+
+	if not foundMatch and self.useRaidStylePartyFrames then
 		parent = CompactPartyFrame
 		width = CompactPartyFrame.memberUnitFrames[1]:GetWidth()
 	end

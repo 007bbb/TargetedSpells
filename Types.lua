@@ -13,11 +13,13 @@
 ---@field CalculateCoordinate fun(index: number, dimension: number, gap: number, parentDimension: number, total: number, offset: number, grow: Grow): number
 ---@field SortFrames fun(frames: TargetedSpellsMixin[], sortOrder: SortOrder)
 ---@field RollDice fun(): boolean
----@field FindThirdPartyGroupFrameForUnit fun(unit: string, kind: FrameKind): Frame?, boolean
+---@field FindThirdPartyGroupFrameForUnit fun(unit: string): Frame?, boolean
 ---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
 ---@field Import fun(string: string): boolean
 ---@field Export fun(): string
 ---@field RegisterEditModeFrame fun(frameKind: FrameKind, frame: Frame)
+---@field RegisterFrameByName fun(frameName: string): boolean
+---@field UnregisterFrameByName fun(frameName: string): boolean
 
 ---@class StaticPopupDialogsArgs
 ---@field text string
