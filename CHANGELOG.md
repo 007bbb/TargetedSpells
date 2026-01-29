@@ -2,8 +2,10 @@
 
 - performance improvements
 - fixed a bug where changing the Party glow in Edit Mode type wouldn't respect the Glow setting if that was disabled
-- preliminary ElvUI support
+- added support for all (most) oUF-based unit frames, most notably ElvUI
+- added support for ElvUI Skinning - automatically applies when you have Elv enabled
 - increase OffsetX / OffsetY for Party frames to 200
+- fix bug introduced in 1.1.2 that led to incorrect layouting for the Self preview in Edit Mode
 
 ## Version 1.1.2
 
