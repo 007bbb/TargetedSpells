@@ -91,7 +91,7 @@ do
 			for frameName, bool in pairs(thirdPartyFrameNames) do
 				local frame = _G[frameName]
 
-				if frame.unit == unit then
+				if frame and frame.unit == unit then
 					return frame, false
 				end
 			end
