@@ -1347,15 +1347,16 @@ function SelfEditModeMixin:RepositionPreviewFrames()
 	local point = isHorizontal and "LEFT" or "BOTTOM"
 	local total = (activeFrameCount * (isHorizontal and width or height)) + (activeFrameCount - 1) * gap
 	local parentDimension = isHorizontal and self.editModeFrame:GetWidth() or self.editModeFrame:GetHeight()
+	local centerOffset = grow == Private.Enum.Grow.Center and (-width / 2) or 0
 
 	for i, frame in ipairs(activeFrames) do
 		local x = 0
 		local y = 0
 
 		if isHorizontal then
-			x = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, 0, grow)
+			x = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, centerOffset, grow)
 		else
-			y = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, 0, grow)
+			y = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, centerOffset, grow)
 		end
 
 		frame:Reposition(point, self.editModeFrame, "CENTER", x, y, false)
