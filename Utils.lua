@@ -78,8 +78,12 @@ do
 		if meta and _G[meta] then
 			hooksecurefunc(_G[meta], "SpawnHeader", function(ref)
 				for _, header in next, ref.headers do
-					for unitIndex = 1, 5 do
-						Private.Utils.RegisterFrameByName(string.format("%sUnitButton%d", header:GetName(), unitIndex))
+					local headerName = header:GetName()
+
+					if headerName and string.find(headerName, "Party") ~= nil then
+						for unitIndex = 1, 5 do
+							Private.Utils.RegisterFrameByName(string.format("%sUnitButton%d", headerName, unitIndex))
+						end
 					end
 				end
 			end)
@@ -93,20 +97,6 @@ do
 
 				if frame and frame.unit == unit then
 					return frame, false
-				end
-			end
-		end
-
-		if ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable then
-			for i = 1, 5 do
-				local frameName = string.format("ElvUF_PartyGroup1UnitButton%d", i)
-
-				if _G[frameName] then
-					local frame = _G[frameName]
-
-					if frame.unit == unit then
-						return frame, false
-					end
 				end
 			end
 		end
