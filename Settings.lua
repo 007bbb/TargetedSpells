@@ -269,10 +269,6 @@ function Private.Settings.GetFontOptions()
 	return LibSharedMedia:HashTable(LibSharedMedia.MediaType.FONT)
 end
 
-C_Timer.After(3, function()
-	Private.Settings.GetFontOptions()
-end)
-
 function Private.Settings.IsContentTypeAvailableForKind(kind, contentTypeId)
 	if kind == Private.Enum.FrameKind.Self then
 		return true
