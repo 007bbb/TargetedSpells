@@ -1717,41 +1717,42 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 		local activeFrameCount = #activeFrames
 
 		if activeFrameCount > 0 then
-			Private.Utils.SortFrames(activeFrames, sortOrder)
+			local token = i == 5 and "player" or string.format("party%d", i)
 
-			local parentFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(
-				i == 5 and "player" or string.format("party%d", i),
-				Private.Enum.FrameKind.Party
-			)
+			if i < 5 and true or i == 5 and TargetedSpellsSaved.Settings.Party.IncludeSelfInParty then
+				Private.Utils.SortFrames(activeFrames, sortOrder)
 
-			if parentFrame == nil then
-				if self.useRaidStylePartyFrames then
-					parentFrame = CompactPartyFrame.memberUnitFrames[i]
-				else
-					for memberFrame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
-						if memberFrame.layoutIndex == i then
-							parentFrame = memberFrame
-							break
+				local parentFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(token)
+
+				if parentFrame == nil then
+					if self.useRaidStylePartyFrames then
+						parentFrame = CompactPartyFrame.memberUnitFrames[i]
+					else
+						for memberFrame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+							if memberFrame.layoutIndex == i then
+								parentFrame = memberFrame
+								break
+							end
 						end
 					end
 				end
-			end
 
-			if parentFrame ~= nil then
-				local total = (activeFrameCount * (isHorizontal and width or height)) + (activeFrameCount - 1) * gap
-				local parentDimension = isHorizontal and parentFrame:GetWidth() or parentFrame:GetHeight()
+				if parentFrame ~= nil then
+					local total = (activeFrameCount * (isHorizontal and width or height)) + (activeFrameCount - 1) * gap
+					local parentDimension = isHorizontal and parentFrame:GetWidth() or parentFrame:GetHeight()
 
-				for j, frame in ipairs(activeFrames) do
-					local x = offsetX
-					local y = offsetY
+					for j, frame in ipairs(activeFrames) do
+						local x = offsetX
+						local y = offsetY
 
-					if isHorizontal then
-						x = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetX, grow)
-					else
-						y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
+						if isHorizontal then
+							x = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetX, grow)
+						else
+							y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
+						end
+
+						frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
 					end
-
-					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
 				end
 			end
 		end
@@ -1767,29 +1768,27 @@ function PartyEditModeMixin:StartDemo()
 	self.buildingFrames = true
 
 	for unit = 1, self.maxUnitCount do
-		if unit > 1 or TargetedSpellsSaved.Settings.Party.IncludeSelfInParty then
-			if self.frames[unit] == nil then
-				self.frames[unit] = {}
+		if self.frames[unit] == nil then
+			self.frames[unit] = {}
+		end
+
+		if unit == self.maxUnitCount and not self.useRaidStylePartyFrames then
+			break
+		end
+
+		for index = 1, self.amountOfPreviewFramesPerUnit do
+			if self.frames[unit][index] == nil then
+				self.frames[unit][index] = self:AcquireFrame()
 			end
 
-			if unit == self.maxUnitCount and not self.useRaidStylePartyFrames then
-				break
-			end
+			local frame = self.frames[unit][index]
 
-			for index = 1, self.amountOfPreviewFramesPerUnit do
-				if self.frames[unit][index] == nil then
-					self.frames[unit][index] = self:AcquireFrame()
-				end
+			table.insert(
+				self.demoTimers.tickers,
+				C_Timer.NewTicker(5 + index + unit, GenerateClosure(self.LoopFrame, self, frame, index + unit))
+			)
 
-				local frame = self.frames[unit][index]
-
-				table.insert(
-					self.demoTimers.tickers,
-					C_Timer.NewTicker(5 + index + unit, GenerateClosure(self.LoopFrame, self, frame, index + unit))
-				)
-
-				self:LoopFrame(frame, index + unit)
-			end
+			self:LoopFrame(frame, index + unit)
 		end
 	end
 

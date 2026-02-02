@@ -1,4 +1,9 @@
-## Version 1.1.3
+## Version 1.1.5
+
+- fixed a bug where the cooldown swipe animation would linger under specific circumstances in the Edit Mode preview
+- fixed a bug when opening Edit Mode when `Include Self in Party` was disabled
+
+## Version 1.1.4
 
 - NEW: option to change the font
 - NEW: added support for all (most) oUF-based unit frames, most notably ElvUI
@@ -9,6 +14,10 @@
 - fixed a bug where changing the Party glow in Edit Mode type wouldn't respect the Glow setting if that was disabled
 - increase OffsetX / OffsetY for Party frames to 200
 - fix bug introduced in 1.1.2 that led to incorrect layouting for the Self preview in Edit Mode
+
+## Version 1.1.3
+
+_skipped_
 
 ## Version 1.1.2
 

@@ -429,13 +429,11 @@ function TargetedSpellsMixin:Reset()
 	self.Cooldown:Clear()
 	self.duration = nil
 	self:ClearAllPoints()
-	self:Hide()
 	self:HideGlow()
 	self.wasInterrupted = false
 	self.doNotHideBefore = nil
 	self.InterruptIcon:Hide()
 	self.Icon:SetDesaturated(false)
-	self.Cooldown:SetDrawSwipe(true)
 	self:SetId()
 	self.InterruptSource:SetText()
 	self.InterruptSource:Hide()
@@ -446,6 +444,8 @@ function TargetedSpellsMixin:Reset()
 
 	self:SetShowDuration(tableRef.ShowDuration, tableRef.ShowDurationFractions)
 	self.Cooldown:SetDrawSwipe(tableRef.ShowSwipe)
+	-- important to come last - the cooldown swipe ignores display status of its parent
+	self:Hide()
 end
 
 function TargetedSpellsMixin:SetFontSize()

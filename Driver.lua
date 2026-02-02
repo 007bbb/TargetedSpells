@@ -112,8 +112,7 @@ end
 ---@param unit string
 ---@return Frame?, boolean
 local function FindParentFrameForPartyMember(unit)
-	local thirdPartyFrame, useTopLevel =
-		Private.Utils.FindThirdPartyGroupFrameForUnit(unit, Private.Enum.FrameKind.Party)
+	local thirdPartyFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(unit)
 
 	if thirdPartyFrame then
 		return thirdPartyFrame, useTopLevel
