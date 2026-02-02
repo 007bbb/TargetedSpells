@@ -397,27 +397,23 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			return
 		end
 
-		local startTime = nil
-		---@type DurationObjectDummy|number|nil
-		local durationOrCastTime = nil
-
+		local isChannel = false
 		local _, _, _, _, _, _, _, _, spellId, id = UnitCastingInfo(unit)
 
 		if spellId == nil then
 			_, _, _, _, _, _, _, spellId, _, _, id = UnitChannelInfo(unit)
+			isChannel = true
 		end
 
 		if spellId == nil then
 			return
 		end
 
-		durationOrCastTime = UnitCastingDuration(unit) or UnitChannelDuration(unit)
+		local duration = (isChannel and UnitChannelDuration(unit) or nil) or UnitCastingDuration(unit)
 
-		if durationOrCastTime == nil then
+		if duration == nil then
 			return
 		end
-
-		startTime = GetTime() -- todo: this is wrong, but we can't do better yet
 
 		local frames = self:AcquireFrames(unit)
 
@@ -431,11 +427,13 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			self:ReleaseFrameForUnit(unit, false)
 		end
 
+		local startTime = GetTime() -- todo: this is wrong, but we can't do better yet
+
 		for i, frame in ipairs(frames) do
 			table.insert(self.frames[unit], frame)
 			frame:SetSpellId(spellId)
 			frame:SetStartTime(startTime)
-			frame:SetDuration(durationOrCastTime)
+			frame:SetDuration(duration)
 			frame:SetId(id)
 		end
 
@@ -549,12 +547,10 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		end
 
 		---@type DurationObjectDummy|number|nil
-		local durationOrCastTime = nil
-
-		durationOrCastTime = UnitCastingDuration(info.unit) or UnitChannelDuration(info.unit)
+		local duration = UnitCastingDuration(info.unit) or UnitChannelDuration(info.unit)
 
 		-- without `nameplateShowOffscreen` active, castTime may stay nil
-		if durationOrCastTime == nil then
+		if duration == nil then
 			return
 		end
 
@@ -563,7 +559,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			frame:SetSpellId(info.spellId)
 			frame:SetStartTime(info.startTime)
 			frame:SetId(info.id)
-			frame:SetDuration(durationOrCastTime)
+			frame:SetDuration(duration)
 		end
 
 		self:RepositionFrames()
