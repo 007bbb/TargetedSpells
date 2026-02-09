@@ -266,7 +266,14 @@ function Private.Settings.GetPartyDefaultSettings()
 end
 
 function Private.Settings.GetFontOptions()
-	return LibSharedMedia:HashTable(LibSharedMedia.MediaType.FONT)
+	local fonts = CopyTable(LibSharedMedia:List(LibSharedMedia.MediaType.FONT))
+	table.sort(fonts)
+	local byLabel = LibSharedMedia:HashTable(LibSharedMedia.MediaType.FONT)
+
+	return {
+		fonts = fonts,
+		byLabel = byLabel,
+	}
 end
 
 function Private.Settings.IsContentTypeAvailableForKind(kind, contentTypeId)
@@ -379,9 +386,9 @@ table.insert(Private.LoginFnQueue, function()
 
 			local function GetOptions()
 				local container = Settings.CreateControlTextContainer()
-				local fonts = Private.Settings.GetFontOptions()
+				local fontInfo = Private.Settings.GetFontOptions()
 
-				for label, path in pairs(fonts) do
+				for label, path in pairs(fontInfo.byLabel) do
 					container:Add(path, label)
 				end
 

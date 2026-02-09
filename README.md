@@ -1,5 +1,7 @@
 # Targeted Spells
 
+![https://www.patreon.com/cw/warcraftlogs](https://img.shields.io/badge/patreon-red?logo=patreon&style=for-the-badge)
+
 - [Curseforge](https://www.curseforge.com/wow/addons/targetedspells)
 - [Wago](https://addons.wago.io/addons/targeted-spells)
 

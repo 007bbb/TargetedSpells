@@ -1,3 +1,8 @@
+## Version 1.1.6
+
+- in Edit Mode, the font selection now renders the font name in the font family
+- changed category to Archon
+
 ## Version 1.1.5
 
 - fixed a bug where the cooldown swipe animation would linger under specific circumstances in the Edit Mode preview

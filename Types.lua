@@ -44,6 +44,10 @@
 ---@field kinds table<FrameKind, boolean>
 ---@field id number|string|nil
 
+---@class FontInfo
+---@field fonts table<string, string>
+---@field byLabel table<string, string>
+
 ---@class TargetedSpellsSettings
 ---@field Keys table<'Self' | 'Party', table<string, string>>
 ---@field GetSettingsDisplayOrder fun(kind: FrameKind): string[]
@@ -52,7 +56,7 @@
 ---@field GetSelfDefaultSettings fun(): SavedVariablesSettingsSelf
 ---@field GetPartyDefaultSettings fun(): SavedVariablesSettingsParty
 ---@field IsContentTypeAvailableForKind fun(kind: FrameKind, contentTypeId: ContentType): boolean
----@field GetFontOptions fun(): table<string, string>
+---@field GetFontOptions fun(): FontInfo
 
 ---@class SavedVariables
 ---@field Settings SavedVariablesSettings

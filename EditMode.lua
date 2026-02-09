@@ -215,10 +215,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 
 				local translated = L.Settings.TargetingFilterApiLabels[id]
 
-				rootDescription:CreateCheckbox(translated, IsEnabled, SetProxy, {
-					value = label,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
 			end
 		end
 
@@ -247,10 +244,63 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			end
 		end
 
-		local function Generator(owner, rootDescription, data)
-			local fonts = Private.Settings.GetFontOptions()
+		---@param path string
+		---@param label string
+		---@return string globalName
+		local function CreateAndGetFontIfNeeded(path, label)
+			local sanitizedName = string.gsub(label, " ", "")
+			local globalName = addonName .. "_" .. sanitizedName
 
-			for label, path in pairs(fonts) do
+			if _G[globalName] == nil then
+				local locale = GAME_LOCALE or GetLocale()
+				local overrideAlphabet = "roman"
+				if locale == "koKR" then
+					overrideAlphabet = "korean"
+				elseif locale == "zhCN" then
+					overrideAlphabet = "simplifiedchinese"
+				elseif locale == "zhTW" then
+					overrideAlphabet = "traditionalchinese"
+				elseif locale == "ruRU" then
+					overrideAlphabet = "russian"
+				end
+
+				local members = {}
+				local coreFont = GameFontNormal
+				local alphabets = { "roman", "korean", "simplifiedchinese", "traditionalchinese", "russian" }
+				for _, alphabet in ipairs(alphabets) do
+					local forAlphabet = coreFont:GetFontObjectForAlphabet(alphabet)
+					local file, size, _ = forAlphabet:GetFont()
+					if alphabet == overrideAlphabet then
+						table.insert(members, {
+							alphabet = alphabet,
+							file = path,
+							height = size,
+							flags = "",
+						})
+					else
+						table.insert(members, {
+							alphabet = alphabet,
+							file = file,
+							height = size,
+							flags = "",
+						})
+					end
+				end
+
+				local font = CreateFontFamily(globalName, members)
+				font:SetTextColor(1, 1, 1)
+				_G[globalName] = font
+			end
+
+			return globalName
+		end
+
+		local function Generator(owner, rootDescription, data)
+			local fontInfo = Private.Settings.GetFontOptions()
+
+			for index, label in pairs(fontInfo.fonts) do
+				local path = fontInfo.byLabel[label]
+
 				local function IsEnabled()
 					return tableRef.Font == path
 				end
@@ -259,10 +309,12 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 					Set(LibEditMode:GetActiveLayoutName(), path)
 				end
 
-				rootDescription:CreateCheckbox(label, IsEnabled, SetProxy, {
-					value = path,
-					multiple = false,
-				})
+				local radio = rootDescription:CreateRadio(label, IsEnabled, SetProxy)
+
+				radio:AddInitializer(function(button, elementDescription, menu)
+					local globalName = CreateAndGetFontIfNeeded(path, label)
+					button.fontString:SetFontObject(globalName)
+				end)
 			end
 		end
 
@@ -466,10 +518,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 
 				local translated = L.Settings.GlowTypeLabels[id]
 
-				rootDescription:CreateCheckbox(translated, IsEnabled, SetProxy, {
-					value = label,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
 			end
 		end
 
@@ -940,10 +989,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 				local translated = id == Private.Enum.Direction.Horizontal and L.Settings.FrameDirectionHorizontal
 					or L.Settings.FrameDirectionVertical
 
-				rootDescription:CreateCheckbox(translated, IsEnabled, SetProxy, {
-					value = id,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
 			end
 		end
 
@@ -1040,10 +1086,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 					Set(LibEditMode:GetActiveLayoutName(), enumValue)
 				end
 
-				rootDescription:CreateCheckbox(label, IsEnabled, SetProxy, {
-					value = label,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(label, IsEnabled, SetProxy)
 			end
 		end
 
@@ -1078,10 +1121,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 					Set(LibEditMode:GetActiveLayoutName(), enumValue)
 				end
 
-				rootDescription:CreateCheckbox(label, IsEnabled, SetProxy, {
-					value = label,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(label, IsEnabled, SetProxy)
 			end
 		end
 
@@ -1122,10 +1162,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 				local translated = id == Private.Enum.SortOrder.Ascending and L.Settings.FrameSortOrderAscending
 					or L.Settings.FrameSortOrderDescending
 
-				rootDescription:CreateCheckbox(translated, IsEnabled, SetProxy, {
-					value = id,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
 			end
 		end
 
@@ -1165,10 +1202,7 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 
 				local translated = L.Settings.FrameGrowLabels[id]
 
-				rootDescription:CreateCheckbox(translated, IsEnabled, SetProxy, {
-					value = id,
-					multiple = false,
-				})
+				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
 			end
 		end
 
