@@ -113,7 +113,7 @@ function TargetedSpellsEditModeMixin:OnExportButtonClick()
 
 	Private.Utils.ShowStaticPopup({
 		text = Private.L.Settings.Export,
-		button1 = Private.L.Settings.Export,
+		button1 = ACCEPT,
 		hasEditBox = true,
 		hasWideEditBox = true,
 		editBoxWidth = 350,

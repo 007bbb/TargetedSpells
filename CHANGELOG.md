@@ -2,6 +2,8 @@
 
 - in Edit Mode, the font selection now renders the font name in the font family
 - changed category to Archon
+- fixed a bug where the Import API was not correctly handling `false` values for checkboxes
+- add esES and esMX locale thanks to ferrancarril
 
 ## Version 1.1.5
 

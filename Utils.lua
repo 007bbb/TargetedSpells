@@ -204,7 +204,7 @@ do
 				local newValue = result[kind][key]
 				local expectedType = type(defaultValue)
 
-				if newValue and type(newValue) == expectedType then
+				if newValue ~= nil and type(newValue) == expectedType then
 					local eventKey = eventKeys[key]
 					local hasChanges = false
 
