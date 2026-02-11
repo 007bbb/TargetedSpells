@@ -214,6 +214,8 @@ do
 							enumToCompareAgainst = Private.Enum.ContentType
 						elseif key == "LoadConditionRole" then
 							enumToCompareAgainst = Private.Enum.Role
+						elseif key == "FontFlags" then
+							enumToCompareAgainst = Private.Enum.FontFlags
 						end
 
 						-- only other case is Position but that's taken care of above

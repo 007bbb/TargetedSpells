@@ -231,6 +231,60 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 		}
 	end
 
+	if key == Private.Settings.Keys.Self.FontFlags or key == Private.Settings.Keys.Party.FontFlags then
+		local tableRef = key == Private.Settings.Keys.Self.FontFlags and TargetedSpellsSaved.Settings.Self
+			or TargetedSpellsSaved.Settings.Party
+
+		local function Generator(owner, rootDescription, data)
+			for label, id in pairs(Private.Enum.FontFlags) do
+				local function IsEnabled()
+					return tableRef.FontFlags[id] == true
+				end
+
+				local function Toggle()
+					tableRef.FontFlags[id] = not tableRef.FontFlags[id]
+
+					Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef.FontFlags)
+				end
+
+				local translated = L.Settings.FontFlagsLabels[id]
+
+				rootDescription:CreateCheckbox(translated, IsEnabled, Toggle, {
+					value = label,
+					multiple = true,
+				})
+			end
+		end
+
+		---@param layoutName string
+		---@param values table<string, boolean>
+		local function Set(layoutName, values)
+			local hasChanges = false
+
+			for id, bool in pairs(values) do
+				if tableRef.FontFlags[id] ~= bool then
+					tableRef.FontFlags[id] = bool
+					hasChanges = true
+				end
+			end
+
+			if hasChanges then
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, tableRef.FontFlags)
+			end
+		end
+
+		---@type LibEditModeDropdown
+		return {
+			name = L.Settings.FontFlagsLabel,
+			kind = Enum.EditModeSettingDisplayType.Dropdown,
+			default = defaults.FontFlags,
+			desc = L.Settings.FontFlagsTooltip,
+			generator = Generator,
+			-- technically is a reset only
+			set = Set,
+		}
+	end
+
 	if key == Private.Settings.Keys.Self.Font or key == Private.Settings.Keys.Party.Font then
 		local tableRef = key == Private.Settings.Keys.Self.Font and TargetedSpellsSaved.Settings.Self
 			or TargetedSpellsSaved.Settings.Party

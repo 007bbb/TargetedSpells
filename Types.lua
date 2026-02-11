@@ -93,6 +93,7 @@
 ---@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
 ---@field Font string
+---@field FontFlags table<FontFlags, boolean>
 
 ---@class SavedVariablesSettingsParty
 ---@field Enabled boolean
@@ -119,6 +120,7 @@
 ---@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
 ---@field Font string
+---@field FontFlags table<FontFlags, boolean>
 
 ---@class TargetedSpellsSelfPreviewFrame: Frame
 ---@field GetChildren fun(self: TargetedSpellsSelfPreviewFrame): TargetedSpellsMixin
@@ -147,6 +149,7 @@
 ---@field private Border Frame | BackdropTemplate
 ---@field private InterruptIcon Texture
 ---@field private InterruptSource FontString
+---@field private elapsed number
 ---@field OnLoad fun(self: TargetedSpellsMixin)
 ---@field SetId fun(self: TargetedSpellsMixin, id: number?)
 ---@field GetId fun(self: TargetedSpellsMixin): number?

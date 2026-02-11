@@ -155,6 +155,7 @@ end
 function TargetedSpellsDriver:RepositionFrames()
 	---@type table<string, TargetedSpellsMixin[]>
 	local activeFrames = {}
+
 	for sourceUnit, frames in pairs(self.frames) do
 		for i, frame in pairs(frames) do
 			if frame then
