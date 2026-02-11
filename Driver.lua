@@ -509,7 +509,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			id = select(4, ...)
 		end
 
-		if interruptedBy ~= nil and self:MaybeMarkAsInterruptedAndDelay(unit, id, interruptedBy) then
+		if self:MaybeMarkAsInterruptedAndDelay(unit, id, interruptedBy) then
 			return
 		end
 
@@ -570,7 +570,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 
 		local frames = self.frames[delayInfo.unit]
 
-		if frames == nil then
+		if frames == nil or #frames == 0 then
 			return
 		end
 
@@ -687,22 +687,10 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 		return false
 	end
 
-	local interruptName = nil
-	local interruptColor = nil
-
-	if interruptedBy ~= nil then
-		local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(interruptedBy)
-
-		if name == nil then
-			local token = UnitTokenFromGUID(interruptedBy)
-			if token ~= nil then
-				name = UnitName(token)
-			end
-		end
-
-		interruptName = name
-		interruptColor = englishClass and C_ClassColor.GetClassColor(englishClass) or nil
-	end
+	local interruptName = UnitNameFromGUID(interruptedBy)
+	local className = select(2, UnitClassFromGUID(interruptedBy))
+	-- unsure if className yields something for pets, so nilcheck it until confirmed
+	local interruptColor = className == nil and nil or C_ClassColor.GetClassColor(className)
 
 	local kindsToDelay = {
 		[Private.Enum.FrameKind.Self] = false,
