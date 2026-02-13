@@ -120,6 +120,16 @@ do
 			return (next(Grid2:GetUnitFrames(unit))), true
 		end
 
+		if EnhanceQoL and EQOLUFPartyHeader then
+			for i = 1, 5 do
+				local frame = _G["EQOLUFPartyHeaderUnitButton" .. i]
+
+				if frame and frame.unit == unit then
+					return frame, true
+				end
+			end
+		end
+
 		if DandersFrames and DandersFrames.Api and DandersFrames.Api.GetFrameForUnit then
 			local frame = DandersFrames.Api.GetFrameForUnit(unit, Private.Enum.FrameKind.Party)
 

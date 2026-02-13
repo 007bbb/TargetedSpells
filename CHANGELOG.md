@@ -6,6 +6,7 @@
 - add esES and esMX locale thanks to ferrancarril
 - added Font Options for Shadow and Outline
 - minor performance improvements
+- add support for Enhance QoL party frames
 
 ## Version 1.1.5
 

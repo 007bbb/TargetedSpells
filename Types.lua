@@ -479,3 +479,9 @@ ElvUI = nil
 
 ---@type Frame?
 ElvUF_Party = nil
+
+---@type table?
+EnhanceQoL = nil
+
+---@type Frame?
+EQOLUFPartyHeader = nil

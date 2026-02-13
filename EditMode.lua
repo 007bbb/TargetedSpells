@@ -1691,6 +1691,12 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 		end
 	end
 
+	if not foundMatch and EnhanceQoL and EQOLUFPartyHeader then
+		parent = EQOLUFPartyHeader
+		width = EQOLUFPartyHeader:GetWidth()
+		foundMatch = true
+	end
+
 	if not foundMatch and ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
 		parent = ElvUF_Party
 		width = ElvUF_Party:GetWidth()
