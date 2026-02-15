@@ -111,13 +111,13 @@ do
 				local frame = _G[frameName]
 
 				if frame and frame.unit == unit then
-					return frame, false
+					return frame
 				end
 			end
 		end
 
 		if Grid2 then
-			return (next(Grid2:GetUnitFrames(unit))), true
+			return (next(Grid2:GetUnitFrames(unit)))
 		end
 
 		if EnhanceQoL and EQOLUFPartyHeader then
@@ -125,7 +125,7 @@ do
 				local frame = _G["EQOLUFPartyHeaderUnitButton" .. i]
 
 				if frame and frame.unit == unit then
-					return frame, true
+					return frame
 				end
 			end
 		end
@@ -134,11 +134,11 @@ do
 			local frame = DandersFrames.Api.GetFrameForUnit(unit, Private.Enum.FrameKind.Party)
 
 			if frame then
-				return frame, false
+				return frame
 			end
 		end
 
-		return nil, false
+		return nil
 	end
 end
 

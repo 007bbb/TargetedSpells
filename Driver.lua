@@ -110,46 +110,46 @@ end
 
 -- this is where 3rd party unit frames would need addition
 ---@param unit string
----@return Frame?, boolean
+---@return Frame?
 local function FindParentFrameForPartyMember(unit)
-	local thirdPartyFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(unit)
+	local thirdPartyFrame = Private.Utils.FindThirdPartyGroupFrameForUnit(unit)
 
 	if thirdPartyFrame then
-		return thirdPartyFrame, useTopLevel
+		return thirdPartyFrame
 	end
 
 	if unit == "player" then
 		if not EditModeManagerFrame:UseRaidStylePartyFrames() then
 			-- non-raid style party frames don't include the player
-			return nil, false
+			return nil
 		end
 
 		for _, frame in pairs(CompactPartyFrame.memberUnitFrames) do
 			if frame.unit == "player" then
-				return frame, false
+				return frame
 			end
 		end
 
-		return nil, false
+		return nil
 	end
 
 	if EditModeManagerFrame:UseRaidStylePartyFrames() then
 		for _, frame in pairs(CompactPartyFrame.memberUnitFrames) do
 			if frame.unit == unit then
-				return frame, false
+				return frame
 			end
 		end
 
-		return nil, false
+		return nil
 	end
 
 	for memberFrame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
 		if memberFrame.unitToken == unit then
-			return memberFrame, false
+			return memberFrame
 		end
 	end
 
-	return nil, false
+	return nil
 end
 
 function TargetedSpellsDriver:RepositionFrames()
@@ -202,10 +202,10 @@ function TargetedSpellsDriver:RepositionFrames()
 					y = Private.Utils.CalculateCoordinate(i, width, gap, height, total, 0, grow)
 				end
 
-				frame:Reposition(point, self.frame, "CENTER", x, y, false)
+				frame:Reposition(point, self.frame, "CENTER", x, y)
 			end
 		else
-			local parentFrame, useTopLevel = FindParentFrameForPartyMember(targetUnit)
+			local parentFrame = FindParentFrameForPartyMember(targetUnit)
 
 			if parentFrame ~= nil then
 				local tableRef = TargetedSpellsSaved.Settings.Party
@@ -237,7 +237,7 @@ function TargetedSpellsDriver:RepositionFrames()
 						y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
 					end
 
-					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
+					frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y)
 				end
 			end
 		end

@@ -4,7 +4,6 @@ local LibCustomGlow = LibStub("LibCustomGlow-1.0")
 local LibEditMode = LibStub("LibEditMode")
 
 TARGETED_SPELLS_BACKDROP = {
-	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
 	tile = true,
 	tileEdge = true,
@@ -119,49 +118,40 @@ function TargetedSpellsMixin:SetShowBorder(bool)
 	end
 end
 
-do
+--- shamelessly ~~stolen~~ repurposed from WeakAuras2
+---@param width number
+---@param height number
+function TargetedSpellsMixin:OnSizeChanged(width, height)
 	local coordinates = { 0, 0, 0, 1, 1, 0, 1, 1 }
+	local aspectRatio = width / height
 
-	--- shamelessly ~~stolen~~ repurposed from WeakAuras2
-	---@param width number
-	---@param height number
-	function TargetedSpellsMixin:OnSizeChanged(width, height)
-		local aspectRatio = width / height
+	local xRatio = aspectRatio < 1 and aspectRatio or 1
+	local yRatio = aspectRatio > 1 and 1 / aspectRatio or 1
 
-		local xRatio = aspectRatio < 1 and aspectRatio or 1
-		local yRatio = aspectRatio > 1 and 1 / aspectRatio or 1
+	for i = 1, #coordinates, 1 do
+		local coordinate = coordinates[i]
 
-		for i = 1, #coordinates, 1 do
-			local coordinate = coordinates[i]
-
-			if i % 2 == 1 then
-				coordinates[i] = (coordinate - 0.5) * xRatio + 0.5
-			else
-				coordinates[i] = (coordinate - 0.5) * yRatio + 0.5
-			end
+		if i % 2 == 1 then
+			coordinates[i] = (coordinate - 0.5) * xRatio + 0.5
+		else
+			coordinates[i] = (coordinate - 0.5) * yRatio + 0.5
 		end
+	end
 
-		self.Icon:SetTexCoord(unpack(coordinates))
+	self.Icon:SetTexCoord(unpack(coordinates))
 
-		local topleftRelativePoint = select(2, self.Overlay:GetPointByName("TOPLEFT"))
-		local bottomrightRelativePoint = select(2, self.Overlay:GetPointByName("BOTTOMRIGHT"))
-		self.Overlay:ClearAllPoints()
+	local topleftRelativePoint = select(2, self.Overlay:GetPointByName("TOPLEFT"))
+	local bottomrightRelativePoint = select(2, self.Overlay:GetPointByName("BOTTOMRIGHT"))
+	self.Overlay:ClearAllPoints()
 
-		do
-			local fifteenPercent = 0.15 * width
-			self.Overlay:SetPoint("TOPLEFT", topleftRelativePoint, "TOPLEFT", -fifteenPercent, fifteenPercent)
-		end
+	do
+		local fifteenPercent = 0.15 * width
+		self.Overlay:SetPoint("TOPLEFT", topleftRelativePoint, "TOPLEFT", -fifteenPercent, fifteenPercent)
+	end
 
-		do
-			local fifteenPercent = 0.15 * height
-			self.Overlay:SetPoint(
-				"BOTTOMRIGHT",
-				bottomrightRelativePoint,
-				"BOTTOMRIGHT",
-				fifteenPercent,
-				-fifteenPercent
-			)
-		end
+	do
+		local fifteenPercent = 0.15 * height
+		self.Overlay:SetPoint("BOTTOMRIGHT", bottomrightRelativePoint, "BOTTOMRIGHT", fifteenPercent, -fifteenPercent)
 	end
 end
 
@@ -383,10 +373,11 @@ function TargetedSpellsMixin:ClearStartTime()
 	self.startTime = nil
 end
 
-function TargetedSpellsMixin:Reposition(point, relativeTo, relativePoint, offsetX, offsetY, useTopLevel)
+function TargetedSpellsMixin:Reposition(point, relativeTo, relativePoint, offsetX, offsetY)
+	self:SetParent(relativeTo)
 	self:ClearAllPoints()
+	self:SetFrameLevel(relativeTo:GetFrameLevel() + 10)
 	self:SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
-	self:SetToplevel(useTopLevel)
 	self:Show()
 end
 

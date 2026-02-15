@@ -13,7 +13,7 @@
 ---@field CalculateCoordinate fun(index: number, dimension: number, gap: number, parentDimension: number, total: number, offset: number, grow: Grow): number
 ---@field SortFrames fun(frames: TargetedSpellsMixin[], sortOrder: SortOrder)
 ---@field RollDice fun(): boolean
----@field FindThirdPartyGroupFrameForUnit fun(unit: string): Frame?, boolean
+---@field FindThirdPartyGroupFrameForUnit fun(unit: string): Frame?
 ---@field ShowStaticPopup fun(args: StaticPopupDialogsArgs)
 ---@field Import fun(string: string): boolean
 ---@field Export fun(): string
@@ -170,7 +170,7 @@
 ---@field SetSpellId fun(self: TargetedSpellsMixin, spellId: number?)
 ---@field ShouldBeShown fun(self: TargetedSpellsMixin): boolean
 ---@field ClearStartTime fun(self: TargetedSpellsMixin)
----@field Reposition fun(self: TargetedSpellsMixin, point: string, relativeTo: Frame, relativePoint: string, offsetX: number, offsetY: number, useTopLevel: boolean)
+---@field Reposition fun(self: TargetedSpellsMixin, point: string, relativeTo: Frame, relativePoint: string, offsetX: number, offsetY: number)
 ---@field SetUnit fun(self: TargetedSpellsMixin, unit: string)
 ---@field SetKind fun(self: TargetedSpellsMixin, kind: FrameKind)
 ---@field GetKind fun(self: TargetedSpellsMixin): FrameKind?

@@ -9,6 +9,9 @@
 - add support for Enhance QoL party frames
 - added Discord link to Edit Mode
 - updated ToC
+- fixed a bug with icon resizing leading to very broken visuals
+- fixed a regression where, using Grid2, the Edit Mode party selection element wouldn't correctly anchor
+- fixed a bug where, using Grid2, party elements wouldn't be reliably layered on top of the party frame
 
 ## Version 1.1.5
 

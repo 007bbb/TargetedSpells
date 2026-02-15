@@ -1463,7 +1463,7 @@ function SelfEditModeMixin:RepositionPreviewFrames()
 			y = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, centerOffset, grow)
 		end
 
-		frame:Reposition(point, self.editModeFrame, "CENTER", x, y, false)
+		frame:Reposition(point, self.editModeFrame, "CENTER", x, y)
 	end
 end
 
@@ -1649,7 +1649,7 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 	local width = 125
 	local foundMatch = false
 
-	if Private.Utils.HasThirdPartyCandidates() then
+	if Private.Utils.HasThirdPartyCandidates() or Grid2 ~= nil then
 		local maybeFrame = Private.Utils.FindThirdPartyGroupFrameForUnit("party1")
 
 		if maybeFrame then
@@ -1663,19 +1663,25 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 		end
 	end
 
-	if not foundMatch and EnhanceQoL and EQOLUFPartyHeader then
+	if not foundMatch and EnhanceQoL ~= nil and EQOLUFPartyHeader ~= nil then
 		parent = EQOLUFPartyHeader
 		width = EQOLUFPartyHeader:GetWidth()
 		foundMatch = true
 	end
 
-	if not foundMatch and ElvUI and ElvUI[1].db and ElvUI[1].db.unitframe.units.party.enable and ElvUF_Party then
+	if
+		not foundMatch
+		and ElvUI ~= nil
+		and ElvUI[1].db ~= nil
+		and ElvUI[1].db.unitframe.units.party.enable ~= nil
+		and ElvUF_Party ~= nil
+	then
 		parent = ElvUF_Party
 		width = ElvUF_Party:GetWidth()
 		foundMatch = true
 	end
 
-	if not foundMatch and DandersFrames and DandersPartyGroupContainer then
+	if not foundMatch and DandersFrames ~= nil and DandersPartyGroupContainer ~= nil then
 		parent = DandersPartyGroupContainer
 		width = DandersPartyGroupContainer:GetWidth()
 		foundMatch = true
@@ -1788,7 +1794,7 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 			if i < 5 and true or i == 5 and TargetedSpellsSaved.Settings.Party.IncludeSelfInParty then
 				Private.Utils.SortFrames(activeFrames, sortOrder)
 
-				local parentFrame, useTopLevel = Private.Utils.FindThirdPartyGroupFrameForUnit(token)
+				local parentFrame = Private.Utils.FindThirdPartyGroupFrameForUnit(token)
 
 				if parentFrame == nil then
 					if self.useRaidStylePartyFrames then
@@ -1817,7 +1823,7 @@ function PartyEditModeMixin:RepositionPreviewFrames()
 							y = Private.Utils.CalculateCoordinate(j, width, gap, parentDimension, total, offsetY, grow)
 						end
 
-						frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y, useTopLevel)
+						frame:Reposition(sourceAnchor, parentFrame, targetAnchor, x, y)
 					end
 				end
 			end
