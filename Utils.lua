@@ -198,6 +198,10 @@ function Private.Utils.ShowStaticPopup(args)
 	StaticPopup_Show(addonName)
 end
 
+local function DecodeProfileString(string)
+	C_EncodingUtil.DeserializeCBOR(C_EncodingUtil.DecodeBase64(string))
+end
+
 do
 	---@type table<string, Frame|nil>
 	local editModeFrameByKind = {
@@ -210,9 +214,7 @@ do
 	end
 
 	function Private.Utils.Import(string)
-		local ok, result = pcall(function()
-			return C_EncodingUtil.DeserializeCBOR(C_EncodingUtil.DecodeBase64(string))
-		end, string)
+		local ok, result = pcall(DecodeProfileString, string)
 
 		if not ok then
 			if result ~= nil then
@@ -338,9 +340,23 @@ do
 	end
 end
 
-_G.TargetedSpellsAPI = {
-	Import = Private.Utils.Import,
-	Export = Private.Utils.Export,
-	RegisterFrameByName = Private.Utils.RegisterFrameByName,
-	UnregisterFrameByName = Private.Utils.UnregisterFrameByName,
-}
+do
+	local function noop() end
+
+	_G.TargetedSpellsAPI = {
+		Import = Private.Utils.Import,
+		Export = Private.Utils.Export,
+		DecodeProfileString = DecodeProfileString,
+		RegisterFrameByName = Private.Utils.RegisterFrameByName,
+		UnregisterFrameByName = Private.Utils.UnregisterFrameByName,
+		SetProfile = noop,
+		GetProfileKeys = function()
+			return { "Global" }
+		end,
+		GetCurrentProfileKey = function()
+			return "Global"
+		end,
+		OpenConfig = noop,
+		CloseConfig = noop,
+	}
+end
