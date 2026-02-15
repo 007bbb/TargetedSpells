@@ -142,6 +142,52 @@ do
 	end
 end
 
+function Private.Utils.CreateEditablePopup(title, text, button1)
+	return {
+		text = title,
+		button1 = button1,
+		hasEditBox = true,
+		hasWideEditBox = true,
+		editBoxWidth = 350,
+		hideOnEscape = true,
+		OnShow = function(popupSelf)
+			local editBox = popupSelf:GetEditBox()
+			editBox:SetText(text)
+			editBox:HighlightText()
+
+			local ctrlDown = false
+
+			editBox:SetScript("OnKeyDown", function(_, key)
+				if key == "LCTRL" or key == "RCTRL" or key == "LMETA" or key == "RMETA" then
+					ctrlDown = true
+				end
+			end)
+			editBox:SetScript("OnKeyUp", function(_, key)
+				C_Timer.After(0.2, function()
+					ctrlDown = false
+				end)
+
+				if ctrlDown and (key == "C" or key == "X") then
+					StaticPopup_Hide(addonName)
+				end
+			end)
+		end,
+		EditBoxOnEscapePressed = function(popupSelf)
+			popupSelf:GetParent():Hide()
+		end,
+		EditBoxOnTextChanged = function(popupSelf)
+			-- ctrl + x sets the text to "" but this triggers hiding and shouldn't trigger resetting the text
+			local currentText = popupSelf:GetText()
+
+			if currentText == "" or currentText == text then
+				return
+			end
+
+			popupSelf:SetText(text)
+		end,
+	}
+end
+
 function Private.Utils.ShowStaticPopup(args)
 	args.id = addonName
 	args.whileDead = true

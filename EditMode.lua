@@ -105,55 +105,27 @@ function TargetedSpellsEditModeMixin:CreateImportExportButtons()
 			end,
 			text = Private.L.Settings.Export,
 		},
+		{
+			click = function()
+				self:OnDiscordButtonClick()
+			end,
+			text = "Discord",
+		},
 	}
 end
 
+function TargetedSpellsEditModeMixin:OnDiscordButtonClick()
+	local link = C_EncodingUtil.DeserializeCBOR(
+		C_EncodingUtil.DecodeBase64("oURsaW5rWB1odHRwczovL2Rpc2NvcmQuZ2cvQzVTVGpZUnNDRA==")
+	).link
+
+	Private.Utils.ShowStaticPopup(Private.Utils.CreateEditablePopup("Discord", link, ACCEPT))
+end
+
 function TargetedSpellsEditModeMixin:OnExportButtonClick()
-	local string = Private.Utils.Export()
-
-	Private.Utils.ShowStaticPopup({
-		text = Private.L.Settings.Export,
-		button1 = ACCEPT,
-		hasEditBox = true,
-		hasWideEditBox = true,
-		editBoxWidth = 350,
-		hideOnEscape = true,
-		OnShow = function(popupSelf)
-			local editBox = popupSelf:GetEditBox()
-			editBox:SetText(string)
-			editBox:HighlightText()
-
-			local ctrlDown = false
-
-			editBox:SetScript("OnKeyDown", function(_, key)
-				if key == "LCTRL" or key == "RCTRL" or key == "LMETA" or key == "RMETA" then
-					ctrlDown = true
-				end
-			end)
-			editBox:SetScript("OnKeyUp", function(_, key)
-				C_Timer.After(0.2, function()
-					ctrlDown = false
-				end)
-
-				if ctrlDown and (key == "C" or key == "X") then
-					StaticPopup_Hide(addonName)
-				end
-			end)
-		end,
-		EditBoxOnEscapePressed = function(popupSelf)
-			popupSelf:GetParent():Hide()
-		end,
-		EditBoxOnTextChanged = function(popupSelf)
-			-- ctrl + x sets the text to "" but this triggers hiding and shouldn't trigger resetting the text
-			local currentText = popupSelf:GetText()
-
-			if currentText == "" or currentText == string then
-				return
-			end
-
-			popupSelf:SetText(string)
-		end,
-	})
+	Private.Utils.ShowStaticPopup(
+		Private.Utils.CreateEditablePopup(Private.L.Settings.Export, Private.Utils.Export(), ACCEPT)
+	)
 end
 
 function TargetedSpellsEditModeMixin:OnImportButtonClick()
