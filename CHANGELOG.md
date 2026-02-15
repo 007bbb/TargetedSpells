@@ -7,6 +7,8 @@
 - added Font Options for Shadow and Outline
 - minor performance improvements
 - add support for Enhance QoL party frames
+- added Discord link to Edit Mode
+- updated ToC
 
 ## Version 1.1.5
 
