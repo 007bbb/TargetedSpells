@@ -1,3 +1,7 @@
+## Version 1.1.7
+
+- fix an error for CN/FR/ES/MX locales
+
 ## Version 1.1.6
 
 - in Edit Mode, the font selection now renders the font name in the font family

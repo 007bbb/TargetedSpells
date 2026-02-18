@@ -67,6 +67,13 @@ L.Settings.FrameHeightTooltip = nil
 L.Settings.FontSizeLabel = "字体大小"
 L.Settings.FontSizeTooltip = nil
 
+L.Settings.FontFlagsLabel = "Font Options"
+L.Settings.FontFlagsTooltip = nil
+L.Settings.FontFlagsLabels = {
+	[Private.Enum.FontFlags.OUTLINE] = "Outline",
+	[Private.Enum.FontFlags.SHADOW] = "Shadow",
+}
+
 L.Settings.FrameGapLabel = "间距"
 L.Settings.FrameGapTooltip = nil
 
