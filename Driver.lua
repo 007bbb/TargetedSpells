@@ -187,8 +187,9 @@ function TargetedSpellsDriver:RepositionFrames()
 			local width, height, gap, sortOrder, direction, grow =
 				tableRef.Width, tableRef.Height, tableRef.Gap, tableRef.SortOrder, tableRef.Direction, tableRef.Grow
 			local isHorizontal = direction == Private.Enum.Direction.Horizontal
-			local point = isHorizontal and "LEFT" or "BOTTOM"
+			local point = grow == Private.Enum.Grow.Center and "CENTER" or isHorizontal and "LEFT" or "BOTTOM"
 			local total = (#frames * (isHorizontal and width or height)) + (#frames - 1) * gap
+			local parentDimension = isHorizontal and self.frame:GetWidth() or self.frame:GetHeight()
 
 			Private.Utils.SortFrames(frames, sortOrder)
 
@@ -197,9 +198,9 @@ function TargetedSpellsDriver:RepositionFrames()
 				local y = 0
 
 				if isHorizontal then
-					x = Private.Utils.CalculateCoordinate(i, width, gap, width, total, 0, grow)
+					x = Private.Utils.CalculateCoordinate(i, width, gap, parentDimension, total, 0, grow)
 				else
-					y = Private.Utils.CalculateCoordinate(i, width, gap, height, total, 0, grow)
+					y = Private.Utils.CalculateCoordinate(i, height, gap, parentDimension, total, 0, grow)
 				end
 
 				frame:Reposition(point, self.frame, "CENTER", x, y)
@@ -593,6 +594,10 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		or event == "PLAYER_SPECIALIZATION_CHANGED"
 		or event == "UPDATE_INSTANCE_INFO"
 	then
+		if event == "LOADING_SCREEN_DISABLED" then
+			self:CleanupDanglingFrames()
+		end
+
 		local _, instanceType, difficultyId = GetInstanceInfo()
 		-- equivalent to `instanceType == "none"`
 		local nextContentType = Private.Enum.ContentType.OpenWorld
@@ -652,6 +657,20 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 		self.frame:ClearAllPoints()
 		self.frame:SetPoint(point, x, y)
 		self.frame:Show()
+	end
+end
+
+function TargetedSpellsDriver:CleanupDanglingFrames()
+	local cleanedSomethingUp = false
+
+	for unit in pairs(self.frames) do
+		local thisUnitWasCleanedUp = self:ReleaseFrameForUnit(unit, true)
+
+		cleanedSomethingUp = cleanedSomethingUp or thisUnitWasCleanedUp
+	end
+
+	if cleanedSomethingUp then
+		self:RepositionFrames()
 	end
 end
 

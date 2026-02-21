@@ -1,3 +1,8 @@
+## Version 1.1.8
+
+- fixed a bug leading to off-center positioning for casts targeting the player
+- fixed a bug where, when leaving a dungeon mid-cast would have orphaned frames remain onscreen until a /reload
+
 ## Version 1.1.7
 
 - fix an error for CN/FR/ES/MX locales
