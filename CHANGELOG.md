@@ -1,3 +1,7 @@
+## Version 1.1.9
+
+- fixed import not doing anything (hehecat moment)
+
 ## Version 1.1.8
 
 - fixed a bug leading to off-center positioning for casts targeting the player

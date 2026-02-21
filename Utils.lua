@@ -199,7 +199,7 @@ function Private.Utils.ShowStaticPopup(args)
 end
 
 local function DecodeProfileString(string)
-	C_EncodingUtil.DeserializeCBOR(C_EncodingUtil.DecodeBase64(string))
+	return C_EncodingUtil.DeserializeCBOR(C_EncodingUtil.DecodeBase64(string))
 end
 
 do
