@@ -17,7 +17,8 @@ function TargetedSpellsDriver:Init()
 end
 
 function TargetedSpellsDriver:PositionSelfFrame()
-	local offsetX, offsetY = 0, 0
+	local offsetX = 0
+	local offsetY = 0
 
 	-- since the Edit Mode preview frame is always using 5 icons to showcase, the self frame which may or may not
 	-- have that many icons, needs to be separately adjusted to match the preview frame, possibly using negative
@@ -27,12 +28,15 @@ function TargetedSpellsDriver:PositionSelfFrame()
 
 		if editModeFrame ~= nil then
 			if TargetedSpellsSaved.Settings.Self.Direction == Private.Enum.Direction.Horizontal then
-				local halfWidth = editModeFrame:GetWidth() / 2
-				offsetX = TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start and -halfWidth or halfWidth
+				offsetX = editModeFrame:GetWidth() / 2
+
+				if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start then
+					offsetX = offsetX * -1
+				end
 			else
-				local halfHeight = editModeFrame:GetHeight() / 2
-				offsetY = TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start and -halfHeight
-					or halfHeight
+				if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.End then
+					offsetY = editModeFrame:GetHeight()
+				end
 			end
 		end
 	end
