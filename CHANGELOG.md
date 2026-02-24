@@ -1,3 +1,8 @@
+## Version 1.1.10
+
+- fixed a bug where the position of spells targeting the player wasn't instantly updated when importing a profile
+- fixed various bugs leading to different positioning of spells targeting the player in contrast to its preview in Edit Mode
+
 ## Version 1.1.9
 
 - fixed import not doing anything (hehecat moment)

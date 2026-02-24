@@ -16,17 +16,44 @@ function TargetedSpellsDriver:Init()
 	self:SetupFrame(true)
 end
 
+function TargetedSpellsDriver:PositionSelfFrame()
+	local offsetX, offsetY = 0, 0
+
+	-- since the Edit Mode preview frame is always using 5 icons to showcase, the self frame which may or may not
+	-- have that many icons, needs to be separately adjusted to match the preview frame, possibly using negative
+	-- offsets based on grow direction
+	if TargetedSpellsSaved.Settings.Self.Grow ~= Private.Enum.Grow.Center then
+		local editModeFrame = Private.Utils.GetEditModeFrame(Private.Enum.FrameKind.Self)
+
+		if editModeFrame ~= nil then
+			if TargetedSpellsSaved.Settings.Self.Direction == Private.Enum.Direction.Horizontal then
+				local halfWidth = editModeFrame:GetWidth() / 2
+				offsetX = TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start and -halfWidth or halfWidth
+			else
+				local halfHeight = editModeFrame:GetHeight() / 2
+				offsetY = TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start and -halfHeight
+					or halfHeight
+			end
+		end
+	end
+
+	self.frame:ClearAllPoints()
+	PixelUtil.SetPoint(
+		self.frame,
+		TargetedSpellsSaved.Settings.Self.Position.point,
+		UIParent,
+		"CENTER",
+		TargetedSpellsSaved.Settings.Self.Position.x + offsetX,
+		TargetedSpellsSaved.Settings.Self.Position.y + offsetY
+	)
+	self.frame:Show()
+end
+
 function TargetedSpellsDriver:SetupFrame(isBoot)
 	if isBoot then
 		self.frame = CreateFrame("Frame", "TargetedSpellsDriverFrame", UIParent)
 		self.frame:SetSize(1, 1)
-		self.frame:ClearAllPoints()
-		self.frame:SetPoint(
-			TargetedSpellsSaved.Settings.Self.Position.point,
-			TargetedSpellsSaved.Settings.Self.Position.x,
-			TargetedSpellsSaved.Settings.Self.Position.y
-		)
-		self.frame:Show()
+		self:PositionSelfFrame()
 
 		Private.EventRegistry:RegisterCallback(
 			Private.Enum.Events.EDIT_MODE_POSITION_CHANGED,
@@ -652,11 +679,7 @@ function TargetedSpellsDriver:OnFrameEvent(_, event, ...)
 			self.role = Private.Enum.Role.Damager
 		end
 	elseif event == Private.Enum.Events.EDIT_MODE_POSITION_CHANGED then
-		local point, x, y = ...
-
-		self.frame:ClearAllPoints()
-		self.frame:SetPoint(point, x, y)
-		self.frame:Show()
+		self:PositionSelfFrame()
 	end
 end
 
@@ -685,6 +708,14 @@ function TargetedSpellsDriver:OnSettingsChanged(key, value)
 		else
 			self:SetupFrame(false)
 		end
+	elseif
+		key == Private.Settings.Keys.Self.Grow
+		or key == Private.Settings.Keys.Self.Direction
+		or key == Private.Settings.Keys.Self.Width
+		or key == Private.Settings.Keys.Self.Height
+		or key == Private.Settings.Keys.Self.Gap
+	then
+		self:PositionSelfFrame()
 	end
 end
 

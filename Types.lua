@@ -18,9 +18,12 @@
 ---@field Import fun(string: string): boolean
 ---@field Export fun(): string
 ---@field RegisterEditModeFrame fun(frameKind: FrameKind, frame: Frame)
+---@field GetEditModeFrame fun(frameKind: FrameKind): Frame?
 ---@field RegisterFrameByName fun(frameName: string): boolean
 ---@field UnregisterFrameByName fun(frameName: string): boolean
 ---@field MaybeApplyElvUISkin fun(frame: TargetedSpellsMixin)
+---@field CreateEditablePopup fun(title: string, text: string, button1: string): StaticPopupDialogsArgs
+---@field HasThirdPartyCandidates fun(): boolean
 
 ---@class StaticPopupDialogsArgs
 ---@field text string
@@ -31,6 +34,8 @@
 ---@field hasWideEditBox boolean?
 ---@field editBoxWidth number?
 ---@field hideOnEscape boolean?
+---@field id string?
+---@field whileDead boolean?
 
 ---@class TargetedSpellsEnums
 
@@ -67,7 +72,7 @@
 ---@field Party SavedVariablesSettingsParty
 
 ---@class FramePosition
----@field point Anchor
+---@field point FramePoint
 ---@field x number
 ---@field y number
 
@@ -105,8 +110,8 @@
 ---@field LoadConditionRole table<number, boolean>
 ---@field OffsetX number
 ---@field OffsetY number
----@field SourceAnchor Anchor
----@field TargetAnchor Anchor
+---@field SourceAnchor FramePoint
+---@field TargetAnchor FramePoint
 ---@field SortOrder SortOrder
 ---@field Grow Grow
 ---@field ShowDuration boolean
@@ -170,7 +175,7 @@
 ---@field SetSpellId fun(self: TargetedSpellsMixin, spellId: number?)
 ---@field ShouldBeShown fun(self: TargetedSpellsMixin): boolean
 ---@field ClearStartTime fun(self: TargetedSpellsMixin)
----@field Reposition fun(self: TargetedSpellsMixin, point: string, relativeTo: Frame, relativePoint: string, offsetX: number, offsetY: number)
+---@field Reposition fun(self: TargetedSpellsMixin, point: FramePoint, relativeTo: Frame, relativePoint: FramePoint, offsetX: number, offsetY: number)
 ---@field SetUnit fun(self: TargetedSpellsMixin, unit: string)
 ---@field SetKind fun(self: TargetedSpellsMixin, kind: FrameKind)
 ---@field GetKind fun(self: TargetedSpellsMixin): FrameKind?
@@ -197,7 +202,7 @@
 ---@field AppendSettings fun(self: TargetedSpellsEditModeMixin)
 ---@field AcquireFrame fun(self: TargetedSpellsEditModeMixin): TargetedSpellsMixin
 ---@field ReleaseFrame fun(self: TargetedSpellsEditModeMixin, frame: TargetedSpellsMixin)
----@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: string, x: number, y: number)
+---@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: FramePoint, x: number, y: number)
 ---@field RepositionPreviewFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field LoopFrame fun(self: TargetedSpellsEditModeMixin, frame: TargetedSpellsMixin, index: number)
 ---@field StartDemo fun(self: TargetedSpellsEditModeMixin)
@@ -217,7 +222,7 @@
 ---@field ReleaseAllFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field AppendSettings fun(self: TargetedSpellsEditModeMixin)
 ---@field RestoreEditModePosition fun(self: TargetedSpellsSelfEditMode)
----@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: string, x: number, y: number)
+---@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: FramePoint, x: number, y: number)
 ---@field RepositionPreviewFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field StartDemo fun(self: TargetedSpellsSelfEditMode)
 ---@field OnLayoutSettingChanged fun(self: TargetedSpellsEditModeMixin, key: string, value: number|string)
@@ -230,7 +235,7 @@
 ---@field Init fun(self: TargetedSpellsPartyEditMode)
 ---@field AppendSettings fun(self: TargetedSpellsEditModeMixin)
 ---@field RepositionPreviewFrames fun(self: TargetedSpellsEditModeMixin)
----@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: string, x: number, y: number)
+---@field OnEditModePositionChanged fun(self: TargetedSpellsEditModeMixin, frame: Frame, layoutName: string, point: FramePoint, x: number, y: number)
 ---@field OnLayoutSettingChanged fun(self: TargetedSpellsEditModeMixin, key: string, value: number|string)
 ---@field RepositionPreviewFrames fun(self: TargetedSpellsEditModeMixin)
 ---@field StartDemo fun(self: TargetedSpellsEditModeMixin)
@@ -383,16 +388,6 @@ PlayerUtil = {
 
 UNIT_NAMEPLATES_SHOW_OFFSCREEN = ""
 
----@class Plater
----@field db { profile: { script_data: PlaterScriptData[] } }?
-
----@class PlaterScriptData
----@field Name string
----@field SpellIds number[]
-
----@type Plater
-Plater = {}
-
 ---@type string|nil
 GAME_LOCALE = ""
 
@@ -436,15 +431,43 @@ GAME_LOCALE = ""
 
 ---@param unit string
 ---@return DurationObjectDummy
-UnitCastingDuration = function(unit)
+function UnitCastingDuration(unit)
 	return {}
 end
 
 ---@param unit string
 ---@return DurationObjectDummy
-UnitChannelDuration = function(unit)
+function UnitChannelDuration(unit)
 	return {}
 end
+
+---@type table<string, StaticPopupDialogsArgs>
+StaticPopupDialogs = {}
+
+PixelUtil = {
+	SetPoint =
+		---@param region Region
+		---@param point FramePoint
+		---@param relativeTo Frame
+		---@param relativePoint FramePoint
+		---@param offsetX number
+		---@param offsetY number
+		---@param minOffsetXPixels number?
+		---@param minOffsetYPixels number?
+		function(region, point, relativeTo, relativePoint, offsetX, offsetY, minOffsetXPixels, minOffsetYPixels)
+			region:SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
+		end,
+	SetSize =
+		---@param region Region
+		---@param width number
+		---@param height number
+		function(region, width, height)
+			region:SetSize(width, height)
+		end,
+}
+
+function StaticPopup_Hide(name) end
+function StaticPopup_Show(name) end
 
 ---@class UnitFrameButton : Button
 ---@field castBar StatusBar

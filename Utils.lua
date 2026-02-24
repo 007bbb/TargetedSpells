@@ -213,6 +213,10 @@ do
 		editModeFrameByKind[frameKind] = frame
 	end
 
+	function Private.Utils.GetEditModeFrame(frameKind)
+		return editModeFrameByKind[frameKind]
+	end
+
 	function Private.Utils.Import(string)
 		local ok, result = pcall(DecodeProfileString, string)
 
@@ -244,10 +248,11 @@ do
 					and (point ~= tableRef.Position.point or x ~= tableRef.Position.x or y ~= tableRef.Position.y)
 				then
 					frame:ClearAllPoints()
-					frame:SetPoint(point, x, y)
+					PixelUtil.SetPoint(frame, point, UIParent, "CENTER", x, y)
 					tableRef.Position.point = point
 					tableRef.Position.x = x
 					tableRef.Position.y = y
+					Private.EventRegistry:TriggerEvent(Private.Enum.Events.EDIT_MODE_POSITION_CHANGED, point, x, y)
 				end
 			end
 

@@ -79,9 +79,7 @@ function TargetedSpellsMixin:CanBeHidden(id)
 	return id == self:GetId()
 end
 
----@param self TargetedSpellsMixin
----@param elapsed number
-local function OnUpdate(self, elapsed)
+function TargetedSpellsMixin:OnUpdate(elapsed)
 	self.elapsed = self.elapsed + elapsed
 
 	if self.elapsed < 0.1 then
@@ -100,14 +98,10 @@ local function OnUpdate(self, elapsed)
 	self.DurationText:SetFormattedText("%.1f", remainingDuration)
 end
 
-function TargetedSpellsMixin:OnUpdate(elapsed)
-	-- noop until it gets overridden by the above
-end
-
 function TargetedSpellsMixin:SetShowDuration(showDuration, showFractions)
 	self.Cooldown:SetHideCountdownNumbers(not showDuration or showFractions)
 	self.DurationText:SetShown(showDuration and showFractions)
-	self:SetScript("OnUpdate", showDuration and showFractions and OnUpdate or nil)
+	self:SetScript("OnUpdate", showDuration and showFractions and self.OnUpdate or nil)
 end
 
 function TargetedSpellsMixin:SetShowBorder(bool)
@@ -146,12 +140,19 @@ function TargetedSpellsMixin:OnSizeChanged(width, height)
 
 	do
 		local fifteenPercent = 0.15 * width
-		self.Overlay:SetPoint("TOPLEFT", topleftRelativePoint, "TOPLEFT", -fifteenPercent, fifteenPercent)
+		PixelUtil.SetPoint(self.Overlay, "TOPLEFT", topleftRelativePoint, "TOPLEFT", -fifteenPercent, fifteenPercent)
 	end
 
 	do
 		local fifteenPercent = 0.15 * height
-		self.Overlay:SetPoint("BOTTOMRIGHT", bottomrightRelativePoint, "BOTTOMRIGHT", fifteenPercent, -fifteenPercent)
+		PixelUtil.SetPoint(
+			self.Overlay,
+			"BOTTOMRIGHT",
+			bottomrightRelativePoint,
+			"BOTTOMRIGHT",
+			fifteenPercent,
+			-fifteenPercent
+		)
 	end
 end
 
@@ -180,7 +181,7 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 				self:ShowGlow(self:IsSpellImportant(LibEditMode:IsInEditMode() and Private.Utils.RollDice()))
 			end
 		elseif key == Private.Settings.Keys.Self.ShowDurationFractions then
-			self:SetScript("OnUpdate", value and OnUpdate or nil)
+			self:SetScript("OnUpdate", value and self.OnUpdate or nil)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self.Cooldown:SetHideCountdownNumbers(value)
 			---@diagnostic disable-next-line: param-type-mismatch
@@ -213,7 +214,7 @@ function TargetedSpellsMixin:OnSettingChanged(key, value)
 				self:ShowGlow(self:IsSpellImportant(LibEditMode:IsInEditMode() and Private.Utils.RollDice()))
 			end
 		elseif key == Private.Settings.Keys.Party.ShowDurationFractions then
-			self:SetScript("OnUpdate", value and OnUpdate or nil)
+			self:SetScript("OnUpdate", value and self.OnUpdate or nil)
 			---@diagnostic disable-next-line: param-type-mismatch
 			self.Cooldown:SetHideCountdownNumbers(value)
 			---@diagnostic disable-next-line: param-type-mismatch
@@ -377,7 +378,7 @@ function TargetedSpellsMixin:Reposition(point, relativeTo, relativePoint, offset
 	self:SetParent(relativeTo)
 	self:ClearAllPoints()
 	self:SetFrameLevel(relativeTo:GetFrameLevel() + 10)
-	self:SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
+	PixelUtil.SetPoint(self, point, relativeTo, relativePoint, offsetX, offsetY)
 	self:Show()
 end
 

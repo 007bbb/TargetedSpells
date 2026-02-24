@@ -1345,7 +1345,7 @@ function SelfEditModeMixin:Init()
 	TargetedSpellsEditModeMixin.Init(self, Private.L.EditMode.TargetedSpellsSelfLabel, Private.Enum.FrameKind.Self)
 	self.maxFrames = 5
 
-	self.editModeFrame:SetPoint("CENTER", UIParent)
+	PixelUtil.SetPoint(self.editModeFrame, "CENTER", UIParent, "CENTER", 0, 0)
 	self:ResizeEditModeFrame()
 end
 
@@ -1396,8 +1396,11 @@ end
 
 function SelfEditModeMixin:RestoreEditModePosition()
 	self.editModeFrame:ClearAllPoints()
-	self.editModeFrame:SetPoint(
+	PixelUtil.SetPoint(
+		self.editModeFrame,
 		TargetedSpellsSaved.Settings.Self.Position.point,
+		UIParent,
+		"CENTER",
 		TargetedSpellsSaved.Settings.Self.Position.x,
 		TargetedSpellsSaved.Settings.Self.Position.y
 	)
@@ -1695,7 +1698,7 @@ function PartyEditModeMixin:RepositionEditModeFrame()
 
 	PixelUtil.SetSize(self.editModeFrame, width, height)
 	self.editModeFrame:ClearAllPoints()
-	self.editModeFrame:SetPoint("CENTER", parent, "TOP", 0, 16)
+	PixelUtil.SetPoint(self.editModeFrame, "CENTER", parent, "TOP", 0, 16)
 end
 
 function PartyEditModeMixin:OnEditModePositionChanged()
