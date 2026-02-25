@@ -20,168 +20,44 @@ function TargetedSpellsDriver:PositionSelfFrame()
 	local offsetX = 0
 	local offsetY = 0
 
-	-- since the Edit Mode preview frame is always using 5 icons to showcase, the self frame which may or may not
-	-- have that many icons, needs to be separately adjusted to match the preview frame, possibly using negative
-	-- offsets based on grow direction
+	-- the edit mode frame anchors via its own position.point, but self.frame always anchors via CENTER,
+	-- so the offset must compensate for the difference between those two anchor origins
 	local editModeFrame = Private.Utils.GetEditModeFrame(Private.Enum.FrameKind.Self)
 
 	if editModeFrame ~= nil then
+		local AnchorSign = {
+			[Private.Enum.Anchor.Center] = { x = 0, y = 0 },
+			[Private.Enum.Anchor.Top] = { x = 0, y = 1 },
+			[Private.Enum.Anchor.Bottom] = { x = 0, y = -1 },
+			[Private.Enum.Anchor.Left] = { x = -1, y = 0 },
+			[Private.Enum.Anchor.Right] = { x = 1, y = 0 },
+			[Private.Enum.Anchor.TopLeft] = { x = -1, y = 1 },
+			[Private.Enum.Anchor.TopRight] = { x = 1, y = 1 },
+			[Private.Enum.Anchor.BottomLeft] = { x = -1, y = -1 },
+			[Private.Enum.Anchor.BottomRight] = { x = 1, y = -1 },
+		}
+
+		local GrowTarget = {
+			[Private.Enum.Direction.Horizontal] = {
+				[Private.Enum.Grow.Start] = { x = -1, y = 0 },
+				[Private.Enum.Grow.Center] = { x = 0, y = 0 },
+				[Private.Enum.Grow.End] = { x = 1, y = 0 },
+			},
+			[Private.Enum.Direction.Vertical] = {
+				[Private.Enum.Grow.Start] = { x = 0, y = -1 },
+				[Private.Enum.Grow.Center] = { x = 0, y = 0 },
+				[Private.Enum.Grow.End] = { x = 0, y = 1 },
+			},
+		}
+
 		local width, height = editModeFrame:GetSize()
 
-		-- please send help
-		if TargetedSpellsSaved.Settings.Self.Direction == Private.Enum.Direction.Horizontal then
-			if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start then
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					offsetX = -width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					offsetX = -width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					offsetX = -width / 2
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					offsetX = -width
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetX = -width
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetX = -width
-					offsetY = height / 2
-				end
-			elseif TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Center then
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					offsetX = width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					offsetX = -width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetX = width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetX = -width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetX = width / 2
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetX = -width / 2
-					offsetY = height / 2
-				end
-			elseif TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.End then
-				-- offsetX = width / 2
+		local anchor = AnchorSign[TargetedSpellsSaved.Settings.Self.Position.point]
+		local target = GrowTarget[TargetedSpellsSaved.Settings.Self.Direction][TargetedSpellsSaved.Settings.Self.Grow]
 
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					offsetX = width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					offsetX = width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					offsetX = width / 2
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					offsetX = width
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetX = width
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetX = width
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetY = height / 2
-				end
-			end
-		else
-			if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start then
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					offsetY = -height
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					offsetX = width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					offsetX = -width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetX = width / 2
-					offsetY = -height
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetX = -width / 2
-					offsetY = -height
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetX = width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetX = -width / 2
-				end
-			elseif TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Center then
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					offsetX = width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					offsetX = -width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetX = width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetX = -width / 2
-					offsetY = -height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetX = width / 2
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetX = -width / 2
-					offsetY = height / 2
-				end
-			elseif TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.End then
-				if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
-					-- no adjustments needed
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
-					offsetY = height
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
-					offsetX = -width / 2
-					offsetY = height / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
-					offsetX = width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
-					offsetX = -width / 2
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
-					offsetX = width / 2
-					offsetY = height
-				elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
-					offsetX = -width / 2
-					offsetY = height
-				end
-			end
-		end
+		offsetX = (target.x - anchor.x) * (width / 2)
+		offsetY = (target.y - anchor.y) * (height / 2)
 	end
-
-	print(TargetedSpellsSaved.Settings.Self.Position.point)
 
 	self.frame:ClearAllPoints()
 	PixelUtil.SetPoint(
