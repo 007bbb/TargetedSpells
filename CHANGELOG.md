@@ -5,6 +5,7 @@
   - this should only apply to a minority of players heavily deviating from the centered default position
 - fixed a bug where the Button Glow wasn't hiding correctly for non-important spells
   - note that it still briefly shows up when an icon appears until the entry animation is finished. this is unavoidable, the alternative would be disallowing this glow type altogether
+  - fixed an error when trying to colorize interrupt source
 
 ## Version 1.1.9
 

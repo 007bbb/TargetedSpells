@@ -760,9 +760,13 @@ function TargetedSpellsDriver:MaybeMarkAsInterruptedAndDelay(unit, id, interrupt
 	end
 
 	local interruptName = UnitNameFromGUID(interruptedBy)
+	---@type string?
 	local className = select(2, UnitClassFromGUID(interruptedBy))
-	-- unsure if className yields something for pets, so nilcheck it until confirmed
-	local interruptColor = className == nil and nil or C_ClassColor.GetClassColor(className)
+	local interruptColor = nil
+
+	if className ~= nil then
+		interruptColor = C_ClassColor.GetClassColor(className)
+	end
 
 	local kindsToDelay = {
 		[Private.Enum.FrameKind.Self] = false,
