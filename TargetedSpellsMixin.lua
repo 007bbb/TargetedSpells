@@ -317,6 +317,19 @@ function TargetedSpellsMixin:ShowGlow(isImportant)
 		LibCustomGlow.ButtonGlow_Start(self)
 
 		self._ButtonGlow:SetAlphaFromBoolean(isImportant)
+
+		for _, region in pairs({ self._ButtonGlow:GetRegions() }) do
+			region:SetAlphaFromBoolean(isImportant)
+		end
+
+		if self._ButtonGlow.animIn:IsPlaying() then
+			local orig = self._ButtonGlow.animIn:GetScript("OnFinished")
+			self._ButtonGlow.animIn:SetScript("OnFinished", function(anim)
+				orig(anim)
+				anim:GetParent().ants:SetAlphaFromBoolean(isImportant)
+				anim:SetScript("OnFinished", orig)
+			end)
+		end
 	elseif glowType == Private.Enum.GlowType.ProcGlow then
 		LibCustomGlow.ProcGlow_Start(self)
 
