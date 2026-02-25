@@ -1398,9 +1398,9 @@ function SelfEditModeMixin:RestoreEditModePosition()
 	self.editModeFrame:ClearAllPoints()
 	PixelUtil.SetPoint(
 		self.editModeFrame,
-		TargetedSpellsSaved.Settings.Self.Position.point,
-		UIParent,
 		"CENTER",
+		UIParent,
+		TargetedSpellsSaved.Settings.Self.Position.point,
 		TargetedSpellsSaved.Settings.Self.Position.x,
 		TargetedSpellsSaved.Settings.Self.Position.y
 	)

@@ -27,6 +27,7 @@ function TargetedSpellsDriver:PositionSelfFrame()
 		local editModeFrame = Private.Utils.GetEditModeFrame(Private.Enum.FrameKind.Self)
 
 		if editModeFrame ~= nil then
+			local width, height = editModeFrame:GetSize()
 			if TargetedSpellsSaved.Settings.Self.Direction == Private.Enum.Direction.Horizontal then
 				offsetX = editModeFrame:GetWidth() / 2
 
@@ -34,8 +35,53 @@ function TargetedSpellsDriver:PositionSelfFrame()
 					offsetX = offsetX * -1
 				end
 			else
-				if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.End then
-					offsetY = editModeFrame:GetHeight()
+				-- please send help
+				if TargetedSpellsSaved.Settings.Self.Grow == Private.Enum.Grow.Start then
+					if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
+						offsetY = -height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
+						offsetY = -height
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
+						offsetX = width / 2
+						offsetY = -height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
+						offsetX = -width / 2
+						offsetY = -height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
+						offsetX = width / 2
+						offsetY = -height
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
+						offsetX = -width / 2
+						offsetY = -height
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
+						offsetX = width / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
+						offsetX = -width / 2
+					end
+				else
+					if TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Center then
+						offsetY = height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Top then
+					-- no adjustments needed
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Bottom then
+						offsetY = height
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Left then
+						offsetY = height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.Right then
+						offsetX = -width / 2
+						offsetY = height / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopLeft then
+						offsetX = width / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.TopRight then
+						offsetX = -width / 2
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomLeft then
+						offsetX = width / 2
+						offsetY = height
+					elseif TargetedSpellsSaved.Settings.Self.Position.point == Private.Enum.Anchor.BottomRight then
+						offsetX = -width / 2
+						offsetY = height
+					end
 				end
 			end
 		end
@@ -44,9 +90,9 @@ function TargetedSpellsDriver:PositionSelfFrame()
 	self.frame:ClearAllPoints()
 	PixelUtil.SetPoint(
 		self.frame,
-		TargetedSpellsSaved.Settings.Self.Position.point,
-		UIParent,
 		"CENTER",
+		UIParent,
+		TargetedSpellsSaved.Settings.Self.Position.point,
 		TargetedSpellsSaved.Settings.Self.Position.x + offsetX,
 		TargetedSpellsSaved.Settings.Self.Position.y + offsetY
 	)
