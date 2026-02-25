@@ -2,7 +2,9 @@
 
 - fixed a bug where the position of spells targeting the player wasn't instantly updated when importing a profile
 - fixed various bugs leading to different positioning of spells targeting the player in contrast to its preview in Edit Mode
+  - this should only apply to a minority of players heavily deviating from the centered default position
 - fixed a bug where the Button Glow wasn't hiding correctly for non-important spells
+  - note that it still briefly shows up when an icon appears until the entry animation is finished. this is unavoidable, the alternative would be disallowing this glow type altogether
 
 ## Version 1.1.9
 
