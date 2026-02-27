@@ -1,3 +1,7 @@
+## Version 1.1.11
+
+- fixed a secret error comparison error occuring in PvP with Empower casts
+
 ## Version 1.1.10
 
 - fixed a bug where the position of spells targeting the player wasn't instantly updated when importing a profile
