@@ -431,7 +431,17 @@ function TargetedSpellsMixin:PostCreate(unit, kind, castingUnit)
 	self:SetUnit(unit)
 	self:SetKind(kind)
 
-	if castingUnit ~= nil then
+	if castingUnit == nil then
+		return
+	end
+
+	if PlayerIsSpellTarget ~= nil then
+		if kind == Private.Enum.FrameKind.Self then
+			self:SetAlphaFromBoolean(PlayerIsSpellTarget(castingUnit, unit))
+		else
+			self:SetAlphaFromBoolean(UnitIsUnit(string.format("%starget", castingUnit), unit))
+		end
+	else
 		local tableRef = kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
 			or TargetedSpellsSaved.Settings.Party
 

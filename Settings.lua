@@ -65,59 +65,71 @@ Private.Settings.Keys = {
 
 function Private.Settings.GetSettingsDisplayOrder(kind)
 	if kind == Private.Enum.FrameKind.Self then
-		return {
+		local keys = {
 			Private.Settings.Keys.Self.Enabled,
 			Private.Settings.Keys.Self.LoadConditionContentType,
 			Private.Settings.Keys.Self.LoadConditionRole,
-			Private.Settings.Keys.Self.TargetingFilterApi,
-			Private.Settings.Keys.Self.Width,
-			Private.Settings.Keys.Self.Height,
-			Private.Settings.Keys.Self.Gap,
-			Private.Settings.Keys.Self.Direction,
-			Private.Settings.Keys.Self.SortOrder,
-			Private.Settings.Keys.Self.Grow,
-			Private.Settings.Keys.Self.GlowImportant,
-			Private.Settings.Keys.Self.GlowType,
-			Private.Settings.Keys.Self.ShowDuration,
-			Private.Settings.Keys.Self.ShowDurationFractions,
-			Private.Settings.Keys.Self.Font,
-			Private.Settings.Keys.Self.FontSize,
-			Private.Settings.Keys.Self.FontFlags,
-			Private.Settings.Keys.Self.ShowBorder,
-			Private.Settings.Keys.Self.ShowSwipe,
-			Private.Settings.Keys.Self.IndicateInterrupts,
-			Private.Settings.Keys.Self.Opacity,
 		}
+
+		if PlayerIsSpellTarget == nil then
+			table.insert(keys, Private.Settings.Keys.Self.TargetingFilterApi)
+		end
+
+		table.insert(keys, Private.Settings.Keys.Self.Width)
+		table.insert(keys, Private.Settings.Keys.Self.Height)
+		table.insert(keys, Private.Settings.Keys.Self.Gap)
+		table.insert(keys, Private.Settings.Keys.Self.Direction)
+		table.insert(keys, Private.Settings.Keys.Self.SortOrder)
+		table.insert(keys, Private.Settings.Keys.Self.Grow)
+		table.insert(keys, Private.Settings.Keys.Self.GlowImportant)
+		table.insert(keys, Private.Settings.Keys.Self.GlowType)
+		table.insert(keys, Private.Settings.Keys.Self.ShowDuration)
+		table.insert(keys, Private.Settings.Keys.Self.ShowDurationFractions)
+		table.insert(keys, Private.Settings.Keys.Self.Font)
+		table.insert(keys, Private.Settings.Keys.Self.FontSize)
+		table.insert(keys, Private.Settings.Keys.Self.FontFlags)
+		table.insert(keys, Private.Settings.Keys.Self.ShowBorder)
+		table.insert(keys, Private.Settings.Keys.Self.ShowSwipe)
+		table.insert(keys, Private.Settings.Keys.Self.IndicateInterrupts)
+		table.insert(keys, Private.Settings.Keys.Self.Opacity)
+
+		return keys
 	end
 
-	return {
+	local keys = {
 		Private.Settings.Keys.Party.Enabled,
 		Private.Settings.Keys.Party.LoadConditionContentType,
 		Private.Settings.Keys.Party.LoadConditionRole,
-		Private.Settings.Keys.Party.TargetingFilterApi,
-		Private.Settings.Keys.Party.IncludeSelfInParty,
-		Private.Settings.Keys.Party.Width,
-		Private.Settings.Keys.Party.Height,
-		Private.Settings.Keys.Party.Gap,
-		Private.Settings.Keys.Party.Direction,
-		Private.Settings.Keys.Party.SourceAnchor,
-		Private.Settings.Keys.Party.TargetAnchor,
-		Private.Settings.Keys.Party.Grow,
-		Private.Settings.Keys.Party.OffsetX,
-		Private.Settings.Keys.Party.OffsetY,
-		Private.Settings.Keys.Party.SortOrder,
-		Private.Settings.Keys.Party.GlowImportant,
-		Private.Settings.Keys.Party.GlowType,
-		Private.Settings.Keys.Party.ShowDuration,
-		Private.Settings.Keys.Party.ShowDurationFractions,
-		Private.Settings.Keys.Party.Font,
-		Private.Settings.Keys.Party.FontSize,
-		Private.Settings.Keys.Party.FontFlags,
-		Private.Settings.Keys.Party.ShowBorder,
-		Private.Settings.Keys.Party.ShowSwipe,
-		Private.Settings.Keys.Party.IndicateInterrupts,
-		Private.Settings.Keys.Party.Opacity,
 	}
+
+	if PlayerIsSpellTarget == nil then
+		table.insert(keys, Private.Settings.Keys.Party.TargetingFilterApi)
+	end
+
+	table.insert(keys, Private.Settings.Keys.Party.IncludeSelfInParty)
+	table.insert(keys, Private.Settings.Keys.Party.Width)
+	table.insert(keys, Private.Settings.Keys.Party.Height)
+	table.insert(keys, Private.Settings.Keys.Party.Gap)
+	table.insert(keys, Private.Settings.Keys.Party.Direction)
+	table.insert(keys, Private.Settings.Keys.Party.SourceAnchor)
+	table.insert(keys, Private.Settings.Keys.Party.TargetAnchor)
+	table.insert(keys, Private.Settings.Keys.Party.Grow)
+	table.insert(keys, Private.Settings.Keys.Party.OffsetX)
+	table.insert(keys, Private.Settings.Keys.Party.OffsetY)
+	table.insert(keys, Private.Settings.Keys.Party.SortOrder)
+	table.insert(keys, Private.Settings.Keys.Party.GlowImportant)
+	table.insert(keys, Private.Settings.Keys.Party.GlowType)
+	table.insert(keys, Private.Settings.Keys.Party.ShowDuration)
+	table.insert(keys, Private.Settings.Keys.Party.ShowDurationFractions)
+	table.insert(keys, Private.Settings.Keys.Party.Font)
+	table.insert(keys, Private.Settings.Keys.Party.FontSize)
+	table.insert(keys, Private.Settings.Keys.Party.FontFlags)
+	table.insert(keys, Private.Settings.Keys.Party.ShowBorder)
+	table.insert(keys, Private.Settings.Keys.Party.ShowSwipe)
+	table.insert(keys, Private.Settings.Keys.Party.IndicateInterrupts)
+	table.insert(keys, Private.Settings.Keys.Party.Opacity)
+
+	return keys
 end
 
 function Private.Settings.GetDefaultEditModeFramePosition()

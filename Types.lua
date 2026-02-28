@@ -372,6 +372,13 @@ function UnitIsSpellTarget(castingUnit, unit)
 	return true
 end
 
+---@param castingUnit string
+---@param unit string
+---@return boolean
+function PlayerIsSpellTarget(castingUnit, unit)
+	return true
+end
+
 ---@class PlayerUtil
 ---@field GetCurrentSpecID fun(): number?
 ---@field GetSpecName fun(specId: number): string

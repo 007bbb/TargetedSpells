@@ -1,3 +1,10 @@
+## Version 1.1.12
+
+- PTR compatibility for the removal of `UnitIsSpellTarget`
+  - addon will default to use `UnitIsUnit` instead, effectively works more or less the same as before
+  - will provide feedback to Blizzard that this functionality is deemed highly valuable to healers in particular
+  - ability to highlight casts targeting the player is unaffected (`UnitIsSpellTarget` becomes `PlayerIsSpellTarget`)
+
 ## Version 1.1.11
 
 - fixed a secret error comparison error occuring in PvP with Empower casts
