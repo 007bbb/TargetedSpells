@@ -1,3 +1,7 @@
+## Version 1.1.13
+
+- made elements clickthrough, preventing them from eating mouseover events
+
 ## Version 1.1.12
 
 - PTR compatibility for the removal of `UnitIsSpellTarget`
