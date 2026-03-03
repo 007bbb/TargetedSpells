@@ -461,7 +461,6 @@ function TargetedSpellsMixin:Reset()
 	self.Cooldown:Clear()
 	self.duration = nil
 	self:ClearAllPoints()
-	self:HideGlow()
 	self.wasInterrupted = false
 	self.doNotHideBefore = nil
 	self.InterruptIcon:Hide()
@@ -473,6 +472,34 @@ function TargetedSpellsMixin:Reset()
 
 	local tableRef = self.kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
 		or TargetedSpellsSaved.Settings.Party
+
+	if tableRef.GlowImportant then
+		local glowType = tableRef.GlowType
+
+		if glowType == Private.Enum.GlowType.PixelGlow then
+			if self._PixelGlow ~= nil then
+				self._PixelGlow:SetAlpha(1)
+			end
+		elseif glowType == Private.Enum.GlowType.AutoCastGlow then
+			if self._AutoCastGlow ~= nil then
+				self._AutoCastGlow:SetAlpha(1)
+			end
+		elseif glowType == Private.Enum.GlowType.ButtonGlow then
+			if self._ButtonGlow ~= nil then
+				self._ButtonGlow:SetAlpha(1)
+
+				for _, region in pairs({ self._ButtonGlow:GetRegions() }) do
+					region:SetAlpha(1)
+				end
+			end
+		elseif glowType == Private.Enum.GlowType.ProcGlow then
+			if self._ProcGlow ~= nil then
+				self._ProcGlow:SetAlpha(1)
+			end
+		end
+	end
+
+	self:HideGlow()
 
 	self:SetShowDuration(tableRef.ShowDuration, tableRef.ShowDurationFractions)
 	self.Cooldown:SetDrawSwipe(tableRef.ShowSwipe)

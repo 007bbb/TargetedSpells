@@ -1,6 +1,7 @@
 ## Version 1.1.13
 
 - made elements clickthrough, preventing them from eating mouseover events
+- fixed a bug that led to glows reused by other addons through `LibCustomGlow` to keep their possibly 0 alpha values (sorry lmao)
 
 ## Version 1.1.12
 
