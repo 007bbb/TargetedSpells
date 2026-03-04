@@ -95,6 +95,7 @@
 ---@field GlowType GlowType
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
+---@field RenderInterruptSourceName boolean
 ---@field ShowSwipe boolean
 ---@field Font string
 ---@field FontFlags table<FontFlags, boolean>
@@ -121,6 +122,7 @@
 ---@field GlowType GlowType
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
+---@field RenderInterruptSourceName boolean
 ---@field ShowSwipe boolean
 ---@field Font string
 ---@field FontFlags table<FontFlags, boolean>

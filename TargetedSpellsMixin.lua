@@ -58,10 +58,20 @@ function TargetedSpellsMixin:SetInterrupted(name, color)
 		return
 	end
 
-	self.InterruptSource:SetText(name)
+	local renderInterruptSourceName = false
 
-	if color ~= nil then
-		self.InterruptSource:SetTextColor(color.r, color.g, color.b)
+	if self.kind == Private.Enum.FrameKind.Self then
+		renderInterruptSourceName = TargetedSpellsSaved.Settings.Self.RenderInterruptSourceName
+	else
+		renderInterruptSourceName = TargetedSpellsSaved.Settings.Party.RenderInterruptSourceName
+	end
+
+	if renderInterruptSourceName then
+		self.InterruptSource:SetText(name)
+
+		if color ~= nil then
+			self.InterruptSource:SetTextColor(color.r, color.g, color.b)
+		end
 	end
 
 	self.InterruptSource:Show()

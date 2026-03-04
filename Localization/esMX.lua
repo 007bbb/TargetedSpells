@@ -118,6 +118,9 @@ L.Settings.IndicateInterruptsLabel = "Indicar interrupciones"
 L.Settings.IndicateInterruptsTooltip =
 	"Desatura el icono, muestra un indicador encima del icono y retrasa ocultar el icono por 1 segundo. No funciona con hechizos canalizados."
 
+L.Settings.RenderInterruptSourceNameLabel = "Render Interrupt Source Name"
+L.Settings.RenderInterruptSourceNameTooltip = nil
+
 L.Settings.ShowSwipeLabel = "Mostrar barrido"
 L.Settings.ShowSwipeTooltip = nil
 

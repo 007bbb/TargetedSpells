@@ -118,6 +118,9 @@ L.Settings.IndicateInterruptsLabel = "Montrer l'interruption"
 L.Settings.IndicateInterruptsTooltip =
 	"Désature l'icône, affiche un indicateur par-dessus et retarde sa disparition de 1 seconde. Ne marche pas avec les sorts canalisés."
 
+L.Settings.RenderInterruptSourceNameLabel = "Render Interrupt Source Name"
+L.Settings.RenderInterruptSourceNameTooltip = nil
+
 L.Settings.ShowSwipeLabel = "Show Swipe"
 L.Settings.ShowSwipeTooltip = nil
 

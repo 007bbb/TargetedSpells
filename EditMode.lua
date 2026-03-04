@@ -393,6 +393,12 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			if value ~= tableRef.IndicateInterrupts then
 				tableRef.IndicateInterrupts = value
 				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
+
+				if value then
+					LibEditMode:EnableFrameSetting(self.editModeFrame, L.Settings.RenderInterruptSourceNameLabel)
+				else
+					LibEditMode:DisableFrameSetting(self.editModeFrame, L.Settings.RenderInterruptSourceNameLabel)
+				end
 			end
 		end
 
@@ -402,6 +408,39 @@ function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 			kind = Enum.EditModeSettingDisplayType.Checkbox,
 			desc = L.Settings.IndicateInterruptsTooltip,
 			default = defaults.IndicateInterrupts,
+			get = Get,
+			set = Set,
+		}
+	end
+
+	if
+		key == Private.Settings.Keys.Self.RenderInterruptSourceName
+		or key == Private.Settings.Keys.Party.RenderInterruptSourceName
+	then
+		local tableRef = key == Private.Settings.Keys.Self.RenderInterruptSourceName
+				and TargetedSpellsSaved.Settings.Self
+			or TargetedSpellsSaved.Settings.Party
+
+		---@param layoutName string
+		local function Get(layoutName)
+			return tableRef.RenderInterruptSourceName
+		end
+
+		---@param layoutName string
+		---@param value boolean
+		local function Set(layoutName, value)
+			if value ~= tableRef.RenderInterruptSourceName then
+				tableRef.RenderInterruptSourceName = value
+				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
+			end
+		end
+
+		---@type LibEditModeCheckbox
+		return {
+			name = L.Settings.RenderInterruptSourceNameLabel,
+			kind = Enum.EditModeSettingDisplayType.Checkbox,
+			desc = L.Settings.RenderInterruptSourceNameTooltip,
+			default = defaults.RenderInterruptSourceName,
 			get = Get,
 			set = Set,
 		}

@@ -118,6 +118,9 @@ L.Settings.IndicateInterruptsLabel = "Indicate Interrupts"
 L.Settings.IndicateInterruptsTooltip =
 	"Desaturates the icon, shows an indicator on top of the icon and delays hiding the icon by 1 second. Does not work with channeled spells."
 
+L.Settings.RenderInterruptSourceNameLabel = "Render Interrupt Source Name"
+L.Settings.RenderInterruptSourceNameTooltip = nil
+
 L.Settings.ShowSwipeLabel = "Show Swipe"
 L.Settings.ShowSwipeTooltip = nil
 

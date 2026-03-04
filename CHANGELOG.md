@@ -1,3 +1,9 @@
+## Version 1.1.14
+
+- removed leftovers of the Targeting Filter API now that `UnitIsSpellTarget` is gone
+- NEW: `Render Interrupt Source Name` setting
+  - allows using the interrupt indication functionality without rendering the interrupt source unit name
+
 ## Version 1.1.13
 
 - made elements clickthrough, preventing them from eating mouseover events
