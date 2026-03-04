@@ -159,50 +159,6 @@ end
 function TargetedSpellsEditModeMixin:CreateSetting(key, defaults)
 	local L = Private.L
 
-	if
-		key == Private.Settings.Keys.Self.TargetingFilterApi
-		or key == Private.Settings.Keys.Party.TargetingFilterApi
-	then
-		local tableRef = key == Private.Settings.Keys.Self.TargetingFilterApi and TargetedSpellsSaved.Settings.Self
-			or TargetedSpellsSaved.Settings.Party
-
-		---@param layoutName string
-		---@param value number
-		local function Set(layoutName, value)
-			if tableRef.TargetingFilterApi ~= value then
-				tableRef.TargetingFilterApi = value
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
-			end
-		end
-
-		local function Generator(owner, rootDescription, data)
-			for label, id in pairs(Private.Enum.TargetingFilterApi) do
-				local function IsEnabled()
-					return tableRef.TargetingFilterApi == id
-				end
-
-				local function SetProxy()
-					Set(LibEditMode:GetActiveLayoutName(), id)
-				end
-
-				local translated = L.Settings.TargetingFilterApiLabels[id]
-
-				rootDescription:CreateRadio(translated, IsEnabled, SetProxy)
-			end
-		end
-
-		---@type LibEditModeDropdown
-		return {
-			name = L.Settings.TargetingFilterApiLabel,
-			kind = Enum.EditModeSettingDisplayType.Dropdown,
-			desc = L.Settings.TargetingFilterApiTooltip,
-			default = defaults.TargetingFilterApi,
-			multiple = false,
-			generator = Generator,
-			set = Set,
-		}
-	end
-
 	if key == Private.Settings.Keys.Self.FontFlags or key == Private.Settings.Keys.Party.FontFlags then
 		local tableRef = key == Private.Settings.Keys.Self.FontFlags and TargetedSpellsSaved.Settings.Self
 			or TargetedSpellsSaved.Settings.Party

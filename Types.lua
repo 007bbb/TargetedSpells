@@ -95,7 +95,6 @@
 ---@field GlowType GlowType
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
----@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
 ---@field Font string
 ---@field FontFlags table<FontFlags, boolean>
@@ -122,7 +121,6 @@
 ---@field GlowType GlowType
 ---@field Opacity number
 ---@field IndicateInterrupts boolean
----@field TargetingFilterApi TargetingFilterApi
 ---@field ShowSwipe boolean
 ---@field Font string
 ---@field FontFlags table<FontFlags, boolean>
@@ -363,13 +361,6 @@ local s_passThroughClosureGenerators = {
 -- Syntactic sugar for function(...) return f(a, b, c, ...); end
 function GenerateClosure(f, ...)
 	return GenerateClosureInternal(s_passThroughClosureGenerators, f, ...)
-end
-
----@param castingUnit string
----@param unit string
----@return boolean
-function UnitIsSpellTarget(castingUnit, unit)
-	return true
 end
 
 ---@param castingUnit string

@@ -24,7 +24,6 @@ Private.Settings.Keys = {
 		Opacity = "OPACITY_SELF",
 		ShowBorder = "BORDER_SELF",
 		IndicateInterrupts = "INDICATE_INTERRUPTS_SELF",
-		TargetingFilterApi = "TARGETING_FILTER_API_SELF",
 		Import = "IMPORT_SELF",
 		Export = "EXPORT_SELF",
 		ShowSwipe = "SWIPE_SELF",
@@ -54,7 +53,6 @@ Private.Settings.Keys = {
 		Opacity = "OPACITY_PARTY",
 		ShowBorder = "BORDER_PARTY",
 		IndicateInterrupts = "INDICATE_INTERRUPTS_PARTY",
-		TargetingFilterApi = "TARGETING_FILTER_API_PARTY",
 		Import = "IMPORT_PARTY",
 		Export = "EXPORT_PARTY",
 		ShowSwipe = "SWIPE_PARTY",
@@ -65,71 +63,58 @@ Private.Settings.Keys = {
 
 function Private.Settings.GetSettingsDisplayOrder(kind)
 	if kind == Private.Enum.FrameKind.Self then
-		local keys = {
+		return {
 			Private.Settings.Keys.Self.Enabled,
 			Private.Settings.Keys.Self.LoadConditionContentType,
 			Private.Settings.Keys.Self.LoadConditionRole,
+
+			Private.Settings.Keys.Self.Width,
+			Private.Settings.Keys.Self.Height,
+			Private.Settings.Keys.Self.Gap,
+			Private.Settings.Keys.Self.Direction,
+			Private.Settings.Keys.Self.SortOrder,
+			Private.Settings.Keys.Self.Grow,
+			Private.Settings.Keys.Self.GlowImportant,
+			Private.Settings.Keys.Self.GlowType,
+			Private.Settings.Keys.Self.ShowDuration,
+			Private.Settings.Keys.Self.ShowDurationFractions,
+			Private.Settings.Keys.Self.Font,
+			Private.Settings.Keys.Self.FontSize,
+			Private.Settings.Keys.Self.FontFlags,
+			Private.Settings.Keys.Self.ShowBorder,
+			Private.Settings.Keys.Self.ShowSwipe,
+			Private.Settings.Keys.Self.IndicateInterrupts,
+			Private.Settings.Keys.Self.Opacity,
 		}
-
-		if PlayerIsSpellTarget == nil then
-			table.insert(keys, Private.Settings.Keys.Self.TargetingFilterApi)
-		end
-
-		table.insert(keys, Private.Settings.Keys.Self.Width)
-		table.insert(keys, Private.Settings.Keys.Self.Height)
-		table.insert(keys, Private.Settings.Keys.Self.Gap)
-		table.insert(keys, Private.Settings.Keys.Self.Direction)
-		table.insert(keys, Private.Settings.Keys.Self.SortOrder)
-		table.insert(keys, Private.Settings.Keys.Self.Grow)
-		table.insert(keys, Private.Settings.Keys.Self.GlowImportant)
-		table.insert(keys, Private.Settings.Keys.Self.GlowType)
-		table.insert(keys, Private.Settings.Keys.Self.ShowDuration)
-		table.insert(keys, Private.Settings.Keys.Self.ShowDurationFractions)
-		table.insert(keys, Private.Settings.Keys.Self.Font)
-		table.insert(keys, Private.Settings.Keys.Self.FontSize)
-		table.insert(keys, Private.Settings.Keys.Self.FontFlags)
-		table.insert(keys, Private.Settings.Keys.Self.ShowBorder)
-		table.insert(keys, Private.Settings.Keys.Self.ShowSwipe)
-		table.insert(keys, Private.Settings.Keys.Self.IndicateInterrupts)
-		table.insert(keys, Private.Settings.Keys.Self.Opacity)
-
-		return keys
 	end
 
-	local keys = {
+	return {
 		Private.Settings.Keys.Party.Enabled,
 		Private.Settings.Keys.Party.LoadConditionContentType,
 		Private.Settings.Keys.Party.LoadConditionRole,
+		Private.Settings.Keys.Party.IncludeSelfInParty,
+		Private.Settings.Keys.Party.Width,
+		Private.Settings.Keys.Party.Height,
+		Private.Settings.Keys.Party.Gap,
+		Private.Settings.Keys.Party.Direction,
+		Private.Settings.Keys.Party.SourceAnchor,
+		Private.Settings.Keys.Party.TargetAnchor,
+		Private.Settings.Keys.Party.Grow,
+		Private.Settings.Keys.Party.OffsetX,
+		Private.Settings.Keys.Party.OffsetY,
+		Private.Settings.Keys.Party.SortOrder,
+		Private.Settings.Keys.Party.GlowImportant,
+		Private.Settings.Keys.Party.GlowType,
+		Private.Settings.Keys.Party.ShowDuration,
+		Private.Settings.Keys.Party.ShowDurationFractions,
+		Private.Settings.Keys.Party.Font,
+		Private.Settings.Keys.Party.FontSize,
+		Private.Settings.Keys.Party.FontFlags,
+		Private.Settings.Keys.Party.ShowBorder,
+		Private.Settings.Keys.Party.ShowSwipe,
+		Private.Settings.Keys.Party.IndicateInterrupts,
+		Private.Settings.Keys.Party.Opacity,
 	}
-
-	if PlayerIsSpellTarget == nil then
-		table.insert(keys, Private.Settings.Keys.Party.TargetingFilterApi)
-	end
-
-	table.insert(keys, Private.Settings.Keys.Party.IncludeSelfInParty)
-	table.insert(keys, Private.Settings.Keys.Party.Width)
-	table.insert(keys, Private.Settings.Keys.Party.Height)
-	table.insert(keys, Private.Settings.Keys.Party.Gap)
-	table.insert(keys, Private.Settings.Keys.Party.Direction)
-	table.insert(keys, Private.Settings.Keys.Party.SourceAnchor)
-	table.insert(keys, Private.Settings.Keys.Party.TargetAnchor)
-	table.insert(keys, Private.Settings.Keys.Party.Grow)
-	table.insert(keys, Private.Settings.Keys.Party.OffsetX)
-	table.insert(keys, Private.Settings.Keys.Party.OffsetY)
-	table.insert(keys, Private.Settings.Keys.Party.SortOrder)
-	table.insert(keys, Private.Settings.Keys.Party.GlowImportant)
-	table.insert(keys, Private.Settings.Keys.Party.GlowType)
-	table.insert(keys, Private.Settings.Keys.Party.ShowDuration)
-	table.insert(keys, Private.Settings.Keys.Party.ShowDurationFractions)
-	table.insert(keys, Private.Settings.Keys.Party.Font)
-	table.insert(keys, Private.Settings.Keys.Party.FontSize)
-	table.insert(keys, Private.Settings.Keys.Party.FontFlags)
-	table.insert(keys, Private.Settings.Keys.Party.ShowBorder)
-	table.insert(keys, Private.Settings.Keys.Party.ShowSwipe)
-	table.insert(keys, Private.Settings.Keys.Party.IndicateInterrupts)
-	table.insert(keys, Private.Settings.Keys.Party.Opacity)
-
-	return keys
 end
 
 function Private.Settings.GetDefaultEditModeFramePosition()
@@ -233,7 +218,6 @@ function Private.Settings.GetSelfDefaultSettings()
 		GlowImportant = true,
 		GlowType = Private.Enum.GlowType.PixelGlow,
 		IndicateInterrupts = false,
-		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 		ShowSwipe = true,
 		Font = "Fonts\\FRIZQT__.TTF",
 		FontFlags = {
@@ -279,7 +263,6 @@ function Private.Settings.GetPartyDefaultSettings()
 		GlowImportant = true,
 		GlowType = Private.Enum.GlowType.PixelGlow,
 		IndicateInterrupts = true,
-		TargetingFilterApi = Private.Enum.TargetingFilterApi.UnitIsSpellTarget,
 		ShowSwipe = true,
 		Font = "Fonts\\FRIZQT__.TTF",
 		FontFlags = {
@@ -347,53 +330,6 @@ table.insert(Private.LoginFnQueue, function()
 	---@param defaults SavedVariablesSettingsSelf|SavedVariablesSettingsParty
 	---@return SettingConfig
 	local function CreateSetting(key, defaults)
-		if
-			key == Private.Settings.Keys.Self.TargetingFilterApi
-			or key == Private.Settings.Keys.Party.TargetingFilterApi
-		then
-			local tableRef = key == Private.Settings.Keys.Self.TargetingFilterApi and TargetedSpellsSaved.Settings.Self
-				or TargetedSpellsSaved.Settings.Party
-
-			local function GetValue()
-				return tableRef.TargetingFilterApi
-			end
-
-			local function SetValue(value)
-				tableRef.TargetingFilterApi = value
-
-				Private.EventRegistry:TriggerEvent(Private.Enum.Events.SETTING_CHANGED, key, value)
-			end
-
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-
-				for label, id in pairs(Private.Enum.TargetingFilterApi) do
-					local translated = L.Settings.TargetingFilterApiLabels[id]
-					container:Add(id, translated)
-				end
-
-				return container:GetData()
-			end
-
-			local setting = Settings.RegisterProxySetting(
-				category,
-				key,
-				Settings.VarType.Number,
-				L.Settings.TargetingFilterApiLabel,
-				defaults.TargetingFilterApi,
-				GetValue,
-				SetValue
-			)
-			local initializer =
-				Settings.CreateDropdown(category, setting, GetOptions, L.Settings.TargetingFilterApiTooltip)
-
-			return {
-				initializer = initializer,
-				hideSteppers = false,
-				IsSectionEnabled = nil,
-			}
-		end
-
 		if key == Private.Settings.Keys.Self.FontFlags or key == Private.Settings.Keys.Party.FontFlags then
 			local kindTableRef = key == Private.Settings.Keys.Self.FontFlags and TargetedSpellsSaved.Settings.Self
 				or TargetedSpellsSaved.Settings.Party

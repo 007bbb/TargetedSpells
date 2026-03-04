@@ -435,23 +435,10 @@ function TargetedSpellsMixin:PostCreate(unit, kind, castingUnit)
 		return
 	end
 
-	if PlayerIsSpellTarget ~= nil then
-		if kind == Private.Enum.FrameKind.Self then
-			self:SetAlphaFromBoolean(PlayerIsSpellTarget(castingUnit, unit))
-		else
-			self:SetAlphaFromBoolean(UnitIsUnit(string.format("%starget", castingUnit), unit))
-		end
+	if kind == Private.Enum.FrameKind.Self then
+		self:SetAlphaFromBoolean(PlayerIsSpellTarget(castingUnit, unit))
 	else
-		local tableRef = kind == Private.Enum.FrameKind.Self and TargetedSpellsSaved.Settings.Self
-			or TargetedSpellsSaved.Settings.Party
-
-		if tableRef.TargetingFilterApi == Private.Enum.TargetingFilterApi.UnitIsSpellTarget then
-			self:SetAlphaFromBoolean(UnitIsSpellTarget(castingUnit, unit))
-		else
-			-- using UnitIsSpellTarget(castingUnit, unit) works and is technically more accurate
-			-- but it omits spells that - while the enemy is targeting something - doesn't affect the target, e.g. aoe enrages or party-wide damage
-			self:SetAlphaFromBoolean(UnitIsUnit(string.format("%starget", castingUnit), unit))
-		end
+		self:SetAlphaFromBoolean(UnitIsUnit(string.format("%starget", castingUnit), unit))
 	end
 end
 
