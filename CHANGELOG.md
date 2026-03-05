@@ -1,3 +1,7 @@
+## Version 1.1.15
+
+- made elements propagate mouse inputs
+
 ## Version 1.1.14
 
 - removed leftovers of the Targeting Filter API now that `UnitIsSpellTarget` is gone
