@@ -120,6 +120,18 @@ do
 			return (next(Grid2:GetUnitFrames(unit)))
 		end
 
+		if VUHDO_getUnitButtons then
+			local frames = VUHDO_getUnitButtons(unit)
+
+			if frames ~= nil then
+				for _, frame in pairs(frames) do
+					if frame.raidid == unit and frame:IsVisible() then
+						return frame
+					end
+				end
+			end
+		end
+
 		if EnhanceQoL and EQOLUFPartyHeader then
 			for i = 1, 5 do
 				local frame = _G["EQOLUFPartyHeaderUnitButton" .. i]

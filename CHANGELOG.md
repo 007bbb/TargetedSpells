@@ -1,3 +1,7 @@
+## Version 1.1.16
+
+- added suport for VuhDo
+
 ## Version 1.1.15
 
 - made elements propagate mouse inputs

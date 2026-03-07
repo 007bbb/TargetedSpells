@@ -508,3 +508,9 @@ EnhanceQoL = nil
 
 ---@type Frame?
 EQOLUFPartyHeader = nil
+
+---@class VuhDoUnitButton : Frame
+---@field raidid string
+
+---@type (fun(unit: string): VuhDoUnitButton[])?
+VUHDO_getUnitButtons = nil
