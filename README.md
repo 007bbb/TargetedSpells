@@ -22,6 +22,8 @@
   - [ElvUI](https://tukui.org/elvui)
     - automatically applies ElvUI skinning
   - [Grid2](https://www.curseforge.com/wow/addons/grid2)
+  - [VuhDo](https://www.curseforge.com/wow/addons/vuhdo)
+  - [Enhance QoL](https://www.curseforge.com/wow/addons/eqol)
   - [Danders Frames](https://www.curseforge.com/wow/addons/danders-frames)
   - more coming when the dust settles
 - blizzlike look - built on top of the Cooldown Manager design
@@ -36,7 +38,6 @@
   - enabled state
   - load conditions, supporting dungeons, delves, arena, battlegrounds and raids
   - role-based load conditions: tank, healer, dps (unsurprisingly)
-  - targeting API
   - layouting options
     - width, height, gap, direction, sort order, grow
   - glow important spells
@@ -57,7 +58,6 @@
   - enabled state
   - load conditions, supporting dungeons, delves, arena, battlegrounds and raids
   - role-based load conditions: tank, healer, dps (unsurprisingly)
-  - targeting API
   - option to include self in party
   - layouting options
     - width, height, gap, direction, sort order, grow, source & target anchoring, manual x/y offsets
