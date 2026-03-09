@@ -130,10 +130,10 @@ L.Settings.ShowBorderTooltip = nil
 L.Settings.OpacityLabel = "불투명도"
 L.Settings.OpacityTooltip = nil
 
-L.Settings.FrameOffsetXLabel = "X 오프셋"
+L.Settings.FrameOffsetXLabel = "X 위치 조정"
 L.Settings.FrameOffsetXTooltip = nil
 
-L.Settings.FrameOffsetYLabel = "Y 오프셋"
+L.Settings.FrameOffsetYLabel = "Y 위치 조정"
 L.Settings.FrameOffsetYTooltip = nil
 
 L.Settings.FrameSourceAnchorLabel = "기준 앵커"
@@ -151,4 +151,5 @@ L.Settings.Import = "가져오기"
 L.Settings.Export = "내보내기"
 
 L.Settings.FontLabel = "글꼴"
+
 L.Settings.FontTooltip = nil
