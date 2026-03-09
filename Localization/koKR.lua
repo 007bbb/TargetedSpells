@@ -1,0 +1,155 @@
+---@type string, TargetedSpells
+local addonName, Private = ...
+
+local addonNameWithIcon = ""
+
+do
+	local icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture")
+	-- width, height, offsetX, offsetY
+	addonNameWithIcon = string.format("|T%s:%d:%d:%d:%d|t %s", icon, 20, 20, 0, -4, addonName)
+end
+
+local L = Private.L
+
+L.EditMode = {}
+L.Functionality = {}
+L.Settings = {}
+
+L.Settings.EditModeReminder =
+	"편집 모드를 사용하는 것을 권장합니다. 모든 설정의 실시간 미리보기가 포함되어 있습니다.\n여기 있는 설정은 전투 중에도 편집할 수 있도록 제공됩니다."
+L.EditMode.TargetedSpellsSelfLabel = "대상 지정 주문 - 자신"
+L.EditMode.TargetedSpellsPartyLabel = "대상 지정 주문 - 파티"
+
+L.Functionality.CVarWarning = string.format(
+	"%s\n\n이름표 설정 '%s' 비활성화되었습니다.\n\n이 설정 없이는 %s 화면 밖의 적에게 작동하지 않습니다.\n\n'%s' 클릭하여 다시 활성화하세요.",
+	addonNameWithIcon,
+	UNIT_NAMEPLATES_SHOW_OFFSCREEN,
+	addonName,
+	ENABLE
+)
+
+L.Settings.EnabledLabel = "활성화"
+L.Settings.EnabledTooltip = nil
+L.Settings.DisabledLabel = "비활성화"
+
+L.Settings.AddonCompartmentTooltipLine1 =
+	string.format("%s: %s", WrapTextInColorCode(L.EditMode.TargetedSpellsSelfLabel, "ffeda55f"), "%s")
+L.Settings.AddonCompartmentTooltipLine2 =
+	string.format("%s: %s", WrapTextInColorCode(L.EditMode.TargetedSpellsPartyLabel, "ffeda55f"), "%s")
+
+L.Settings.LoadConditionContentTypeLabel = "로드 조건: 콘텐츠 유형"
+L.Settings.LoadConditionContentTypeLabelAbbreviated = "콘텐츠별 로드"
+L.Settings.LoadConditionContentTypeTooltip = nil
+L.Settings.LoadConditionContentTypeLabels = {
+	[Private.Enum.ContentType.OpenWorld] = "필드",
+	[Private.Enum.ContentType.Delve] = "구렁",
+	[Private.Enum.ContentType.Dungeon] = "던전",
+	[Private.Enum.ContentType.Raid] = "공격대",
+	[Private.Enum.ContentType.Arena] = "투기장",
+	[Private.Enum.ContentType.Battleground] = "전장",
+}
+
+L.Settings.LoadConditionRoleLabel = "로드 조건: 역할"
+L.Settings.LoadConditionRoleLabelAbbreviated = "역할별 로드"
+L.Settings.LoadConditionRoleTooltip = nil
+L.Settings.LoadConditionRoleLabels = {
+	[Private.Enum.Role.Healer] = "힐러",
+	[Private.Enum.Role.Tank] = "탱커",
+	[Private.Enum.Role.Damager] = "딜러",
+}
+
+L.Settings.FrameWidthLabel = "너비"
+L.Settings.FrameWidthTooltip = nil
+
+L.Settings.FrameHeightLabel = "높이"
+L.Settings.FrameHeightTooltip = nil
+
+L.Settings.FontSizeLabel = "글꼴 크기"
+L.Settings.FontSizeTooltip = nil
+
+L.Settings.FontFlagsLabel = "글꼴 옵션"
+L.Settings.FontFlagsTooltip = nil
+L.Settings.FontFlagsLabels = {
+	[Private.Enum.FontFlags.OUTLINE] = "외곽선",
+	[Private.Enum.FontFlags.SHADOW] = "그림자",
+}
+
+L.Settings.FrameGapLabel = "간격"
+L.Settings.FrameGapTooltip = nil
+
+L.Settings.FrameDirectionLabel = "방향"
+L.Settings.FrameDirectionTooltip = nil
+L.Settings.FrameDirectionHorizontal = "가로"
+L.Settings.FrameDirectionVertical = "세로"
+
+L.Settings.FrameSortOrderLabel = "정렬 순서"
+L.Settings.FrameSortOrderTooltip = nil
+L.Settings.FrameSortOrderAscending = "오름차순"
+L.Settings.FrameSortOrderDescending = "내림차순"
+
+L.Settings.FrameGrowLabel = "성장 방향"
+L.Settings.FrameGrowTooltip = nil
+L.Settings.FrameGrowLabels = {
+	[Private.Enum.Grow.Center] = "가운데",
+	[Private.Enum.Grow.Start] = "시작",
+	[Private.Enum.Grow.End] = "끝",
+}
+
+L.Settings.GlowImportantLabel = "중요 주문 강조"
+L.Settings.GlowImportantTooltip = "중요 여부는 게임에 의해 결정됩니다."
+
+L.Settings.GlowTypeLabel = "반짝임 유형"
+L.Settings.GlowTypeTooltip = nil
+L.Settings.GlowTypeLabels = {
+	[Private.Enum.GlowType.PixelGlow] = "픽셀 반짝임",
+	[Private.Enum.GlowType.AutoCastGlow] = "자동시전 반짝임",
+	[Private.Enum.GlowType.ButtonGlow] = "동작 버튼 반짝임",
+	[Private.Enum.GlowType.ProcGlow] = "스킬 발동 반짝임",
+	[Private.Enum.GlowType.Star4] = "별 4",
+}
+
+L.Settings.ShowDurationLabel = "지속시간 표시"
+L.Settings.ShowDurationTooltip = nil
+
+L.Settings.ShowDurationFractionsLabel = "소수점 표시"
+L.Settings.ShowDurationFractionsTooltip = nil
+
+L.Settings.IndicateInterruptsLabel = "차단 표시"
+L.Settings.IndicateInterruptsTooltip =
+	"아이콘을 흑백으로 표시하고, 아이콘 위에 표시기를 보여주며, 아이콘 숨김을 1초 지연합니다. 정신 집중 주문에는 작동하지 않습니다."
+
+L.Settings.RenderInterruptSourceNameLabel = "차단자 이름 표시"
+L.Settings.RenderInterruptSourceNameTooltip = nil
+
+L.Settings.ShowSwipeLabel = "회전 표시"
+L.Settings.ShowSwipeTooltip = nil
+
+L.Settings.ShowBorderLabel = "테두리 표시"
+L.Settings.ShowBorderTooltip = nil
+
+L.Settings.OpacityLabel = "불투명도"
+L.Settings.OpacityTooltip = nil
+
+L.Settings.FrameOffsetXLabel = "X 위치 조정"
+L.Settings.FrameOffsetXTooltip = nil
+
+L.Settings.FrameOffsetYLabel = "Y 위치 조정"
+L.Settings.FrameOffsetYTooltip = nil
+
+L.Settings.FrameSourceAnchorLabel = "기준 앵커"
+L.Settings.FrameSourceAnchorTooltip = nil
+
+L.Settings.FrameTargetAnchorLabel = "대상 앵커"
+L.Settings.FrameTargetAnchorTooltip = nil
+
+L.Settings.IncludeSelfInPartyLabel = "파티에 자신 포함"
+L.Settings.IncludeSelfInPartyTooltip = "공격대 스타일 파티 프레임을 사용할 때만 작동합니다."
+
+L.Settings.ClickToOpenSettingsLabel = "클릭 설정 열기"
+
+L.Settings.Import = "가져오기"
+L.Settings.Export = "내보내기"
+
+L.Settings.FontLabel = "글꼴"
+
+L.Settings.FontTooltip = nil
