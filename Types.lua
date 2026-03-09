@@ -514,3 +514,12 @@ EQOLUFPartyHeader = nil
 
 ---@type (fun(unit: string): VuhDoUnitButton[])?
 VUHDO_getUnitButtons = nil
+
+---@type Frame?
+SUFHeaderparty = nil
+
+---@type table?
+ShadowUF = nil
+
+---@type Frame?
+Vd1 = nil

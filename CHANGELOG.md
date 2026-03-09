@@ -1,6 +1,11 @@
+## Version 1.1.17
+
+- added support for ShadowedUnitFrames
+- improved support for VuhDo
+
 ## Version 1.1.16
 
-- added suport for VuhDo
+- added support for VuhDo
 
 ## Version 1.1.15
 
