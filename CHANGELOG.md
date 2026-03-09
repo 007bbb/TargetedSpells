@@ -1,3 +1,7 @@
+## Version 1.1.18
+
+- added support for KR locale, thanks to 007bbb
+
 ## Version 1.1.17
 
 - added support for ShadowedUnitFrames
